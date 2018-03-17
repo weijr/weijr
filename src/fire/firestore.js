@@ -1,8 +1,7 @@
-const firebase = require("firebase");
-require("firebase/firestore");
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 
-
-var config = {
+const config = {
   apiKey: "AIzaSyD-SRNhQPjUTiCCFjb8miJPkvaNwaEIvxA",
   authDomain: "mafia-blockchain.firebaseapp.com",
   databaseURL: "https://mafia-blockchain.firebaseio.com",
@@ -13,6 +12,7 @@ var config = {
 
 firebase.initializeApp(config);
 
-var db = firebase.firestore();
+export const db = firebase.firestore();
+export const auth = firebase.auth();
 
-export default db;
+export default firebase;

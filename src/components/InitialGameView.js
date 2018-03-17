@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import App from './App'
 import { Switch, Route, Link } from 'react-router-dom'
-import db from './store/firestore'
+import { db } from '../fire/firestore'
 // const firebase = require("firebase");
 // require("firebase/firestore");
 

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from '../logo.svg';
 import './App.css';
-import { Switch, Route, Link, withRouter } from 'react-router-dom'
-import db from './store/firestore'
-import history from './history'
-import store from './store'
-import { browserHistory } from 'react-router'
+import { Switch, Route, Link, withRouter } from 'react-router-dom';
+import { db } from '../fire/firestore';
+import history from '../history';
+import store from '../store';
+import { browserHistory } from 'react-router';
 
 class App extends Component {
   constructor(props) {
@@ -25,6 +25,7 @@ class App extends Component {
     //random number generator for ether
     let randomEtherAmount = Math.floor((Math.random() * 100) + 75);
     let playerRef = db.collection("players")
+  
 
     playerRef
       .add({
