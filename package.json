@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "mocha",
     "start": "react-scripts start"
   },
   "author": "",
@@ -12,7 +13,8 @@
     "ganache-cli": "^6.1.0",
     "mocha": "^5.0.4",
     "solc": "^0.4.21",
-    "web3": "^1.0.0-beta.26",
+    "truffle-hdwallet-provider": "0.0.3",
+    "web3": "1.0.0-beta.26",
     "firebase": "^4.11.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
