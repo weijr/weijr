@@ -38,8 +38,9 @@ contract Mafia {
   }
 
   function payout(bool isWinningTeamMafia) public {
-      //require(msg.sender == manager);
+      require(msg.sender == manager);
       uint numberOfWinners;
+      uint total = this.balance;
       if (isWinningTeamMafia) {
           numberOfWinners = mafiaMembers;
       } else {
@@ -47,10 +48,10 @@ contract Mafia {
       }
       for (uint i = 0; i < players.length; i++) {
           if (players[i].mafia == isWinningTeamMafia) {
-              players[i].gamePlayer.transfer(this.balance/numberOfWinners);
+              players[i].gamePlayer.transfer(total/numberOfWinners);
           }
-      }
       //players = new Player[](0);
+      }
   }
 
   function getPlayersLength() public view returns(uint) {
