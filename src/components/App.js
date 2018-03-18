@@ -24,16 +24,18 @@ class App extends Component {
 
     //random number generator for ether
     let randomEtherAmount = Math.floor((Math.random() * 100) + 75);
-    let playerRef = db.collection("players")
+    let playerRef = db.collection("rooms").doc("room1").collection("players")
   
 
     playerRef
-      .add({
+      .doc(randomName)
+      .set({
         name: randomName,
         ether: randomEtherAmount,
       })
       .then(() => {
         playerRef
+          .doc(randomName)
           .collection("inbox")
           .add({
             user: "admin",

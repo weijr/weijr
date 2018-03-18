@@ -3,6 +3,8 @@ import './App.css';
 import App from './App'
 import { Switch, Route, Link } from 'react-router-dom'
 import { db } from '../fire/firestore'
+import { connect } from 'react-redux';
+import { postMssage, writeMessage } from '../store';
 // const firebase = require("firebase");
 // require("firebase/firestore");
 
@@ -22,33 +24,78 @@ import { db } from '../fire/firestore'
 
 
 class InitialGameView extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       messages: []
     }
   }
-  
-componentDidMount() {
-  let messages = db.collection('game').doc('gameRoom1')
-                .collection('messages')
-  messages.get()
-    .then((doc) => {
-      console.log(doc.data)
-    })
-  console.log(messages.data)  
-}
+
+  // componentDidMount() {
+  //   let messages = db.collection('game').doc('gameRoom1')
+  //                 .collection('messages')
+  //   messages.get()
+  //     .then((doc) => {
+  //       console.log(doc.data)
+  //     })
+  //   console.log(messages.data)  
+  // }
 
   render() {
-      return (
-        <div className="App">
-          <header className="App-header">
-            <h1 className="App-title">GAME ROOM BE HERE</h1>
-            <Link to="/" className="link-btn">Home</Link>
-          </header>
-        </div>
-      )
-    }
-  }
+    const { name, newMessageEntry, handleChange, handleSubmit } = this.props;
 
-export default InitialGameView;
+    return (
+      <div className="App">
+        <header className="App-header">
+          <h1 className="App-title">GAME ROOM BE HERE</h1>
+          <Link to="/" className="link-btn">Home</Link>
+        </header>
+        <form id="new-message-form" onSubmit={evt => handleSubmit(name, newMessageEntry, evt)}>
+          <div className="input-group input-group-lg">
+            <input
+              className="form-control"
+              type="text"
+              name="content"
+              value={newMessageEntry}
+              onChange={handleChange}
+              placeholder="Say something nice..."
+            />
+            <span className="input-group-btn">
+              <button className="btn btn-default" type="submit">Chat!</button>
+            </span>
+          </div>
+        </form>
+      </div>
+    )
+  }
+}
+
+const mapStateToProps = function (state, ownProps) {
+  return {
+    newMessageEntry: state.newMessageEntry,
+    name: state.name
+  };
+};
+
+const mapDispatchToProps = function (dispatch, ownProps) {
+  return {
+    handleChange (evt) {
+      dispatch(writeMessage(evt.target.value));
+    },
+    handleSubmit (name, content, evt) {
+      evt.preventDefault();
+
+      const { channelId } = ownProps;
+
+      dispatch(postMessage({ name, content, channelId }));
+      dispatch(writeMessage(''));
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(InitialGameView);
+
+
