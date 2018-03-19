@@ -7,6 +7,7 @@ import history from '../history';
 import store from '../store';
 import { browserHistory } from 'react-router';
 
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -25,7 +26,12 @@ class App extends Component {
     //random number generator for ether
     let randomEtherAmount = Math.floor((Math.random() * 100) + 75);
     let playerRef = db.collection("rooms").doc("room1").collection("players")
-  
+    playerRef.get()
+      .then(querySnapshot => {
+      let docs = querySnapshot.docs;
+      for (let doc of docs) {
+        console.log(`Document found at path: ${doc.ref.path}`);
+      }})
 
     playerRef
       .doc(randomName)

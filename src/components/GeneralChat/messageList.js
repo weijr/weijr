@@ -1,0 +1,55 @@
+import React, { Component } from 'react';
+// import './App.css';
+// import App from './App'
+import { Switch, Route, Link } from 'react-router-dom'
+import { db } from '../../fire/firestore'
+import { connect } from 'react-redux';
+import Message from './message'
+
+
+class messageList extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      messages: []
+    }
+  }
+
+  componentDidMount() {
+    db
+    .collection("rooms")
+    .doc("room1")
+    .collection("generalChat")
+    .onSnapshot(snapshot => {
+      this.setState({
+        messages: snapshot.docs.map(doc => {
+          const data = doc.data()
+          return {
+            id: doc.ref.id,
+            content: data.content,
+            from: data.uid,
+            sentAt: data.sentAt.toString()
+          }
+        })
+      })
+    })
+  }
+
+  render() {
+    const { messages } = this.state
+    console.log(messages)
+    return (
+
+      <div>
+        {messages.map(message => <Message key={message.id} message={message} />
+        )}
+      </div>
+      
+
+    )
+  }
+
+
+}
+
+export default messageList;

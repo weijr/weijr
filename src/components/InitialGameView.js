@@ -5,6 +5,7 @@ import { Switch, Route, Link } from 'react-router-dom'
 import { db } from '../fire/firestore'
 import { connect } from 'react-redux';
 import { postMssage, writeMessage } from '../store';
+import MessageList from './GeneralChat/messageList'
 // const firebase = require("firebase");
 // require("firebase/firestore");
 
@@ -33,30 +34,33 @@ class InitialGameView extends Component {
     this.submitMessage = this.submitMessage.bind(this)
   }
 
-  // componentDidMount() {
-  //   let messages = db.collection('game').doc('gameRoom1')
-  //                 .collection('messages')
-  //   messages.get()
-  //     .then((doc) => {
-  //       console.log(doc.data)
-  //     })
-  //   console.log(messages.data)  
-  // }
-
   submitMessage = (handle, message, evt) => {
 
     evt.preventDefault()
     let dateTime = Date.now().toString()
     let actionsRef = db.collection("rooms").doc("room1").collection("actions")
-    
-    actionsRef
-      .doc(dateTime)
-      .set({
-        handle: handle,
-        message: message,
-      })
+    let playersRef = db.collection('/rooms/room1/players')
 
-    console.log('made it here')
+
+    
+    // playersRef.get()
+    //   .then(querySnapshot => {
+    //     if (querySnapshot.docs) {
+    //       let docs = querySnapshot.docs
+    //       for (let doc of docs) {
+    //           console.log(doc.ref.path)
+    //       }}
+    //     })
+
+    // actionsRef
+    //   .doc(dateTime)
+    //   .set({
+    //     handle: handle,
+    //     message: message,
+    //     type: 'generalMessage'
+    //   })
+
+    // console.log('made it here')
   }
 
   render() {
@@ -68,20 +72,7 @@ class InitialGameView extends Component {
           <h1 className="App-title">GAME ROOM BE HERE</h1>
           <Link to="/" className="link-btn">Home</Link>
         </header>
-        <form id="new-message-form" onSubmit={evt => this.submitMessage("defaultHandle", newMessageEntry, evt)}>
-          <div className="input-group input-group-lg">
-            <input
-              className="form-control"
-              type="text"
-              value={newMessageEntry}
-              onChange={handleChange}
-              placeholder="Say something nice..."
-            />
-            <span className="input-group-btn">
-              <button className="btn btn-default" type="submit">Chat!</button>
-            </span>
-          </div>
-        </form>
+        <MessageList />
       </div>
     )
   }
