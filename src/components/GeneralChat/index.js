@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import './App.css';
-import App from './App'
+// import './App.css';
+// import App from '../App'
 import { Switch, Route, Link } from 'react-router-dom'
-import { db } from '../fire/firestore'
+import { db } from '../../fire/firestore'
 import { connect } from 'react-redux';
 import MessageList from './messageList'
 import NewMessageEntry from './newMessageEntry'
@@ -50,7 +50,7 @@ const mapDispatchToProps = function (dispatch, ownProps) {
     //   dispatch(postMessage({ name, content, evt }));
     //   // dispatch(writeMessage(''));
     }
-  }
+
 };
 
 export default connect(
