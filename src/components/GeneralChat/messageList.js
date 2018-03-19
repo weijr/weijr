@@ -32,7 +32,7 @@ class messageList extends Component {
             id: doc.ref.id,
             content: data.content,
             from: data.uid,
-            sentAt: data.sentAt.toString()
+            sentAt: data.sentAt
           }
         })
       })

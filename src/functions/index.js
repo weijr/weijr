@@ -9,7 +9,7 @@ app.get('/rooms/room1', (req, res) => {
   res.send('hello')
 })
 
-app.post('/rooms/room1/actions', (req, res) => {
+app.post('/rooms/room1/generalChat', (req, res) => {
   
 })
 
