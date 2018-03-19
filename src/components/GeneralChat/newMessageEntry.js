@@ -6,6 +6,8 @@ import { writeMessage } from '../../store'
 
 const sendMessage = (evt, message) => {
   evt.preventDefault()
+  // console.log('evt.t.v :', evt.target.value)
+  console.log('message: ', message)
 
   db
     .collection("rooms")
@@ -13,21 +15,19 @@ const sendMessage = (evt, message) => {
     .collection("generalChat")
     .add({
       uid: auth.currentUser.uid,
-      content: evt.target.value,
-      sentAt: Date.now()
+      content: message,
+      sentAt: Date(Date.now()).toString()
     })
 
 }
 
-
-
-
 const NewMessageEntry = (props) => {
   console.log('auth: ', auth)
   const { name, newMessageEntry, handleChange, handleSubmit } = props;
-  return (
+  console.log(props.newMessageEntry)
 
-    <form id="new-message-form" onSubmit={evt => sendMessage(evt)}>
+  return (
+    <form id="new-message-form" onSubmit={evt => sendMessage(evt, newMessageEntry)}>
       <div className="input-group input-group-lg">
         <input
           className="form-control"
@@ -43,6 +43,12 @@ const NewMessageEntry = (props) => {
     </form>
   )
 }
+
+const mapStateToProps = function (state, ownProps) {
+  return {
+    newMessageEntry: state.newMessageEntry,
+  };
+};
 
 const mapDispatchToProps = function (dispatch, ownProps) {
   return {
@@ -61,6 +67,6 @@ const mapDispatchToProps = function (dispatch, ownProps) {
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(NewMessageEntry);
