@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from '../logo.svg';
 import './App.css';
 import { Switch, Route, Link, withRouter } from 'react-router-dom';
-import { db } from '../fire/firestore';
+import { db, auth, userById } from '../fire/firestore';
 import history from '../history';
 import store from '../store';
 import { browserHistory } from 'react-router';
@@ -28,7 +28,7 @@ class App extends Component {
     const manager = await mafiaContract.methods.manager().call();
     const numberOfPlayers = await mafiaContract.methods.getPlayersLength().call();
     const pot = await web3.eth.getBalance(mafiaContract.options.address);
-    console.log(numberOfPlayers)
+
     this.setState({ manager, numberOfPlayers, pot });
   }
 
@@ -46,38 +46,33 @@ class App extends Component {
     let randomEtherAmount = Math.floor((Math.random() * 100) + 75);
     let playerRef = db.collection("players")
 
+    let accounts;
+    try {
+      accounts = await web3.eth.getAccounts();
+    } catch(error) {
+      this.setState({message: 'Go Set Up A MetaMask Account!'})
+    }
 
-    const accounts = await web3.eth.getAccounts();
-    this.setState({ message: 'Waiting on transaction success...' });
+    const alreadyInGame = await mafiaContract.methods.checkIfAlreadyInGame(accounts[0]).call();
 
-    await mafiaContract.methods.addPlayer(accounts[0], true).send({
-      from: accounts[0],
-      value: web3.utils.toWei('1', 'ether')
-    });
-    this.setState({ message: 'Transaction Success! Wait to be redirected to waiting room' });
-
-
-    playerRef
-      .add({
-        name: randomName,
-        ether: randomEtherAmount,
-      })
-      .then(() => {
-        playerRef
-          .collection("inbox")
-          .add({
-            user: "admin",
-            message: randomName + "has entered the game"
-          })
-      })
-      .then(() => {
-        this.props.history.push('/game')
-      })
-      .catch(function (error) {
-        console.error("Error adding document: ", error);
+    if(alreadyInGame){
+      this.setState({message: "You're already in the game! No cheating! "})
+    } else {
+      this.setState({ message: 'Waiting on transaction success...' });
+      await mafiaContract.methods.addPlayer(accounts[0], true).send({
+        from: accounts[0],
+        value: web3.utils.toWei('1', 'ether')
       });
+      this.unsubscribe = auth.onAuthStateChanged(()=> {
+        userById(accounts[0]).set({id:accounts[0], fakeName: randomName},{merge: true})
+      })
+      this.setState({ message: 'Transaction Success! Wait to be redirected to waiting room' });
+    }
+    console.log("account", accounts[0])
   }
-
+  componentWillUnmount(){
+    this.unsubscribe()
+  }
 
   render() {
     return (
