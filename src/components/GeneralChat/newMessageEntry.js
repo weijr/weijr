@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
 import { db, auth } from '../../fire/firestore'
 import { connect } from 'react-redux';
+import { writeMessage } from '../../store'
 
 const sendMessage = (roomId) => {
+
+  
+
   return (evt) => {
     evt.preventDefault()
     db 
@@ -17,8 +21,11 @@ const sendMessage = (roomId) => {
   }
 }
 
-const NewMessageEntry = () => {
-  console.log(auth.currentUser.uid)
+
+
+const NewMessageEntry = (props) => {
+  // console.log(auth.currentUser.uid)
+  const { name, newMessageEntry, handleChange, handleSubmit } = props;
   return (
     
     <form id="new-message-form" onSubmit={evt => this.submitMessage("defaultHandle", newMessageEntry, evt)}>
@@ -38,5 +45,23 @@ const NewMessageEntry = () => {
   )
 }
 
+const mapDispatchToProps = function (dispatch, ownProps) {
+  return {
+    handleChange (evt) {
+      dispatch(writeMessage(evt.target.value));
+    }
+  //   handleSubmit (name, content, evt) {
+  //     evt.preventDefault();
 
-  export default NewMessageEntry;
+  //     const { channelId } = ownProps;
+
+  //     dispatch(postMessage({ name, content, channelId }));
+  //     dispatch(writeMessage(''));
+  //   }
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(NewMessageEntry);
