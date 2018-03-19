@@ -13,6 +13,8 @@ import mafiaContract from '../mafiaContract';
 class App extends Component {
   constructor(props) {
     super(props)
+
+    this.pay = this.pay.bind(this)
     this.enterGame = this.enterGame.bind(this)
   }
 
@@ -20,7 +22,8 @@ class App extends Component {
     manager: '',
     numberOfPlayers: '',
     pot: '',
-    message: ''
+    message: '',
+    paid: false
 
   }
 
@@ -32,9 +35,9 @@ class App extends Component {
     this.setState({ manager, numberOfPlayers, pot });
   }
 
-  enterGame = async (event) => {
+  pay = async (event) => {
 
-      event.preventDefault();
+    event.preventDefault();
     //random name generator
     let name = ["abandoned", "able", "absolute", "adorable", "adventurous", "academic", "acceptable", "acclaimed"]
     let nameIndex = Math.floor((Math.random() * name.length));
@@ -59,10 +62,10 @@ class App extends Component {
       this.setState({ message: "You're already in the game! No cheating! " })
     } else {
       this.setState({ message: 'Waiting on transaction success...' });
-      await mafiaContract.methods.addPlayer(accounts[0], true).send({
-        from: accounts[0],
-        value: web3.utils.toWei('1', 'ether')
-      });
+      // await mafiaContract.methods.addPlayer(accounts[0], true).send({
+      //   from: accounts[0],
+      //   value: web3.utils.toWei('1', 'ether')
+      // });
       this.unsubscribe = auth.onAuthStateChanged((user) => {
         if (!user) {
           auth.signInAnonymously()
@@ -71,9 +74,14 @@ class App extends Component {
         console.log(user.uid)
         userById(accounts[0]).set({ metamaskId: accounts[0], uid: user.uid, fakeName: randomName }, { merge: true })
       })
-      this.setState({ message: 'Transaction Success! Wait to be redirected to waiting room' });
+      this.setState({ message: 'Transaction Success! Click the link below to enter!', paid: true });
     }
+    history.push('/game')
     console.log("account", accounts[0])
+  }
+
+  enterGame = () => {
+    history.push('/game')
   }
 
   componentWillUnmount() {
@@ -81,21 +89,39 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to Mafia on da bloc</h1>
-          <h2>This game is managed by {this.state.manager}</h2>
-        </header>
-        <h2>Don't know how to play? Click here for instructions.</h2>
-        <h2>There are currently {this.state.numberOfPlayers} players in the game</h2>
-        <h3>Click the button below to ante up 1 ether with a chance to win the whole pot</h3>
-        <button onClick={this.enterGame}>Click here!</button>
-        <h6>The Current pot is {web3.utils.fromWei(this.state.pot, 'ether')} ether</h6>
-        <h1>{this.state.message}</h1>
-      </div>
-    )
+    if (!this.state.paid) {
+      return (
+        <div className="App">
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <h1 className="App-title">Welcome to Mafia on da bloc</h1>
+            <h2>This game is managed by {this.state.manager}</h2>
+          </header>
+          <h2>Don't know how to play? Click here for instructions.</h2>
+          <h2>There are currently {this.state.numberOfPlayers} players in the game</h2>
+          <h3>Click the button below to ante up 1 ether with a chance to win the whole pot</h3>
+          <button onClick={this.pay}>Click here!</button>
+          <h6>The Current pot is {web3.utils.fromWei(this.state.pot, 'ether')} ether</h6>
+          <h1>{this.state.message}</h1>
+        </div>
+      )
+    } else {
+      return (
+        <div className="App">
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <h1 className="App-title">Welcome to Mafia on da bloc</h1>
+            <h2>This game is managed by {this.state.manager}</h2>
+          </header>
+          <h2>Don't know how to play? Click here for instructions.</h2>
+          <h2>There are currently {this.state.numberOfPlayers} players in the game</h2>
+          <h6>The Current pot is {web3.utils.fromWei(this.state.pot, 'ether')} ether</h6>
+          <h1>{this.state.message}</h1>
+          <Link to={'/game'}>Enter Game</Link>
+        </div>
+      )
+    }
+    
   }
 }
 

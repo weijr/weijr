@@ -4,31 +4,30 @@ import { db, auth } from '../../fire/firestore'
 import { connect } from 'react-redux';
 import { writeMessage } from '../../store'
 
-const sendMessage = (roomId) => {
+const sendMessage = (evt, message) => {
+  evt.preventDefault()
 
-  
-
-  return (evt) => {
-    evt.preventDefault()
-    db 
+  db
     .collection("rooms")
     .doc("room1")
     .collection("generalChat")
     .add({
       uid: auth.currentUser.uid,
-
+      content: evt.target.value,
+      sentAt: Date.now()
     })
-  }
+
 }
 
 
 
+
 const NewMessageEntry = (props) => {
-  // console.log(auth.currentUser.uid)
+  console.log('auth: ', auth)
   const { name, newMessageEntry, handleChange, handleSubmit } = props;
   return (
-    
-    <form id="new-message-form" onSubmit={evt => this.submitMessage("defaultHandle", newMessageEntry, evt)}>
+
+    <form id="new-message-form" onSubmit={evt => sendMessage(evt)}>
       <div className="input-group input-group-lg">
         <input
           className="form-control"
@@ -47,17 +46,17 @@ const NewMessageEntry = (props) => {
 
 const mapDispatchToProps = function (dispatch, ownProps) {
   return {
-    handleChange (evt) {
+    handleChange(evt) {
       dispatch(writeMessage(evt.target.value));
     }
-  //   handleSubmit (name, content, evt) {
-  //     evt.preventDefault();
+    //   handleSubmit (name, content, evt) {
+    //     evt.preventDefault();
 
-  //     const { channelId } = ownProps;
+    //     const { channelId } = ownProps;
 
-  //     dispatch(postMessage({ name, content, channelId }));
-  //     dispatch(writeMessage(''));
-  //   }
+    //     dispatch(postMessage({ name, content, channelId }));
+    //     dispatch(writeMessage(''));
+    //   }
   };
 };
 
