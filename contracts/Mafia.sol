@@ -20,17 +20,12 @@ contract Mafia {
       manager = msg.sender;
   }
 
-  function addPlayer(address currentPlayer, bool mafia) public payable {
+  function addPlayer(address currentPlayer, bool isMafia) public payable {
       require(!alreadyPlaying[currentPlayer]);
-      players.push(Player({gamePlayer: currentPlayer, mafia: mafia}));
-  }
-
-  function recordPlayerIsPlaying(address playerThatsPlaying) public {
-    alreadyPlaying[playerThatsPlaying] = true;
-  }
-
-  function incrementSides(bool isMafia) public {
-    if (isMafia) {
+      require(msg.value == 1 ether);
+      players.push(Player({gamePlayer: currentPlayer, mafia: isMafia}));
+      alreadyPlaying[currentPlayer] = true;
+      if (isMafia) {
         mafiaMembers++;
     }else {
         villagerMembers++;
@@ -51,7 +46,12 @@ contract Mafia {
               players[i].gamePlayer.transfer(total/numberOfWinners);
           }
       //players = new Player[](0);
+      //Player storage players = [](0);
       }
+  }
+
+  function checkIfAlreadyInGame(address possiblePlayer)  public returns(bool) {
+      return alreadyPlaying[possiblePlayer];
   }
 
   function getPlayersLength() public view returns(uint) {

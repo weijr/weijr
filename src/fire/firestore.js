@@ -10,9 +10,14 @@ const config = {
   messagingSenderId: "291156435310"
 };
 
+
+
 firebase.initializeApp(config);
 
 export const db = firebase.firestore();
 export const auth = firebase.auth();
+
+export const userById = id => db.collection('users').doc(id);
+
 
 export default firebase;
