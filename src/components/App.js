@@ -34,7 +34,7 @@ class App extends Component {
 
   enterGame = async (event) => {
 
-    event.preventDefault();
+      event.preventDefault();
     //random name generator
     let name = ["abandoned", "able", "absolute", "adorable", "adventurous", "academic", "acceptable", "acclaimed"]
     let nameIndex = Math.floor((Math.random() * name.length));
@@ -49,28 +49,34 @@ class App extends Component {
     let accounts;
     try {
       accounts = await web3.eth.getAccounts();
-    } catch(error) {
-      this.setState({message: 'Go Set Up A MetaMask Account!'})
+    } catch (error) {
+      this.setState({ message: 'Go Set Up A MetaMask Account!' })
     }
 
     const alreadyInGame = await mafiaContract.methods.checkIfAlreadyInGame(accounts[0]).call();
 
-    if(alreadyInGame){
-      this.setState({message: "You're already in the game! No cheating! "})
+    if (alreadyInGame) {
+      this.setState({ message: "You're already in the game! No cheating! " })
     } else {
       this.setState({ message: 'Waiting on transaction success...' });
       await mafiaContract.methods.addPlayer(accounts[0], true).send({
         from: accounts[0],
         value: web3.utils.toWei('1', 'ether')
       });
-      this.unsubscribe = auth.onAuthStateChanged(()=> {
-        userById(accounts[0]).set({id:accounts[0], fakeName: randomName},{merge: true})
+      this.unsubscribe = auth.onAuthStateChanged((user) => {
+        if (!user) {
+          auth.signInAnonymously()
+          return
+        }
+        console.log(user.uid)
+        userById(accounts[0]).set({ metamaskId: accounts[0], uid: user.uid, fakeName: randomName }, { merge: true })
       })
       this.setState({ message: 'Transaction Success! Wait to be redirected to waiting room' });
     }
     console.log("account", accounts[0])
   }
-  componentWillUnmount(){
+
+  componentWillUnmount() {
     this.unsubscribe()
   }
 
