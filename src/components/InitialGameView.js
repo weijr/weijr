@@ -29,6 +29,8 @@ class InitialGameView extends Component {
     this.state = {
       messages: []
     }
+
+    this.submitMessage = this.submitMessage.bind(this)
   }
 
   // componentDidMount() {
@@ -41,6 +43,22 @@ class InitialGameView extends Component {
   //   console.log(messages.data)  
   // }
 
+  submitMessage = (handle, message, evt) => {
+
+    evt.preventDefault()
+    let dateTime = Date.now().toString()
+    let actionsRef = db.collection("rooms").doc("room1").collection("actions")
+    
+    actionsRef
+      .doc(dateTime)
+      .set({
+        handle: handle,
+        message: message,
+      })
+
+    console.log('made it here')
+  }
+
   render() {
     const { name, newMessageEntry, handleChange, handleSubmit } = this.props;
 
@@ -50,12 +68,11 @@ class InitialGameView extends Component {
           <h1 className="App-title">GAME ROOM BE HERE</h1>
           <Link to="/" className="link-btn">Home</Link>
         </header>
-        <form id="new-message-form" onSubmit={evt => handleSubmit(name, newMessageEntry, evt)}>
+        <form id="new-message-form" onSubmit={evt => this.submitMessage("defaultHandle", newMessageEntry, evt)}>
           <div className="input-group input-group-lg">
             <input
               className="form-control"
               type="text"
-              name="content"
               value={newMessageEntry}
               onChange={handleChange}
               placeholder="Say something nice..."
@@ -85,10 +102,10 @@ const mapDispatchToProps = function (dispatch, ownProps) {
     handleSubmit (name, content, evt) {
       evt.preventDefault();
 
-      const { channelId } = ownProps;
+      // const { channelId } = ownProps;
 
-      dispatch(postMessage({ name, content, channelId }));
-      dispatch(writeMessage(''));
+      dispatch(postMessage({ name, content, evt }));
+      // dispatch(writeMessage(''));
     }
   };
 };
