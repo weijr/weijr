@@ -1,13 +1,13 @@
-import web from "./web3";
+import web3 from "./web3";
 
-const address = "0x97514887629A0c6f6853c34B588CE338F7727d7F";
+const address = "0xB78e712C9E96Eb6D8EF3Da5fe94Ca63ff70BA946";
 
 const abi = [
   {
     constant: false,
     inputs: [
       { name: "currentPlayer", type: "address" },
-      { name: "mafia", type: "bool" }
+      { name: "isMafia", type: "bool" }
     ],
     name: "addPlayer",
     outputs: [],
@@ -44,15 +44,6 @@ const abi = [
   },
   {
     constant: false,
-    inputs: [{ name: "playerThatsPlaying", type: "address" }],
-    name: "recordPlayerIsPlaying",
-    outputs: [],
-    payable: false,
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    constant: false,
     inputs: [{ name: "isWinningTeamMafia", type: "bool" }],
     name: "payout",
     outputs: [],
@@ -62,9 +53,9 @@ const abi = [
   },
   {
     constant: false,
-    inputs: [{ name: "isMafia", type: "bool" }],
-    name: "incrementSides",
-    outputs: [],
+    inputs: [{ name: "possiblePlayer", type: "address" }],
+    name: "checkIfAlreadyInGame",
+    outputs: [{ name: "", type: "bool" }],
     payable: false,
     stateMutability: "nonpayable",
     type: "function"

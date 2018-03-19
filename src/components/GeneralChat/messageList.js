@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import './App.css';
 // import App from './App'
 import { Switch, Route, Link } from 'react-router-dom'
-import { db } from '../../fire/firestore'
+import { db, auth, userById} from '../../fire/firestore'
 import { connect } from 'react-redux';
 import Message from './message'
 
@@ -11,11 +11,15 @@ class messageList extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      messages: []
+      messages: [],
+      currentUser: ""
     }
   }
 
   componentDidMount() {
+    if(auth.currentUser){
+      this.setState({currentUser: auth.currentUser.uid})
+    }
     db
     .collection("rooms")
     .doc("room1")
@@ -37,7 +41,7 @@ class messageList extends Component {
 
   render() {
     const { messages } = this.state
-    console.log(messages)
+    // console.log(messages)
     return (
 
       <div>

@@ -6,6 +6,7 @@ import { db } from '../fire/firestore'
 import { connect } from 'react-redux';
 import { postMssage, writeMessage } from '../store';
 import MessageList from './GeneralChat/messageList'
+import GeneralChat from './GeneralChat/index'
 // const firebase = require("firebase");
 // require("firebase/firestore");
 
@@ -72,7 +73,7 @@ class InitialGameView extends Component {
           <h1 className="App-title">GAME ROOM BE HERE</h1>
           <Link to="/" className="link-btn">Home</Link>
         </header>
-        <MessageList />
+        <GeneralChat />
       </div>
     )
   }

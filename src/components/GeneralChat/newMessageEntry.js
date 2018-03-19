@@ -11,15 +11,16 @@ const sendMessage = (roomId) => {
     .doc("room1")
     .collection("generalChat")
     .add({
-      uid: auth
+      uid: auth.currentUser.uid,
+
     })
   }
 }
 
 const NewMessageEntry = () => {
-
+  console.log(auth.currentUser.uid)
   return (
-
+    
     <form id="new-message-form" onSubmit={evt => this.submitMessage("defaultHandle", newMessageEntry, evt)}>
       <div className="input-group input-group-lg">
         <input
@@ -35,6 +36,7 @@ const NewMessageEntry = () => {
       </div>
     </form>
   )
+}
 
 
   export default NewMessageEntry;

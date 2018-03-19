@@ -2,20 +2,39 @@ import React, { Component } from 'react';
 import logo from '../logo.svg';
 import './App.css';
 import { Switch, Route, Link, withRouter } from 'react-router-dom';
-import { db } from '../fire/firestore';
+import { db, auth, userById } from '../fire/firestore';
 import history from '../history';
 import store from '../store';
 import { browserHistory } from 'react-router';
 
+import web3 from '../web3';
+import mafiaContract from '../mafiaContract';
 
 class App extends Component {
   constructor(props) {
     super(props)
-
     this.enterGame = this.enterGame.bind(this)
   }
 
-  enterGame = () => {
+  state = {
+    manager: '',
+    numberOfPlayers: '',
+    pot: '',
+    message: ''
+
+  }
+
+  async componentDidMount() {
+    const manager = await mafiaContract.methods.manager().call();
+    const numberOfPlayers = await mafiaContract.methods.getPlayersLength().call();
+    const pot = await web3.eth.getBalance(mafiaContract.options.address);
+
+    this.setState({ manager, numberOfPlayers, pot });
+  }
+
+  enterGame = async (event) => {
+
+      event.preventDefault();
     //random name generator
     let name = ["abandoned", "able", "absolute", "adorable", "adventurous", "academic", "acceptable", "acclaimed"]
     let nameIndex = Math.floor((Math.random() * name.length));
@@ -25,37 +44,41 @@ class App extends Component {
 
     //random number generator for ether
     let randomEtherAmount = Math.floor((Math.random() * 100) + 75);
-    let playerRef = db.collection("rooms").doc("room1").collection("players")
-    playerRef.get()
-      .then(querySnapshot => {
-      let docs = querySnapshot.docs;
-      for (let doc of docs) {
-        console.log(`Document found at path: ${doc.ref.path}`);
-      }})
+    let playerRef = db.collection("players")
 
-    playerRef
-      .doc(randomName)
-      .set({
-        name: randomName,
-        ether: randomEtherAmount,
-      })
-      .then(() => {
-        playerRef
-          .doc(randomName)
-          .collection("inbox")
-          .add({
-            user: "admin",
-            message: randomName + "has entered the game"
-          })
-      })
-      .then(() => {
-        this.props.history.push('/game')
-      })
-      .catch(function (error) {
-        console.error("Error adding document: ", error);
+    let accounts;
+    try {
+      accounts = await web3.eth.getAccounts();
+    } catch (error) {
+      this.setState({ message: 'Go Set Up A MetaMask Account!' })
+    }
+
+    const alreadyInGame = await mafiaContract.methods.checkIfAlreadyInGame(accounts[0]).call();
+
+    if (alreadyInGame) {
+      this.setState({ message: "You're already in the game! No cheating! " })
+    } else {
+      this.setState({ message: 'Waiting on transaction success...' });
+      await mafiaContract.methods.addPlayer(accounts[0], true).send({
+        from: accounts[0],
+        value: web3.utils.toWei('1', 'ether')
       });
+      this.unsubscribe = auth.onAuthStateChanged((user) => {
+        if (!user) {
+          auth.signInAnonymously()
+          return
+        }
+        console.log(user.uid)
+        userById(accounts[0]).set({ metamaskId: accounts[0], uid: user.uid, fakeName: randomName }, { merge: true })
+      })
+      this.setState({ message: 'Transaction Success! Wait to be redirected to waiting room' });
+    }
+    console.log("account", accounts[0])
   }
 
+  componentWillUnmount() {
+    this.unsubscribe()
+  }
 
   render() {
     return (
@@ -63,11 +86,14 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to Mafia on da bloc</h1>
+          <h2>This game is managed by {this.state.manager}</h2>
         </header>
         <h2>Don't know how to play? Click here for instructions.</h2>
-        <h2>To join a game:</h2>
-
+        <h2>There are currently {this.state.numberOfPlayers} players in the game</h2>
+        <h3>Click the button below to ante up 1 ether with a chance to win the whole pot</h3>
         <button onClick={this.enterGame}>Click here!</button>
+        <h6>The Current pot is {web3.utils.fromWei(this.state.pot, 'ether')} ether</h6>
+        <h1>{this.state.message}</h1>
       </div>
     )
   }
