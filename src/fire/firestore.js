@@ -18,6 +18,7 @@ export const db = firebase.firestore();
 export const auth = firebase.auth();
 
 export const userById = id => db.collection('users').doc(id);
-auth.onAuthStateChanged((user) => auth.signInAnonymously())
+
+export const gameById = id => db.collection('game').doc(id);
 
 export default firebase;
