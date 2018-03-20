@@ -4,44 +4,53 @@ import { db, auth } from '../../fire/firestore'
 import { connect } from 'react-redux';
 import { writeMessage } from '../../store'
 
-const sendMessage = (evt, message) => {
-  evt.preventDefault()
-  // console.log('evt.t.v :', evt.target.value)
-  console.log('message: ', message)
 
-  db
-    .collection("rooms")
-    .doc("room1")
-    .collection("generalChat")
-    .add({
-      uid: auth.currentUser.uid,
-      content: message,
-      sentAt: Date(Date.now()).toString()
-    })
 
-}
+class NewMessageEntry extends Component {
+  constructor(props) {
+    super(props)
 
-const NewMessageEntry = (props) => {
-  console.log('auth: ', auth)
-  const { name, newMessageEntry, handleChange, handleSubmit } = props;
-  console.log(props.newMessageEntry)
+    this.sendMessage = this.sendMessage.bind(this)
+  }
 
-  return (
-    <form id="new-message-form" onSubmit={evt => sendMessage(evt, newMessageEntry)}>
-      <div className="input-group input-group-lg">
-        <input
-          className="form-control"
-          type="text"
-          value={newMessageEntry}
-          onChange={handleChange}
-          placeholder="Say something nice..."
-        />
-        <span className="input-group-btn">
-          <button className="btn btn-default" type="submit">Chat!</button>
-        </span>
-      </div>
-    </form>
-  )
+  sendMessage = (evt, message) => {
+    evt.preventDefault()
+    // console.log('evt.t.v :', evt.target.value)
+    console.log('message: ', message)
+
+    db
+      .collection("rooms")
+      .doc("room1")
+      .collection("generalChat")
+      .add({
+        uid: auth.currentUser.uid,
+        content: message,
+        sentAt: Date(Date.now()).toString()
+      })
+    this.props.clearForm()
+  }
+
+  render() {
+    console.log('auth: ', auth)
+    const { name, newMessageEntry, handleChange, handleSubmit } = this.props;
+    console.log(this.props.newMessageEntry)
+    return (
+      <form id="new-message-form" onSubmit={evt => this.sendMessage(evt, newMessageEntry)}>
+        <div className="input-group input-group-lg">
+          <input
+            className="form-control"
+            type="text"
+            value={newMessageEntry}
+            onChange={handleChange}
+            placeholder="Say something nice..."
+          />
+          <span className="input-group-btn">
+            <button className="btn btn-default" type="submit">Chat!</button>
+          </span>
+        </div>
+      </form>
+    )
+  }
 }
 
 const mapStateToProps = function (state, ownProps) {
@@ -54,6 +63,9 @@ const mapDispatchToProps = function (dispatch, ownProps) {
   return {
     handleChange(evt) {
       dispatch(writeMessage(evt.target.value));
+    },
+    clearForm() {
+      dispatch(writeMessage(''))
     }
     //   handleSubmit (name, content, evt) {
     //     evt.preventDefault();

@@ -21,5 +21,4 @@ export const userById = id => db.collection('users').doc(id);
 
 export const gameById = id => db.collection('game').doc(id);
 
-
 export default firebase;

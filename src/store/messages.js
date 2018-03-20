@@ -1,4 +1,4 @@
-// import axios from 'axios';
+import axios from 'axios';
 // import socket from '../socket';
 
 // ACTION TYPES
@@ -20,21 +20,13 @@ export function getMessages (messages) {
 
 // THUNK CREATORS
 
-// export function fetchMessages () {
+// export function postMessage (message) {
 
+//   let apiLink = 'https://us-central1-mafia-blockchain.cloudfunctions.net/api/rooms/room1/generalChat'
 //   return function thunk (dispatch) {
-//     return axios.get('/api/messages')
-//       .then(res => res.data)
-//       .then(messages => {
-//         const action = getMessages(messages);
-//         dispatch(action);
-//       });
+//     return axios.post(apiLink, message)
 //   };
 // }
-
-export function postMessage (message) {
-  console.log(message)
-}
 
 // REDUCER
 

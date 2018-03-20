@@ -69,6 +69,7 @@ class App extends Component {
 
     const alreadyInGame = await mafiaContract.methods.checkIfAlreadyInGame(accounts[0]).call();
 
+
     // if(alreadyInGame){
     //   this.setState({message: "You're already in the game! No cheating! "})
     // }
@@ -100,8 +101,6 @@ class App extends Component {
       this.setState({numberOfPlayers: await mafiaContract.methods.getPlayersLength().call()})
       this.setState({pot: await web3.eth.getBalance(mafiaContract.options.address)})
       this.setState({ message: 'Transaction Success! Wait to be redirected to waiting room', paid: true });
-
-
     }
 
 
