@@ -16,7 +16,7 @@ class App extends Component {
   constructor(props) {
     super(props)
 
-    this.pay = this.pay.bind(this)
+    // this.pay = this.pay.bind(this)
     this.enterGame = this.enterGame.bind(this)
   }
 
