@@ -24,6 +24,7 @@ class messageList extends Component {
     .collection("rooms")
     .doc("room1")
     .collection("generalChat")
+    .orderBy("sentAt")
     .onSnapshot(snapshot => {
       this.setState({
         messages: snapshot.docs.map(doc => {
@@ -48,7 +49,7 @@ class messageList extends Component {
         {messages.map(message => <Message key={message.id} message={message} />
         )}
       </div>
-      
+
 
     )
   }
