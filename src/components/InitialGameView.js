@@ -3,6 +3,10 @@ import './App.css';
 import App from './App'
 import { Switch, Route, Link } from 'react-router-dom'
 import { db } from '../fire/firestore'
+import { connect } from 'react-redux';
+import { postMssage, writeMessage } from '../store';
+import MessageList from './GeneralChat/messageList'
+import GeneralChat from './GeneralChat/index'
 // const firebase = require("firebase");
 // require("firebase/firestore");
 
@@ -22,33 +26,85 @@ import { db } from '../fire/firestore'
 
 
 class InitialGameView extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       messages: []
     }
+
+    this.submitMessage = this.submitMessage.bind(this)
   }
-  
-componentDidMount() {
-  let messages = db.collection('game').doc('gameRoom1')
-                .collection('messages')
-  messages.get()
-    .then((doc) => {
-      console.log(doc.data)
-    })
-  console.log(messages.data)  
-}
+
+  submitMessage = (handle, message, evt) => {
+
+    evt.preventDefault()
+    let dateTime = Date.now().toString()
+    let actionsRef = db.collection("rooms").doc("room1").collection("actions")
+    let playersRef = db.collection('/rooms/room1/players')
+
+
+    
+    // playersRef.get()
+    //   .then(querySnapshot => {
+    //     if (querySnapshot.docs) {
+    //       let docs = querySnapshot.docs
+    //       for (let doc of docs) {
+    //           console.log(doc.ref.path)
+    //       }}
+    //     })
+
+    // actionsRef
+    //   .doc(dateTime)
+    //   .set({
+    //     handle: handle,
+    //     message: message,
+    //     type: 'generalMessage'
+    //   })
+
+    // console.log('made it here')
+  }
 
   render() {
-      return (
-        <div className="App">
-          <header className="App-header">
-            <h1 className="App-title">GAME ROOM BE HERE</h1>
-            <Link to="/" className="link-btn">Home</Link>
-          </header>
-        </div>
-      )
-    }
-  }
+    const { name, newMessageEntry, handleChange, handleSubmit } = this.props;
 
-export default InitialGameView;
+    return (
+      <div className="App">
+        <header className="App-header">
+          <h1 className="App-title">GAME ROOM BE HERE</h1>
+          <Link to="/" className="link-btn">Home</Link>
+        </header>
+        <GeneralChat />
+      </div>
+    )
+  }
+}
+
+const mapStateToProps = function (state, ownProps) {
+  return {
+    newMessageEntry: state.newMessageEntry,
+    name: state.name
+  };
+};
+
+const mapDispatchToProps = function (dispatch, ownProps) {
+  return {
+    handleChange (evt) {
+      dispatch(writeMessage(evt.target.value));
+    },
+    handleSubmit (name, content, evt) {
+      evt.preventDefault();
+
+      // const { channelId } = ownProps;
+
+      dispatch(postMessage({ name, content, evt }));
+      // dispatch(writeMessage(''));
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(InitialGameView);
+
+

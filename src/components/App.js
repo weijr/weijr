@@ -15,6 +15,8 @@ import {definedRole, randomNameGenerator} from '../utils';
 class App extends Component {
   constructor(props) {
     super(props)
+
+    this.pay = this.pay.bind(this)
     this.enterGame = this.enterGame.bind(this)
   }
 
@@ -22,7 +24,8 @@ class App extends Component {
     manager: '',
     numberOfPlayers: '',
     pot: '',
-    message: ''
+    message: '',
+    paid: false
 
   }
 
@@ -41,12 +44,16 @@ class App extends Component {
     this.setState({ manager, numberOfPlayers, pot });
   }
 
+<<<<<<< HEAD
   componentWillUnmount(){
     this.unsubscribe()
     this.unsubscribeCreateRoles();
   }
 
   enterGame = async (event) => {
+=======
+  pay = async (event) => {
+>>>>>>> master
 
     event.preventDefault();
 
@@ -59,8 +66,8 @@ class App extends Component {
     let accounts;
     try {
       accounts = await web3.eth.getAccounts();
-    } catch(error) {
-      this.setState({message: 'Go Set Up A MetaMask Account!'})
+    } catch (error) {
+      this.setState({ message: 'Go Set Up A MetaMask Account!' })
     }
 
 
@@ -96,28 +103,47 @@ class App extends Component {
 
       this.setState({numberOfPlayers: await mafiaContract.methods.getPlayersLength().call()})
       this.setState({pot: await web3.eth.getBalance(mafiaContract.options.address)})
-      this.setState({ message: 'Transaction Success! Wait to be redirected to waiting room' });
+      this.setState({ message: 'Transaction Success! Wait to be redirected to waiting room', paid: true });
+
 
     }
 
 
 
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to Mafia on da bloc</h1>
-          <h2>This game is managed by {this.state.manager}</h2>
-        </header>
-        <h2>Don't know how to play? Click here for instructions.</h2>
-        <h2>There are currently {this.state.numberOfPlayers} players in the game</h2>
-        <h3>Click the button below to ante up 1 ether with a chance to win the whole pot</h3>
-        <button onClick={this.enterGame}>Click here!</button>
-        <h6>The Current pot is {web3.utils.fromWei(this.state.pot, 'ether')} ether</h6>
-        <h1>{this.state.message}</h1>
-      </div>
-    )
+    if (!this.state.paid) {
+      return (
+        <div className="App">
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <h1 className="App-title">Welcome to Mafia on da bloc</h1>
+            <h2>This game is managed by {this.state.manager}</h2>
+          </header>
+          <h2>Don't know how to play? Click here for instructions.</h2>
+          <h2>There are currently {this.state.numberOfPlayers} players in the game</h2>
+          <h3>Click the button below to ante up 1 ether with a chance to win the whole pot</h3>
+          <button onClick={this.pay}>Click here!</button>
+          <h6>The Current pot is {web3.utils.fromWei(this.state.pot, 'ether')} ether</h6>
+          <h1>{this.state.message}</h1>
+        </div>
+      )
+    } else {
+      return (
+        <div className="App">
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <h1 className="App-title">Welcome to Mafia on da bloc</h1>
+            <h2>This game is managed by {this.state.manager}</h2>
+          </header>
+          <h2>Don't know how to play? Click here for instructions.</h2>
+          <h2>There are currently {this.state.numberOfPlayers} players in the game</h2>
+          <h6>The Current pot is {web3.utils.fromWei(this.state.pot, 'ether')} ether</h6>
+          <h1>{this.state.message}</h1>
+          <Link to={'/game'}>Enter Game</Link>
+        </div>
+      )
+    }
+
   }
 }
 
