@@ -8,7 +8,7 @@ import store from '../store';
 import { browserHistory } from 'react-router';
 
 import web3 from '../web3';
-import mafiaContract from '../mafiaContract';
+import wagerContract from '../wagerContract';
 
 import {definedRole, randomNameGenerator} from '../utils';
 
@@ -37,9 +37,9 @@ class App extends Component {
       }
     })
 
-    const manager = await mafiaContract.methods.manager().call();
-    const numberOfPlayers = await mafiaContract.methods.getPlayersLength().call();
-    const pot = await web3.eth.getBalance(mafiaContract.options.address);
+    const manager = await wagerContract.methods.manager().call();
+    const numberOfPlayers = await wagerContract.methods.getUsersLength().call();
+    const pot = await web3.eth.getBalance(wagerContract.options.address);
 
     this.setState({ manager, numberOfPlayers, pot });
   }
@@ -49,7 +49,7 @@ class App extends Component {
     this.unsubscribeCreateRoles();
   }
 
-  enterGame = async (event) => {
+  enterBet = async (event) => {
 
     event.preventDefault();
 
@@ -57,7 +57,7 @@ class App extends Component {
     let randomName = randomNameGenerator();
 
 
-    const setRolesForGame = await db.collection("rooms").doc("room1").collection("roles").doc("roles").get()
+    // const setRolesForGame = await db.collection("rooms").doc("room1").collection("roles").doc("roles").get()
 
     let accounts;
     try {
@@ -67,27 +67,25 @@ class App extends Component {
     }
 
 
-    const alreadyInGame = await mafiaContract.methods.checkIfAlreadyInGame(accounts[0]).call();
+    const alreadyInBet = await wagerContract.methods.checkIfAlreadyInBet(accounts[0]).call();
 
 
-    // if(alreadyInGame){
+    // if(alreadyInBet){
     //   this.setState({message: "You're already in the game! No cheating! "})
     // }
     //else {
 
       //checks currentrandom arrays index to see if its mafia or not
-      let isMafia;
-      setRolesForGame.data().roles[Number(this.state.numberOfPlayers)].indexOf('mafia') === -1 ? isMafia = false : isMafia = true;
+      let chooseFirstSide;
+
 
       this.setState({ message: 'Waiting on transaction success...' });
 
       //await the transaction to contract for adding a player
-      await mafiaContract.methods.addPlayer(accounts[0], isMafia).send({
+      await wagerContract.methods.joinBet(chooseFirtSide).send({
         from: accounts[0],
         value: web3.utils.toWei('.0000000000001', 'ether')
       });
-      const YO = await mafiaContract.methods.getPlayersLength().call();
-      console.log(YO)
 
       //push the new player to the firestore
       this.unsubscribe = auth.onAuthStateChanged((user)=> {
@@ -98,8 +96,8 @@ class App extends Component {
         userById(accounts[0]).set({metamaskId:accounts[0], id: user.uid, fakeName: randomName, role: setRolesForGame.data().roles[Number(this.state.numberOfPlayers)], isMafia: isMafia},{merge: true})
       })
 
-      this.setState({numberOfPlayers: await mafiaContract.methods.getPlayersLength().call()})
-      this.setState({pot: await web3.eth.getBalance(mafiaContract.options.address)})
+      this.setState({numberOfPlayers: await wagerContract.methods.getPlayersLength().call()})
+      this.setState({pot: await web3.eth.getBalance(wagerContract.options.address)})
       this.setState({ message: 'Transaction Success! Click on the link below to enter', paid: true });
     }
 
