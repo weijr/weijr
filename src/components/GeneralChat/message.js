@@ -1,25 +1,21 @@
-import React, { Component } from 'react';
-import { Switch, Route, Link } from 'react-router-dom'
-import { db, auth } from '../../fire/firestore'
-import { connect } from 'react-redux';
-// import { 
-//   Button,
-//   Comment,
-//   Form, 
-//   Header
-// } from 'semantic-ui-react'
+import React from 'react';
+import { Comment } from 'semantic-ui-react'
+import image from './adminLogo.png'
 
-const Message = ({ message }) => {
-  // console.log(typeof message.sentAt)
-  // console.log('auth: ', auth.currentUser)
-  return(
-    <div className="media-body">
-      <h4 className="media-heading">{message.from}</h4>
-      <p>{message.content}</p>
-      <p>{message.sentAt}</p>
-    </div>
-  )
+export default function Message (props) {
+
+  const message = props.message;
+
+  return (
+    <Comment>
+      <Comment.Avatar src={image} />
+      <Comment.Content>
+        <Comment.Author>{message.from}</Comment.Author>
+        <Comment.Metadata>
+          <div>{message.sentAt}</div>
+        </Comment.Metadata>
+        <Comment.Text>{message.content}</Comment.Text>
+      </Comment.Content>
+    </Comment>
+  );
 }
-
-
-export default Message;

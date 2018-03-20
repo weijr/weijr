@@ -54,7 +54,7 @@ class App extends Component {
     const second = "ThundervsNets";
     return (
       <div>
-        {!this.state.enter ? (
+        {!this.state.enter (
           <div className="App">
             <header className="App-header">
               <img src={logo} className="App-logo" alt="logo" />
@@ -73,8 +73,6 @@ class App extends Component {
             </div>
             <h1>{this.state.message}</h1>
           </div>
-        ) : (
-          <InitialGameView wager={this.state.wager} />
         )}
       </div>
     );

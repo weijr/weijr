@@ -37,7 +37,6 @@ class InitialGameView extends Component {
 
 
   render() {
-
     return (
       <div className="App">
         <GeneralChat wager={this.state.wager}/>
