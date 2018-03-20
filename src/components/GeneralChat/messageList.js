@@ -6,6 +6,7 @@ import { db, auth, userById } from '../../fire/firestore'
 import { connect } from 'react-redux';
 import Message from './message'
 import logo from '../../logo.svg'
+import { Comment } from 'semantic-ui-react'
 
 
 class messageList extends Component {
@@ -50,15 +51,10 @@ class messageList extends Component {
     const { messages } = this.state
     // console.log(messages)
     return (
-
-      <div>
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to Blockchain Bois</h1>
-        </header>
-        {messages.map(message => <Message key={message.id} message={message} wager={this.state.wager} />
+      <Comment.Group>
+        {messages.map(message => <Message key={message.id} message={message} wager={this.state.wager} sentAt={this.state.sentAt}/>
         )}
-      </div>
+      </Comment.Group>
 
 
     )
