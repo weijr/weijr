@@ -44,16 +44,12 @@ class App extends Component {
     this.setState({ manager, numberOfPlayers, pot });
   }
 
-<<<<<<< HEAD
   componentWillUnmount(){
     this.unsubscribe()
     this.unsubscribeCreateRoles();
   }
 
   enterGame = async (event) => {
-=======
-  pay = async (event) => {
->>>>>>> master
 
     event.preventDefault();
 
