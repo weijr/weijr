@@ -9,19 +9,23 @@ import { writeMessage } from '../../store'
 class NewMessageEntry extends Component {
   constructor(props) {
     super(props)
-
+    this.state = {
+      wager: this.props.wager
+    }
     this.sendMessage = this.sendMessage.bind(this)
   }
 
   sendMessage = (evt, message) => {
+    let wager = this.state.wager
     evt.preventDefault()
+    console.log('wager: ', wager)
     // console.log('evt.t.v :', evt.target.value)
     console.log('message: ', message)
-
+    
     db
-      .collection("rooms")
-      .doc("room1")
-      .collection("generalChat")
+      .collection("wagers")
+      .doc(wager)
+      .collection("wagerChat")
       .add({
         uid: auth.currentUser.uid,
         content: message,
