@@ -100,7 +100,7 @@ class App extends Component {
 
       this.setState({numberOfPlayers: await mafiaContract.methods.getPlayersLength().call()})
       this.setState({pot: await web3.eth.getBalance(mafiaContract.options.address)})
-      this.setState({ message: 'Transaction Success! Wait to be redirected to waiting room', paid: true });
+      this.setState({ message: 'Transaction Success! Click on the link below to enter', paid: true });
     }
 
 
@@ -117,7 +117,7 @@ class App extends Component {
           <h2>Don't know how to play? Click here for instructions.</h2>
           <h2>There are currently {this.state.numberOfPlayers} players in the game</h2>
           <h3>Click the button below to ante up 1 ether with a chance to win the whole pot</h3>
-          <button onClick={this.pay}>Click here!</button>
+          <button onClick={this.enterGame}>Click here!</button>
           <h6>The Current pot is {web3.utils.fromWei(this.state.pot, 'ether')} ether</h6>
           <h1>{this.state.message}</h1>
         </div>
