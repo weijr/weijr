@@ -85,18 +85,18 @@ class App extends Component {
       await mafiaContract.methods.addPlayer(accounts[0], isMafia).send({
         from: accounts[0],
         value: web3.utils.toWei('.0000000000001', 'ether')
-      });
+      }); userById(auth.currentUser.uid).set({metamaskId:accounts[0], id: auth.currentUser.uid, fakeName: randomName, role: setRolesForGame.data().roles[Number(this.state.numberOfPlayers)], isMafia: isMafia},{merge: true})
       const YO = await mafiaContract.methods.getPlayersLength().call();
       console.log(YO)
 
       //push the new player to the firestore
-      this.unsubscribe = auth.onAuthStateChanged((user)=> {
-        if (!user) {
-          auth.signInAnonymously()
-          return;
-        }
-        userById(accounts[0]).set({metamaskId:accounts[0], id: user.uid, fakeName: randomName, role: setRolesForGame.data().roles[Number(this.state.numberOfPlayers)], isMafia: isMafia},{merge: true})
-      })
+      // this.unsubscribe = auth.onAuthStateChanged((user)=> {
+      //   if (!user) {
+      //     auth.signInAnonymously()
+      //     return;
+      //   }
+        userById(auth.currentUser.uid).set({metamaskId:accounts[0], id: auth.currentUser.uid, fakeName: randomName, role: setRolesForGame.data().roles[Number(this.state.numberOfPlayers)], isMafia: isMafia},{merge: true})
+      // })
 
       this.setState({numberOfPlayers: await mafiaContract.methods.getPlayersLength().call()})
       this.setState({pot: await web3.eth.getBalance(mafiaContract.options.address)})
