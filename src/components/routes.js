@@ -8,13 +8,14 @@ import InitialGameView from './InitialGameView';
 
 class Routes extends Component {
   componentDidMount () {
-  
+
   }
   render () {
     return (
       <Switch>
-        <Route exact path="/game" component={InitialGameView} />  
+        <Route exact path="/game" component={InitialGameView} />
         <Route exact path="/" component={ App } />
+        <Route exact path="/game/:id" component={InitialGameView} />
       </Switch>
     )
   }

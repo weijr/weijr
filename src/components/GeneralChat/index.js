@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
-// import './App.css';
+import '../App.css';
 // import App from '../App'
 import { Switch, Route, Link } from 'react-router-dom'
 import { db } from '../../fire/firestore'
 import { connect } from 'react-redux';
 import MessageList from './messageList'
 import NewMessageEntry from './newMessageEntry'
-
+import logo from '../../logo.svg';
 
 
 class GeneralChat extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      messages: []
+      messages: [],
+      wager: this.props.wager
     }
 
   }
@@ -23,8 +24,8 @@ class GeneralChat extends Component {
 
     return (
         <div>
-          <MessageList />
-          <NewMessageEntry />
+          <MessageList wager={this.state.wager} />
+          <NewMessageEntry wager={this.state.wager} />
         </div>
     )
   }

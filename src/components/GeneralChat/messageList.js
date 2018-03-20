@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 // import './App.css';
 // import App from './App'
 import { Switch, Route, Link } from 'react-router-dom'
-import { db, auth, userById} from '../../fire/firestore'
+import { db, auth, userById } from '../../fire/firestore'
 import { connect } from 'react-redux';
 import Message from './message'
+import logo from '../../logo.svg'
 
 
 class messageList extends Component {
@@ -12,32 +13,37 @@ class messageList extends Component {
     super(props)
     this.state = {
       messages: [],
-      currentUser: ""
+      currentUser: "",
+      wager: this.props.wager
     }
   }
 
   componentDidMount() {
-    if(auth.currentUser){
-      this.setState({currentUser: auth.currentUser.uid})
+    let wager = this.state.wager
+
+    if (auth.currentUser) {
+      this.setState({ currentUser: auth.currentUser.uid })
     }
+
+    console.log(wager)
     db
-    .collection("rooms")
-    .doc("room1")
-    .collection("generalChat")
-    .orderBy("sentAt")
-    .onSnapshot(snapshot => {
-      this.setState({
-        messages: snapshot.docs.map(doc => {
-          const data = doc.data()
-          return {
-            id: doc.ref.id,
-            content: data.content,
-            from: data.uid,
-            sentAt: data.sentAt
-          }
+      .collection("wagers")
+      .doc(wager)
+      .collection("wagerChat")
+      .orderBy("sentAt")
+      .onSnapshot(snapshot => {
+        this.setState({
+          messages: snapshot.docs.map(doc => {
+            const data = doc.data()
+            return {
+              id: doc.ref.id,
+              content: data.content,
+              from: data.uid,
+              sentAt: data.sentAt
+            }
+          })
         })
       })
-    })
   }
 
   render() {
@@ -46,7 +52,11 @@ class messageList extends Component {
     return (
 
       <div>
-        {messages.map(message => <Message key={message.id} message={message} />
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h1 className="App-title">Welcome to Blockchain Bois</h1>
+        </header>
+        {messages.map(message => <Message key={message.id} message={message} wager={this.state.wager} />
         )}
       </div>
 
