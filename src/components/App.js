@@ -100,6 +100,7 @@ class App extends Component {
 
       this.setState({numberOfPlayers: await mafiaContract.methods.getPlayersLength().call()})
       this.setState({pot: await web3.eth.getBalance(mafiaContract.options.address)})
+      db.collection("rooms").doc("room1").collection("generalChat").add({content: auth.currentUser.uid + " has entered the game.", sentAt: Date(Date.now()).toString(), uid: 'Modterator'})
       this.setState({ message: 'Transaction Success! Click on the link below to enter', paid: true });
     }
 
