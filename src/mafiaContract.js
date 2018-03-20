@@ -1,6 +1,6 @@
 import web3 from "./web3";
 
-const address = "0xB78e712C9E96Eb6D8EF3Da5fe94Ca63ff70BA946";
+const address = "0xD6f90810a97758d52Cd40Ff836f2Ad3F134Fa000";
 
 const abi = [
   {
@@ -97,5 +97,4 @@ const abi = [
     type: "constructor"
   }
 ];
-
 export default new web3.eth.Contract(abi, address);

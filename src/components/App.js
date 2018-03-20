@@ -10,6 +10,8 @@ import { browserHistory } from 'react-router';
 import web3 from '../web3';
 import mafiaContract from '../mafiaContract';
 
+import {definedRole, randomNameGenerator} from '../utils';
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -25,6 +27,13 @@ class App extends Component {
   }
 
   async componentDidMount() {
+    //setting a random array of roles, if one does not exist already
+    this.unsubscribeCreateRoles = db.collection("rooms").doc("room1").collection("roles").onSnapshot(snap =>  {
+      if (!snap.docs.length) {
+         definedRole();
+      }
+    })
+
     const manager = await mafiaContract.methods.manager().call();
     const numberOfPlayers = await mafiaContract.methods.getPlayersLength().call();
     const pot = await web3.eth.getBalance(mafiaContract.options.address);
@@ -32,19 +41,20 @@ class App extends Component {
     this.setState({ manager, numberOfPlayers, pot });
   }
 
+  componentWillUnmount(){
+    this.unsubscribe()
+    this.unsubscribeCreateRoles();
+  }
+
   enterGame = async (event) => {
 
     event.preventDefault();
-    //random name generator
-    let name = ["abandoned", "able", "absolute", "adorable", "adventurous", "academic", "acceptable", "acclaimed"]
-    let nameIndex = Math.floor((Math.random() * name.length));
-    let name2 = ["people", "history", "way", "art", "world", "information", "map", "family", "government", "health"]
-    let name2Index = Math.floor((Math.random() * name2.length));
-    let randomName = name[nameIndex] + "  " + name2[name2Index]
 
-    //random number generator for ether
-    let randomEtherAmount = Math.floor((Math.random() * 100) + 75);
-    let playerRef = db.collection("players")
+    //random name generator
+    let randomName = randomNameGenerator();
+
+
+    const setRolesForGame = await db.collection("rooms").doc("room1").collection("roles").doc("roles").get()
 
     let accounts;
     try {
@@ -53,26 +63,44 @@ class App extends Component {
       this.setState({message: 'Go Set Up A MetaMask Account!'})
     }
 
+
     const alreadyInGame = await mafiaContract.methods.checkIfAlreadyInGame(accounts[0]).call();
 
-    if(alreadyInGame){
-      this.setState({message: "You're already in the game! No cheating! "})
-    } else {
+    // if(alreadyInGame){
+    //   this.setState({message: "You're already in the game! No cheating! "})
+    // }
+    //else {
+
+      //checks currentrandom arrays index to see if its mafia or not
+      let isMafia;
+      setRolesForGame.data().roles[Number(this.state.numberOfPlayers)].indexOf('mafia') === -1 ? isMafia = false : isMafia = true;
+
       this.setState({ message: 'Waiting on transaction success...' });
-      await mafiaContract.methods.addPlayer(accounts[0], true).send({
+
+      //await the transaction to contract for adding a player
+      await mafiaContract.methods.addPlayer(accounts[0], isMafia).send({
         from: accounts[0],
-        value: web3.utils.toWei('1', 'ether')
+        value: web3.utils.toWei('.0000000000001', 'ether')
       });
-      this.unsubscribe = auth.onAuthStateChanged(()=> {
-        userById(accounts[0]).set({id:accounts[0], fakeName: randomName},{merge: true})
+      const YO = await mafiaContract.methods.getPlayersLength().call();
+      console.log(YO)
+
+      //push the new player to the firestore
+      this.unsubscribe = auth.onAuthStateChanged((user)=> {
+        if (!user) {
+          auth.signInAnonymously()
+          return;
+        }
+        userById(accounts[0]).set({metamaskId:accounts[0], id: user.uid, fakeName: randomName, role: setRolesForGame.data().roles[Number(this.state.numberOfPlayers)], isMafia: isMafia},{merge: true})
       })
+
+      this.setState({numberOfPlayers: await mafiaContract.methods.getPlayersLength().call()})
+      this.setState({pot: await web3.eth.getBalance(mafiaContract.options.address)})
       this.setState({ message: 'Transaction Success! Wait to be redirected to waiting room' });
+
     }
-    console.log("account", accounts[0])
-  }
-  componentWillUnmount(){
-    this.unsubscribe()
-  }
+
+
 
   render() {
     return (
