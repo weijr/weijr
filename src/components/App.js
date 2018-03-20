@@ -59,13 +59,13 @@ class App extends Component {
     const alreadyInGame = await mafiaContract.methods.checkIfAlreadyInGame(accounts[0]).call();
 
     if (alreadyInGame) {
-      this.setState({ message: "You're already in the game! No cheating! " })
+      this.setState({ message: "You're already in the game! No cheating! ", paid: true })
     } else {
       this.setState({ message: 'Waiting on transaction success...' });
-      // await mafiaContract.methods.addPlayer(accounts[0], true).send({
-      //   from: accounts[0],
-      //   value: web3.utils.toWei('1', 'ether')
-      // });
+      await mafiaContract.methods.addPlayer(accounts[0], true).send({
+        from: accounts[0],
+        value: web3.utils.toWei('1', 'ether')
+      });
       this.unsubscribe = auth.onAuthStateChanged((user) => {
         if (!user) {
           auth.signInAnonymously()
@@ -74,6 +74,9 @@ class App extends Component {
         console.log(user.uid)
         userById(accounts[0]).set({ metamaskId: accounts[0], uid: user.uid, fakeName: randomName }, { merge: true })
       })
+      userById
+      console.log("auth.currentuser: ", auth.currentUser)
+      userById(auth.currentUser.uid).set({metamaskId: accounts[0], uid: auth.currentUser.uid, fakeName: 'anthony' }, { merge: true })
       this.setState({ message: 'Transaction Success! Click the link below to enter!', paid: true });
     }
     history.push('/game')

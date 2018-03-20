@@ -1,17 +1,25 @@
 const functions = require('firebase-functions');
-// const admin = require('firebase-admin');
-// admin.initializeApp(functions.config().firebase);q\
-// import{ db }from '../fire/firestore'
+const admin = require('firebase-admin');
+admin.initializeApp(functions.config().firebase);
+// import { db }from '../fire/firestore'
 const express = require('express')
 const app = express()
   
-app.get('/rooms/room1', (req, res) => {
-  res.send('hello')
-})
+// app.get('/rooms/room1', (req, res) => {
+//   res.send('hello')
+// })
 
-app.post('/rooms/room1/generalChat', (req, res) => {
-  
-})
+// app.post('/rooms/room1/generalChat', (req, res) => {
+//   admin.firestore()
+//     .collection("rooms")
+//     .doc("room1")
+//     .collection("generalChat")
+//     .add({
+//       uid: req.body.uid,
+//       content: req.body.message,
+//       sentAt: req.body.sentAt
+//     })
+// })
 
 
 
