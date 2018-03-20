@@ -30,14 +30,13 @@ class InitialGameView extends Component {
     super(props)
     this.state = {
       messages: [],
-      wager: this.props.wager
+      wager: this.props.match.params.id
     }
   }
 
-  
+
 
   render() {
-    const { name, newMessageEntry, handleChange, handleSubmit } = this.props;
 
     return (
       <div className="App">
