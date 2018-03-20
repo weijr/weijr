@@ -21,8 +21,8 @@ contract Mafia {
   }
 
   function addPlayer(address currentPlayer, bool isMafia) public payable {
-      require(!alreadyPlaying[currentPlayer]);
-      require(msg.value == 1 ether);
+      //require(!alreadyPlaying[currentPlayer]);
+      //require(msg.value == 1 ether);
       players.push(Player({gamePlayer: currentPlayer, mafia: isMafia}));
       alreadyPlaying[currentPlayer] = true;
       if (isMafia) {
