@@ -1,27 +1,26 @@
-import React, { Component } from 'react';
-import { Switch, Route, Link } from 'react-router-dom'
-import { db, auth } from '../../fire/firestore'
-import { connect } from 'react-redux';
-import { writeMessage } from '../../store'
-
-
+import React, { Component } from "react";
+import { Switch, Route, Link } from "react-router-dom";
+import { db, auth } from "../../fire/firestore";
+import { connect } from "react-redux";
+import { writeMessage } from "../../store";
+import { Form, Button } from "semantic-ui-react";
 
 class NewMessageEntry extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       wager: this.props.wager
-    }
-    this.sendMessage = this.sendMessage.bind(this)
+    };
+    this.sendMessage = this.sendMessage.bind(this);
   }
 
   sendMessage = (evt, message) => {
-    let wager = this.state.wager
-    evt.preventDefault()
-    console.log('wager: ', wager)
+    let wager = this.state.wager;
+    evt.preventDefault();
+    console.log("wager: ", wager);
     // console.log('evt.t.v :', evt.target.value)
-    console.log('message: ', message)
-    
+    console.log("message: ", message);
+
     db
       .collection("wagers")
       .doc(wager)
@@ -30,46 +29,55 @@ class NewMessageEntry extends Component {
         uid: auth.currentUser.uid,
         content: message,
         sentAt: Date(Date.now()).toString()
-      })
-    this.props.clearForm()
-  }
+      });
+    this.props.clearForm();
+  };
 
   render() {
-    console.log('auth: ', auth)
+    console.log("auth: ", auth);
     const { name, newMessageEntry, handleChange, handleSubmit } = this.props;
-    console.log(this.props.newMessageEntry)
+    console.log(this.props.newMessageEntry);
     return (
-      <form id="new-message-form" onSubmit={evt => this.sendMessage(evt, newMessageEntry)}>
-        <div className="input-group input-group-lg">
-          <input
-            className="form-control"
-            type="text"
-            value={newMessageEntry}
-            onChange={handleChange}
-            placeholder="Say something nice..."
-          />
-          <span className="input-group-btn">
-            <button className="btn btn-default" type="submit">Chat!</button>
-          </span>
-        </div>
-      </form>
-    )
+      // <form id="new-message-form" onSubmit={evt => this.sendMessage(evt, newMessageEntry)}>
+      //   <div className="input-group input-group-lg">
+      //     <input
+      //       className="form-control"
+      // type="text"
+      // value={newMessageEntry}
+      // onChange={handleChange}
+      // placeholder="Say something nice..."
+      //     />
+      //     <span className="input-group-btn">
+      //       <button className="btn btn-default" type="submit">Chat!</button>
+      //     </span>
+      //   </div>
+      // </form>
+      <Form reply onSubmit={evt => this.sendMessage(evt, newMessageEntry)}>
+        <Form.TextArea
+          type="text"
+          value={newMessageEntry}
+          onChange={handleChange}
+          placeholder="Say something nice..."
+        />
+        <Button content="Add Reply" labelPosition="left" icon="edit" primary />
+      </Form>
+    );
   }
 }
 
-const mapStateToProps = function (state, ownProps) {
+const mapStateToProps = function(state, ownProps) {
   return {
-    newMessageEntry: state.newMessageEntry,
+    newMessageEntry: state.newMessageEntry
   };
 };
 
-const mapDispatchToProps = function (dispatch, ownProps) {
+const mapDispatchToProps = function(dispatch, ownProps) {
   return {
     handleChange(evt) {
       dispatch(writeMessage(evt.target.value));
     },
     clearForm() {
-      dispatch(writeMessage(''))
+      dispatch(writeMessage(""));
     }
     //   handleSubmit (name, content, evt) {
     //     evt.preventDefault();
@@ -82,7 +90,4 @@ const mapDispatchToProps = function (dispatch, ownProps) {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NewMessageEntry);
+export default connect(mapStateToProps, mapDispatchToProps)(NewMessageEntry);

@@ -6,6 +6,8 @@ import { db, auth, userById } from '../../fire/firestore'
 import { connect } from 'react-redux';
 import Message from './message'
 import logo from '../../logo.svg'
+import { Comment } from 'semantic-ui-react'
+import { ScrollBox } from 'react-scroll-box'
 
 
 class messageList extends Component {
@@ -14,8 +16,11 @@ class messageList extends Component {
     this.state = {
       messages: [],
       currentUser: "",
-      wager: this.props.wager
+      wager: this.props.wager,
+      wagerA: [],
+      wagerB: []
     }
+    this.scrollToBottom = this.scrollToBottom.bind(this)
   }
 
   componentDidMount() {
@@ -25,7 +30,7 @@ class messageList extends Component {
       this.setState({ currentUser: auth.currentUser.uid })
     }
 
-    console.log(wager)
+    console.log(auth.currentUser)
     db
       .collection("wagers")
       .doc(wager)
@@ -44,23 +49,32 @@ class messageList extends Component {
           })
         })
       })
+
+      this.scrollToBottom();
+  }
+
+  scrollToBottom = () => {
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
   render() {
+    // console.log(auth)
     const { messages } = this.state
     // console.log(messages)
     return (
-
-      <div>
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to Blockchain Bois</h1>
-        </header>
-        {messages.map(message => <Message key={message.id} message={message} wager={this.state.wager} />
+      <div className='overflow'>
+      <Comment.Group>
+        {messages.map(message => <Message key={message.id} message={message} wager={this.state.wager} sentAt={this.state.sentAt}/>
         )}
+        <div style={{ float:"left", clear: "both" }}
+             ref={(el) => { this.messagesEnd = el; }}>
+        </div>
+      </Comment.Group>
       </div>
-
-
     )
   }
 
