@@ -14,6 +14,8 @@ import { definedRole, randomNameGenerator } from "../utils";
 import InitialGameView from "./InitialGameView";
 import { Card, Image, Button, Grid } from "semantic-ui-react";
 import basketball from "./basketball.png";
+import CreateWager from "./CreateWager";
+import ShowAllContracts from "./ShowAllContracts";
 
 class App extends Component {
   constructor(props) {
@@ -83,6 +85,8 @@ class App extends Component {
           </Card>
           </Grid.Column>
         ))}
+        <ShowAllContracts />
+        <Button onClick={() => this.props.history.push(`/new-wager`)}>Create Your Own Contract!</Button>
         </Grid>
       </div>
     );
