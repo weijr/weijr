@@ -111,7 +111,7 @@ class WagerComponent extends Component {
       <Label as='a' basic color='red' pointing='left'>{this.state.wagerA.length}  Bets Placed</Label>
     </Button>
     <Button as='div' labelPosition='right'>
-      <Button basic color='blue' value={wagerB} onClick={event => this.placeWager(event)}>
+      <Button color='blue' value={wagerB} onClick={event => this.placeWager(event)}>
         <Icon name='ethereum' />
         { wagerB }
       </Button>
