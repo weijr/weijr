@@ -20,6 +20,7 @@ class messageList extends Component {
       wagerA: [],
       wagerB: []
     }
+    this.scrollToBottom = this.scrollToBottom.bind(this)
   }
 
   componentDidMount() {
@@ -49,6 +50,15 @@ class messageList extends Component {
         })
       })
 
+      this.scrollToBottom();
+  }
+
+  scrollToBottom = () => {
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
   render() {
@@ -56,10 +66,15 @@ class messageList extends Component {
     const { messages } = this.state
     // console.log(messages)
     return (
-      <Comment.Group className='overflow'>
+      <div className='overflow'>
+      <Comment.Group>
         {messages.map(message => <Message key={message.id} message={message} wager={this.state.wager} sentAt={this.state.sentAt}/>
         )}
+        <div style={{ float:"left", clear: "both" }}
+             ref={(el) => { this.messagesEnd = el; }}>
+        </div>
       </Comment.Group>
+      </div>
     )
   }
 
