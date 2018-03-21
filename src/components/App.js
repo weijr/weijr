@@ -6,14 +6,13 @@ import { db, auth, userById } from "../fire/firestore";
 import history from "../history";
 import store from "../store";
 import { browserHistory } from "react-router";
-
 import web3 from "../web3";
 import mafiaContract from "../mafiaContract";
 import GeneralChat from "./GeneralChat/index";
 import { definedRole, randomNameGenerator } from "../utils";
 import InitialGameView from "./InitialGameView";
-import { Card, Image, Button, Grid } from "semantic-ui-react";
 import basketball from "./basketball.png";
+import { Header, Icon, Image, Segment, Grid, Button, Card } from 'semantic-ui-react'
 
 class App extends Component {
   constructor(props) {
@@ -69,20 +68,33 @@ class App extends Component {
     const wagerList = this.state.listOfWagers;
     return (
       <div>
-        <h1 className="App-title">Welcome to Blockchain Bois</h1>
-        <h3>Click the button below to ante up 1 to enter this wager</h3>
-        <Grid columns={3}>
-        {wagerList.map(wager => (
-          <Grid.Column>
-          <Card key={wager.id}>
-            <Image src={basketball} />
-            <Card.Header />
-            <Button key={wager.id} value={wager.id} onClick={this.enterGame}>
-              Click here to bet on {wager.id.split("vs").join(" vs. ")}
-            </Button>
-          </Card>
-          </Grid.Column>
-        ))}
+        <Segment inverted>
+          <Header inverted as="h2" icon textAlign="center">
+            <Icon name="ethereum" circular />
+            <Header.Content>
+              <h2 class="ui red header">
+                Welcome 2 Wagr
+            </h2>
+            </Header.Content>
+            <Header.Content>
+              <h2 class="ui red header">
+                See a wager that you like? Click on it to ante up!
+              </h2>
+            </Header.Content>
+          </Header>
+        </Segment>
+        <Grid columns={4}>
+          {wagerList.map(wager => (
+            <Grid.Column>
+              <Card key={wager.id} className="ui segment centered">
+                <Image src={basketball} />
+                <Card.Header />
+                <Button key={wager.id} value={wager.id} onClick={this.enterGame}>
+                  Click here to bet on {wager.id.split("vs").join(" vs. ")}
+                </Button>
+              </Card>
+            </Grid.Column>
+          ))}
         </Grid>
       </div>
     );

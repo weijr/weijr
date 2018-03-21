@@ -38,20 +38,6 @@ class NewMessageEntry extends Component {
     const { name, newMessageEntry, handleChange, handleSubmit } = this.props;
     console.log(this.props.newMessageEntry);
     return (
-      // <form id="new-message-form" onSubmit={evt => this.sendMessage(evt, newMessageEntry)}>
-      //   <div className="input-group input-group-lg">
-      //     <input
-      //       className="form-control"
-      // type="text"
-      // value={newMessageEntry}
-      // onChange={handleChange}
-      // placeholder="Say something nice..."
-      //     />
-      //     <span className="input-group-btn">
-      //       <button className="btn btn-default" type="submit">Chat!</button>
-      //     </span>
-      //   </div>
-      // </form>
       <Form reply onSubmit={evt => this.sendMessage(evt, newMessageEntry)}>
         <Form.TextArea
           type="text"

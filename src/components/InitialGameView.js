@@ -57,7 +57,7 @@ class InitialGameView extends Component {
                 </Button>
               </Grid.Column>
               <Grid.Column>
-                <Icon name="yen" circular />
+                <Icon name="users" circular />
               </Grid.Column>
             </Grid>
             <Header.Content>
