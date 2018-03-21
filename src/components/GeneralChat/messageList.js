@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import Message from './message'
 import logo from '../../logo.svg'
 import { Comment } from 'semantic-ui-react'
+import { ScrollBox } from 'react-scroll-box'
 
 
 class messageList extends Component {
@@ -15,7 +16,9 @@ class messageList extends Component {
     this.state = {
       messages: [],
       currentUser: "",
-      wager: this.props.wager
+      wager: this.props.wager,
+      wagerA: [],
+      wagerB: []
     }
   }
 
@@ -26,7 +29,7 @@ class messageList extends Component {
       this.setState({ currentUser: auth.currentUser.uid })
     }
 
-    console.log(wager)
+    console.log(auth.currentUser)
     db
       .collection("wagers")
       .doc(wager)
@@ -45,18 +48,18 @@ class messageList extends Component {
           })
         })
       })
+
   }
 
   render() {
+    // console.log(auth)
     const { messages } = this.state
     // console.log(messages)
     return (
-      <Comment.Group>
+      <Comment.Group className='overflow'>
         {messages.map(message => <Message key={message.id} message={message} wager={this.state.wager} sentAt={this.state.sentAt}/>
         )}
       </Comment.Group>
-
-
     )
   }
 
