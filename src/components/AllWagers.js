@@ -14,6 +14,8 @@ import SingleWagerView from "./SingleWagerView";
 import basketball from "./basketball.png";
 import { Header, Icon, Image, Segment, Grid, Button, Card } from 'semantic-ui-react'
 import factory from '../ether/factory'
+import { connect } from "react-redux";
+import App from './App'
 
 class AllWagers extends Component {
   constructor(props) {
@@ -21,7 +23,7 @@ class AllWagers extends Component {
     this.state = {
       wager: "",
       listOfWagers: [],
-      currentUser: ""
+      currentUser: this.props.currentUser
     };
     this.signUp = this.signUp.bind(this);
     this.logout = this.logout.bind(this)
@@ -54,6 +56,9 @@ class AllWagers extends Component {
         currentUser: ""
       })
     })
+    .then(() => {
+      this.props.history.push('/')
+    })
   }
   render() {
     var user = auth.currentUser;
@@ -63,6 +68,7 @@ class AllWagers extends Component {
       console.log("else: ", user)
     }
     const wagerList = this.state.listOfWagers;
+    console.log("state.currentUser: ", this.state.currentUser )
     if (this.state.currentUser) {
       return (
         <div>
@@ -102,44 +108,22 @@ class AllWagers extends Component {
         </div>
       )
     } else {
-      return (
-        <div>
-        <Segment inverted>
-          <Header inverted as="h2" icon textAlign="center">
-            <Icon name="ethereum" circular />
-            <Header.Content>
-              <h2 className="ui red header">
-                Welcome 2 Wagr
-            </h2>
-            </Header.Content>
-            <Header.Content>
-              <h2 className="ui red header">
-                See a wager that you like? Click on it to ante up!
-              </h2>
-            </Header.Content>
-            <Header.Content>
-              <Button onClick={this.signUp}>
-                Sign up/Sign in
-              </Button>
-            </Header.Content>
-          </Header>
-        </Segment>
-        <Grid columns={5}>
-          {wagerList.map(wager => (
-            <Grid.Column>
-              <Card key={wager.address} className="ui segment centered">
-                <Image src={basketball} />
-                <Card.Header />
-                <Link to={`/wagers/${wager}`} key={wager.address} value={wager.address}>
-                  Click here to bet on {wager}
-                </Link>
-              </Card>
-            </Grid.Column>
-          ))}
-        </Grid>
-        </div>
-        )
+      this.props.history.push('/')
+      return null
       }
     }
   }
-export default withRouter(AllWagers);
+
+  const mapStateToProps = function(state, ownProps) {
+    return {
+      currentUser: state.user
+    };
+  };
+
+  const mapDispatchToProps = function(dispatch, ownProps) {
+    return {
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AllWagers))
+
