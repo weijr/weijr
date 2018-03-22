@@ -26,7 +26,7 @@ class NewMessageEntry extends Component {
       .doc(wager)
       .collection("wagerChat")
       .add({
-        uid: auth.currentUser.uid,
+        uid: auth.currentUser.email,
         content: message,
         sentAt: Date(Date.now()).toString()
       });
@@ -38,27 +38,13 @@ class NewMessageEntry extends Component {
     const { name, newMessageEntry, handleChange, handleSubmit } = this.props;
     console.log(this.props.newMessageEntry);
     return (
-      // <form id="new-message-form" onSubmit={evt => this.sendMessage(evt, newMessageEntry)}>
-      //   <div className="input-group input-group-lg">
-      //     <input
-      //       className="form-control"
-      // type="text"
-      // value={newMessageEntry}
-      // onChange={handleChange}
-      // placeholder="Say something nice..."
-      //     />
-      //     <span className="input-group-btn">
-      //       <button className="btn btn-default" type="submit">Chat!</button>
-      //     </span>
-      //   </div>
-      // </form>
       <Form reply onSubmit={evt => this.sendMessage(evt, newMessageEntry)}>
         <Form.TextArea
           type="text"
           value={newMessageEntry}
           onChange={handleChange}
           placeholder="Say something nice..."
-        />
+          />
         <Button content="Add Reply" labelPosition="left" icon="edit" primary />
       </Form>
     );

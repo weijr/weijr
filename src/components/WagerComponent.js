@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import './App.css';
-import App from './App'
+import './app.css';
+import App from './app'
 import { Switch, Route, Link } from 'react-router-dom'
 import { db, auth, userById } from '../fire/firestore'
 import { connect } from 'react-redux';
 import { Button, Icon, Label } from 'semantic-ui-react'
+import { withAlert } from 'react-alert'
+
 
 class WagerComponent extends Component {
   constructor(props) {
@@ -77,7 +79,7 @@ class WagerComponent extends Component {
 
 
     if(this.state.wagerA.concat(this.state.wagerB).map((name) => { return name.userId}).indexOf(currentUser) > -1) {
-      alert("You've already placed a bet")
+      this.props.alert.show("You have already placed a bet on this game!")
     } else {
       db
       .collection("wagers")
@@ -111,7 +113,7 @@ class WagerComponent extends Component {
       <Label as='a' basic color='red' pointing='left'>{this.state.wagerA.length}  Bets Placed</Label>
     </Button>
     <Button as='div' labelPosition='right'>
-      <Button basic color='blue' value={wagerB} onClick={event => this.placeWager(event)}>
+      <Button color='blue' value={wagerB} onClick={event => this.placeWager(event)}>
         <Icon name='ethereum' />
         { wagerB }
       </Button>
@@ -124,4 +126,4 @@ class WagerComponent extends Component {
 
 }
 
-export default WagerComponent;
+export default withAlert(WagerComponent);

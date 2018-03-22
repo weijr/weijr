@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-// import '../App.css';
-// import App from '../App'
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db } from "../../fire/firestore";
 import { connect } from "react-redux";

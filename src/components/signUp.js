@@ -27,7 +27,6 @@ class SignUp extends Component {
 
   componentDidMount() {
 
-
   }
 
   signUp = event => {
@@ -55,12 +54,12 @@ class SignUp extends Component {
       console.log(error.message)
     });
     // console.log(auth.currentUser.email)
-
+    
   }
 
   render() {
     const { name, newUsernameEntry, newPasswordEntry, handleChangeUsername, handleChangePassword } = this.props;
-
+    
     return (
       <div>
         <Segment inverted>
@@ -80,7 +79,7 @@ class SignUp extends Component {
         </Segment>
         <Grid>
         <Grid.Row centered>
-        <Form onSignUp={evt => this.signUp(evt)}
+        <Form onSignUp={evt => this.signUp(evt)} 
               onLogin={evt => this.login(evt)}>
           <label>User Name</label>
           <input placeholder='User Name' onChange={handleChangeUsername} value={newUsernameEntry} />
