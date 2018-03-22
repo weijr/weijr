@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import web3 from "../web3";
 import mafiaContract from "../mafiaContract";
-import GeneralChat from "./GeneralChat/index";
+import GeneralChat from "./GeneralChat/";
 import SingleWagerView from "./SingleWagerView";
 import { writeUsername } from "../store";
 import { writePassword } from "../store";

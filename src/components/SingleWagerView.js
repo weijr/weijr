@@ -6,7 +6,7 @@ import { db, auth, userName } from "../fire/firestore";
 import { connect } from "react-redux";
 import { postMssage, writeMessage } from "../store";
 import MessageList from "./GeneralChat/messageList";
-import GeneralChat from "./GeneralChat/index";
+import GeneralChat from "./GeneralChat/";
 import WagerComponent from "./WagerComponent";
 import { Header, Icon, Image, Segment, Grid, Button } from 'semantic-ui-react'
 
