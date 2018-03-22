@@ -29,22 +29,9 @@ class AllWagers extends Component {
     this.logout = this.logout.bind(this)
   }
   async componentDidMount() {
-    var email;
-    auth.onAuthStateChanged(function(user) {
-      if (user) {
-        email = user.email
-      }
-    })
     this.setState({listOfWagers: await factory.methods.getDeployedwagers().call()})
   }
-  componentWillUnmount() {
-    var unsubscribe = auth.onAuthStateChanged(function (user) {
-      if (user) {
-         // User is signed in.
-      }
-  });
-  unsubscribe()
-  }
+
   signUp = event => {
     event.preventDefault();
     this.props.history.push('/wagers/signup');

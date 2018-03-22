@@ -27,10 +27,6 @@ class App extends Component {
     this.signUp = this.signUp.bind(this)
   }
 
-  componentDidMount() {
-
-
-  }
 
   signUp = event => {
     event.preventDefault();
@@ -38,7 +34,8 @@ class App extends Component {
     let password = this.props.newPasswordEntry
 
     auth.createUserWithEmailAndPassword(username, password)
-    .then(() => {
+    .then((user) => {
+      this.props.setUser(user.email)
       this.props.history.push('/wagers');
     })
     .catch(error => {

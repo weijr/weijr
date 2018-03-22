@@ -17,23 +17,9 @@ class SingleWagerView extends Component {
     this.state = {
       messages: [],
       wager: this.props.match.params.address,
-      currentUser: ""
+      currentUser: this.props.currentUser
     };
     this.onClick = this.onClick.bind(this);
-  }
-
-  componentWillMount() {
-    var email;
-
-    auth.onAuthStateChanged(function(user) {
-      if (user) {
-        email = user.email;
-        }
-      })
-
-    this.setState({
-      currentUser: email
-    })
   }
 
   onClick= (event) => {
@@ -55,7 +41,7 @@ class SingleWagerView extends Component {
     const wagerB = this.state.wager.split('vs')[1];
     console.log("auth: ", auth.currentUser)
     console.log("state: ", this.state.currentUser)
-    //if (this.state.currentUser) {
+    if (this.state.currentUser) {
       return (
         <div className="App">
           <Segment inverted>
@@ -85,6 +71,10 @@ class SingleWagerView extends Component {
           </Grid>
         </div>
       )
+    } else {
+      this.props.history.push('/')
+      return null
+    }
     // } else {
     //   return (
     //     <div className="App">
@@ -111,12 +101,11 @@ class SingleWagerView extends Component {
   }
 }
 
-// const mapStateToProps = function (state, ownProps) {
-//   return {
-//     newMessageEntry: state.newMessageEntry,
-//     name: state.name
-//   };
-// };
+const mapStateToProps = function(state, ownProps) {
+  return {
+    currentUser: state.user
+  };
+};
 
 // const mapDispatchToProps = function (dispatch, ownProps) {
 //   return {
@@ -139,4 +128,4 @@ class SingleWagerView extends Component {
 //   mapDispatchToProps
 // )(InitialGameView);
 
-export default withRouter(SingleWagerView);
+export default withRouter(connect(mapStateToProps, null)(SingleWagerView));
