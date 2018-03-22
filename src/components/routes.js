@@ -3,9 +3,9 @@ import { withRouter, Route, Switch } from 'react-router-dom'
 //import { render } from 'react-dom';
 import { connect, Provider } from 'react-redux';
 // import store from './store';
-import AllWagers from './allWagers';
+import AllWagers from './AllWagers';
 import App from './App'
-import SingleWagerView from './singleWagerView';
+import SingleWagerView from './SingleWagerView';
 // import SignUp from './signUp'
 
 class Routes extends Component {

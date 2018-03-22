@@ -10,7 +10,7 @@ import web3 from "../web3";
 import mafiaContract from "../mafiaContract";
 import GeneralChat from "./GeneralChat/";
 import { definedRole, randomNameGenerator } from "../utils";
-import SingleWagerView from "./singleWagerView";
+import SingleWagerView from "./SingleWagerView";
 import basketball from "./basketball.png";
 import { Header, Icon, Image, Segment, Grid, Button, Card } from 'semantic-ui-react'
 import factory from '../ether/factory'
