@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react';
 import { Form, Button, Input, Message } from 'semantic-ui-react';
-import Layout from './Layout';
 import factory from '../ether/factory';
 import web3 from '../ether/web3';
 import { Router } from './routes';
@@ -47,7 +46,7 @@ class CreateWager extends Component {
 
   render() {
     return (
-      <Layout>
+      <div>
       <h3>Create Your Wager!</h3>
         <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
           <Form.Field>
@@ -73,7 +72,7 @@ class CreateWager extends Component {
             Create!
           </Button>
         </Form>
-      </Layout>
+      </div>
     )
   }
 }

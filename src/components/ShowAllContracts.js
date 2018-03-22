@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react';
 import { Card, Grid, Button } from 'semantic-ui-react';
-import Layout from './Layout';
 import Wager from '../ether/wagers';
 import web3 from '../ether/web3';
 import { Link } from 'react-router-dom';
@@ -78,7 +77,7 @@ class ShowAllContracts extends Component {
 
   render() {
     return (
-      <Layout>
+      <div>
         <h3>Current Active Wagers</h3>
         <Grid>
           <Grid.Row>
@@ -98,7 +97,7 @@ class ShowAllContracts extends Component {
           </Grid.Column>
         </Grid.Row>
         </Grid>
-      </Layout>
+      </div>
     )
   }
 }

@@ -13,6 +13,7 @@ import { definedRole, randomNameGenerator } from "../utils";
 import SingleWagerView from "./singleWagerView";
 import basketball from "./basketball.png";
 import { Header, Icon, Image, Segment, Grid, Button, Card } from 'semantic-ui-react'
+import factory from '../ether/factory'
 
 
 
@@ -52,8 +53,8 @@ class AllWagers extends Component {
     //   });
     // });
 
-    this.setState({listOfWagers: await factory.methods.getDeployedwagers().call()})
-    console.log(this.state.listOfWagers)
+    // this.setState({listOfWagers: await factory.methods.getDeployedwagers().call()})
+    // console.log(this.state.listOfWagers)
   }
 
   componentWillUnmount() {
