@@ -92,6 +92,7 @@ class AllWagers extends Component {
             </Grid.Column>
           ))}
         </Grid>
+        <GeneralChat wager=""/>
         </div>
       )
     } else {

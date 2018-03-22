@@ -53,7 +53,7 @@ class App extends Component {
       this.props.history.push('/wagers');
     })
     .catch(error => {
-      alert(error.message)
+      this.props.alert.show(error.message)
 
     });
     // console.log(auth.currentUser.email)
@@ -76,7 +76,7 @@ class App extends Component {
             </Header.Content>
             <Header.Content>
               <h2 class="ui red header">
-                Complete the form below to sign up!
+                Sign in to start wagering!
               </h2>
             </Header.Content>
           </Header>

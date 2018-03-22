@@ -9,17 +9,16 @@ class NewMessageEntry extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      wager: this.props.wager
+      wager: this.props.wager,
+      chatType: this.props.chatType
     };
     this.sendMessage = this.sendMessage.bind(this);
   }
 
   sendMessage = (evt, message) => {
+    if (this.state.chatType === 'wager'){
     let wager = this.state.wager;
     evt.preventDefault();
-    console.log("wager: ", wager);
-    // console.log('evt.t.v :', evt.target.value)
-    console.log("message: ", message);
 
     db
       .collection("wagers")
@@ -31,12 +30,22 @@ class NewMessageEntry extends Component {
         sentAt: Date(Date.now()).toString()
       });
     this.props.clearForm();
+    }
+    else {
+      evt.preventDefault();
+      db
+        .collection('generalChat')
+        .add({
+          uid: auth.currentUser.email,
+          content: message,
+          sentAt: Date(Date.now()).toString()
+        });
+      this.props.clearForm();
+    }
   };
 
   render() {
-    console.log("auth: ", auth);
     const { name, newMessageEntry, handleChange, handleSubmit } = this.props;
-    console.log(this.props.newMessageEntry);
     return (
       <Form reply onSubmit={evt => this.sendMessage(evt, newMessageEntry)}>
         <Form.TextArea
@@ -65,14 +74,6 @@ const mapDispatchToProps = function(dispatch, ownProps) {
     clearForm() {
       dispatch(writeMessage(""));
     }
-    //   handleSubmit (name, content, evt) {
-    //     evt.preventDefault();
-
-    //     const { channelId } = ownProps;
-
-    //     dispatch(postMessage({ name, content, channelId }));
-    //     dispatch(writeMessage(''));
-    //   }
   };
 };
 

@@ -12,7 +12,8 @@ class GeneralChat extends Component {
     super(props);
     this.state = {
       messages: [],
-      wager: this.props.wager
+      wager: this.props.wager,
+      chatType: this.props.chatType
     };
     this.onClick = this.onClick.bind(this);
   }
@@ -26,8 +27,8 @@ class GeneralChat extends Component {
     const wagerB = this.state.wager.split('vs')[1];
     return (
       <div>
-        <MessageList wager={this.state.wager} />
-        <NewMessageEntry wager={this.state.wager} />
+        <MessageList wager={this.state.wager} chatType={this.state.chatType} />
+        <NewMessageEntry wager={this.state.wager} chatType={this.state.chatType} />
       </div>
     );
   }

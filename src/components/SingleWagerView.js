@@ -113,14 +113,13 @@ class SingleWagerView extends Component {
         </Segment>
         <Grid>
           <Grid.Column width={8}>
-            <GeneralChat wager={this.state.wager} />
+            <GeneralChat wager={this.state.wager} chatType="wager" />
           </Grid.Column>
           <Grid.Column width={8}>
             <WagerComponent wager={this.state.wager} />
           </Grid.Column>
           <Grid.Row>
             <Grid.Column width={10}>{this.renderCards()}</Grid.Column>
-
             <Grid.Column width={6} />
           </Grid.Row>
         </Grid>
