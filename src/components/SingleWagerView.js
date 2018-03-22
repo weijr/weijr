@@ -33,7 +33,8 @@ class SingleWagerView extends Component {
       totalUsers: "",
       sideOne: "",
       sideTwo: "",
-      manager: ""
+      manager: "",
+      currentUser: this.props.currentUser
     };
     this.onClick = this.onClick.bind(this);
     this.renderCards = this.renderCards.bind(this);
@@ -49,7 +50,7 @@ class SingleWagerView extends Component {
     });
 
     this.setState({
-      currentUser: email
+      currentUser: this.props.currentUser
     });
   }
 
@@ -69,8 +70,8 @@ class SingleWagerView extends Component {
 
   onClick = event => {
     event.preventDefault();
-    this.props.history.push("/wagers");
-  };
+    this.props.history.push("/wagers")
+  }
 
   renderCards() {
     const items = [{
@@ -78,7 +79,7 @@ class SingleWagerView extends Component {
       thisSide: this.state.sideOne,
       thatSide: this.state.sideTwo,
       totalUsers: this.state.totalUsers,
-      manager: this.state.manager
+      description: this.state.manager
     }];
     console.log("ITEMS HERE", items);
     return <Card.Group items={items} />;
@@ -86,17 +87,11 @@ class SingleWagerView extends Component {
 
   render() {
     let email;
-    // auth.onAuthStateChanged(function(user) {
-    //   if (user) {
-    //     // User is signed in.
-    //     email = user.email;
-    //   }}
-    // )
+
     const wagerA = this.state.wager.split("vs")[0];
     const wagerB = this.state.wager.split("vs")[1];
 
-    // if (this.state.currentUser) {
-
+    if (this.state.currentUser) {
     return this.state.manager === "" ? null : (
       <div className="App">
         <Segment inverted>
@@ -130,59 +125,18 @@ class SingleWagerView extends Component {
           </Grid.Row>
         </Grid>
       </div>
-    );
-    // } else {
-    //   return (
-    //     <div className="App">
-    //       <Segment inverted>
-    //         <Header inverted as="h2" icon textAlign="center">
-    //           <Grid columns={3}>
-    //             <Grid.Column>
-    //               <Button circular onClick={this.onClick}>
-    //                 <Icon name="home" circular />
-    //               </Button>
-    //             </Grid.Column>
-    //             <Grid.Column>
-    //               <Icon name="users" circular />
-    //             </Grid.Column>
-    //           </Grid>
-    //           <Header.Content>
-    //             Pleaes Sign In To See Wager Details
-    //           </Header.Content>
-    //         </Header>
-    //       </Segment>
-    //       </div>
-    //   )
-    // }
+    )
+  } else {
+    this.props.history.push('/')
+    return null
+    }
   }
 }
 
-// const mapStateToProps = function (state, ownProps) {
-//   return {
-//     newMessageEntry: state.newMessageEntry,
-//     name: state.name
-//   };
-// };
+const mapStateToProps = function(state, ownProps) {
+  return {
+    currentUser: state.user
+  };
+};
 
-// const mapDispatchToProps = function (dispatch, ownProps) {
-//   return {
-//     handleChange (evt) {
-//       dispatch(writeMessage(evt.target.value));
-//     },
-//     handleSubmit (name, content, evt) {
-//       evt.preventDefault();
-
-//       // const { channelId } = ownProps;
-
-//       dispatch(postMessage({ name, content, evt }));
-//       // dispatch(writeMessage(''));
-//     }
-//   };
-// };
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(InitialGameView);
-
-export default withRouter(SingleWagerView);
+export default withRouter(connect(mapStateToProps, null)(SingleWagerView));

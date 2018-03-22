@@ -13,6 +13,8 @@ import GeneralChat from "./GeneralChat/";
 import SingleWagerView from "./SingleWagerView";
 import { writeUsername } from "../store";
 import { writePassword } from "../store";
+import { setUser } from "../store"
+import { withAlert } from 'react-alert'
 import { Header, Icon, Image, Segment, Grid, Button, Card, Form, Checkbox } from 'semantic-ui-react'
 
 class App extends Component {
@@ -25,10 +27,6 @@ class App extends Component {
     this.signUp = this.signUp.bind(this)
   }
 
-  componentDidMount() {
-
-
-  }
 
   signUp = event => {
     event.preventDefault();
@@ -36,22 +34,22 @@ class App extends Component {
     let password = this.props.newPasswordEntry
 
     auth.createUserWithEmailAndPassword(username, password)
-    .then (() => {
+    .then((user) => {
+      this.props.setUser(user.email)
       this.props.history.push('/wagers');
     })
-    .catch(function(error) {
-      alert(error.message)
-    });
-
-
-  }
+    .catch(error => {
+      this.props.alert.show(error.message)
+  })
+}
 
   login = event => {
     event.preventDefault();
     let username = this.props.newUsernameEntry
     let password = this.props.newPasswordEntry
     auth.signInWithEmailAndPassword(username, password)
-    .then(() => {
+    .then((user) => {
+      this.props.setUser(user.email)
       this.props.history.push('/wagers');
     })
     .catch(error => {
@@ -61,6 +59,7 @@ class App extends Component {
     // console.log(auth.currentUser.email)
 
   }
+
 
   render() {
     const { name, newUsernameEntry, newPasswordEntry, handleChangeUsername, handleChangePassword } = this.props;
@@ -103,7 +102,8 @@ class App extends Component {
 const mapStateToProps = function(state, ownProps) {
   return {
     newUsernameEntry: state.newUsernameEntry,
-    newPasswordEntry: state.newPasswordEntry
+    newPasswordEntry: state.newPasswordEntry,
+    currentUser: state.user
   };
 };
 
@@ -117,8 +117,11 @@ const mapDispatchToProps = function(dispatch, ownProps) {
     },
     clearForm() {
       dispatch(writeUsername(""));
+    },
+    setUser(user) {
+      dispatch(setUser(user))
     }
   };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))
+export default withRouter(withAlert(connect(mapStateToProps, mapDispatchToProps)(App)))
