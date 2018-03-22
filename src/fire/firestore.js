@@ -16,14 +16,7 @@ firebase.initializeApp(config);
 
 export const db = firebase.firestore();
 export const auth = firebase.auth();
-auth.onAuthStateChanged(function(user) {
-  if (user) { 
-    // User is signed in.
-    console.log("auth: ", user)
-  } else {
-    console.log("nobody logged in")
-  }}
-)
 export const userById = id => db.collection('users').doc(id);
 export const gameById = id => db.collection('game').doc(id);
 export default firebase;
+

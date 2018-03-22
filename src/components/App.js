@@ -2,192 +2,118 @@ import React, { Component } from "react";
 import logo from "../logo.svg";
 import "./app.css";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
-import { db, auth, userById, email } from "../fire/firestore";
+import { db, auth, userById } from "../fire/firestore";
 import history from "../history";
 import store from "../store";
+import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import web3 from "../web3";
 import mafiaContract from "../mafiaContract";
 import GeneralChat from "./generalChat/index";
-import { definedRole, randomNameGenerator } from "../utils";
-import InitialGameView from "./initialGameView";
-import basketball from "./basketball.png";
-import { Header, Icon, Image, Segment, Grid, Button, Card } from 'semantic-ui-react'
+import SingleWagerView from "./singleWagerView";
+import { writeUsername } from "../store";
+import { writePassword } from "../store";
+import { Header, Icon, Image, Segment, Grid, Button, Card, Form, Checkbox } from 'semantic-ui-react'
 
-class App extends Component {
+class SignUp extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      wager: "",
-      listOfWagers: [],
-      currentUser: ""
     };
-
-    this.enterGame = this.enterGame.bind(this);
-    this.signUp = this.signUp.bind(this);
-    this.logout = this.logout.bind(this)
+    this.login = this.login.bind(this)
+    this.signUp = this.signUp.bind(this)
   }
 
-  async componentDidMount() {
-    // var email;
-    // auth.onAuthStateChanged(function(user) {
-    //   if (user) {
-    //     // User is signed in.
-    //     email = user.email
-    // }})
-    // let email = await auth.currentUser.email
+  componentDidMount() {
 
-
-    db.collection("wagers").onSnapshot(snapshot => {
-      this.setState({
-        listOfWagers: snapshot.docs.map(doc => {
-          const data = doc.data();
-          return {
-            id: doc.ref.id
-          };
-        }),
-        currentUser: auth.currentUser.email
-      });
-    });
   }
-
-  enterGame = event => {
-    event.preventDefault();
-
-    if (!this.state.currentUser) {
-      alert("Please sign in to see wager detail")
-    } else {
-      
-      let wager = event.target.value;
-      
-      var data = {
-        wager: wager
-      };
-  
-      var setDoc = db
-        .collection("wagers")
-        .doc(wager)
-        .set(data);
-      this.setState({
-        wager: event.target.value
-      });
-      this.props.history.push(`/game/${wager}`);
-    }
-
-    // userById(auth.currentUser.uid).set({ id: auth.currentUser.uid });
-
-    
-  };
 
   signUp = event => {
     event.preventDefault();
-    this.props.history.push('/game/signup');
+    let username = this.props.newUsernameEntry
+    let password = this.props.newPasswordEntry
+
+    auth.createUserWithEmailAndPassword(username, password).catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+    });
+
+    this.props.history.push('/');
   }
 
-  logout = () => {
-    auth.signOut()
+  login = event => {
+    event.preventDefault();
+    let username = this.props.newUsernameEntry
+    let password = this.props.newPasswordEntry
+    auth.signInWithEmailAndPassword(username, password)
     .then(() => {
-      this.setState({
-        currentUser: ""
-      })
+      this.props.history.push('/');
     })
-   
+    .catch(error => {
+      console.log(error.message)
+    });
+    // console.log(auth.currentUser.email)
+    
   }
 
   render() {
-    // console.log("list: ", this.state.listOfWagers);
-    // console.log(auth);
-
-    var user = auth.currentUser;
-
-    if (user) {
-      console.log("user: ", user)
-    } else {
-      console.log("else: ", user)
-    }
-
-    console.log("state: ", this.state.currentUser)
-    const wagerList = this.state.listOfWagers;
-    console.log("wagerlist: ", wagerList)
-    if (this.state.currentUser) {
-      return (
-        <div>
+    const { name, newUsernameEntry, newPasswordEntry, handleChangeUsername, handleChangePassword } = this.props;
+    
+    return (
+      <div>
         <Segment inverted>
           <Header inverted as="h2" icon textAlign="center">
             <Icon name="ethereum" circular />
             <Header.Content>
-              <h2 className="ui red header">
+              <h2 class="ui red header">
                 Welcome 2 Wagr
             </h2>
             </Header.Content>
             <Header.Content>
-              <h2 className="ui red header">
-                See a wager that you like? Sign in to see more!
+              <h2 class="ui red header">
+                Complete the form below to sign up!
               </h2>
-            </Header.Content>
-            <Header.Content>
-              <Button onClick={this.logout}>
-                Logout
-              </Button>
             </Header.Content>
           </Header>
         </Segment>
-        <Grid columns={5}>
-          {wagerList.map(wager => (
-            <Grid.Column>
-              <Card key={wager.id} className="ui segment centered">
-                <Image src={basketball} />
-                <Card.Header />
-                <Button key={wager.id} value={wager.id} onClick={this.enterGame}>
-                  Click here to bet on {wager.id.split("vs").join(" vs. ")}
-                </Button>
-              </Card>
-            </Grid.Column>
-          ))}
-        </Grid>
-        </div>
-      )
-    } else {
-      return (
-        <div>
-        <Segment inverted>
-          <Header inverted as="h2" icon textAlign="center">
-            <Icon name="ethereum" circular />
-            <Header.Content>
-              <h2 className="ui red header">
-                Welcome 2 Wagr
-            </h2>
-            </Header.Content>
-            <Header.Content>
-              <h2 className="ui red header">
-                See a wager that you like? Click on it to ante up!
-              </h2>
-            </Header.Content>
-            <Header.Content>
-              <Button onClick={this.signUp}>
-                Sign up/Sign in
-              </Button>
-            </Header.Content>
-          </Header>
-        </Segment>
-        <Grid columns={5}>
-          {wagerList.map(wager => (
-            <Grid.Column>
-              <Card key={wager.id} className="ui segment centered">
-                <Image src={basketball} />
-                <Card.Header />
-                <Button key={wager.id} value={wager.id} onClick={this.enterGame}>
-                  Click here to bet on {wager.id.split("vs").join(" vs. ")}
-                </Button>
-              </Card>
-            </Grid.Column>
-          ))}
-        </Grid>
-        </div>
-        )
-      }
-    }
+        <Grid>
+        <Grid.Row centered>
+        <Form onSignUp={evt => this.signUp(evt)} 
+              onLogin={evt => this.login(evt)}>
+          <label>User Name</label>
+          <input placeholder='User Name' onChange={handleChangeUsername} value={newUsernameEntry} />
+          <label>Password</label>
+          <input placeholder='Password' onChange={handleChangePassword} value={newPasswordEntry} />
+          <label>     </label>
+          <Button type='signUp' onClick={this.signUp}>Submit</Button>
+          <Button type='login' onClick={this.login}>Login</Button>
+      </Form>
+      </Grid.Row>
+      </Grid>
+      </div>
+    );
   }
+}
+const mapStateToProps = function(state, ownProps) {
+  return {
+    newUsernameEntry: state.newUsernameEntry,
+    newPasswordEntry: state.newPasswordEntry
+  };
+};
 
-export default withRouter(App);
+const mapDispatchToProps = function(dispatch, ownProps) {
+  return {
+    handleChangeUsername(evt) {
+      dispatch(writeUsername(evt.target.value));
+    },
+    handleChangePassword(evt) {
+      dispatch(writePassword(evt.target.value));
+    },
+    clearForm() {
+      dispatch(writeUsername(""));
+    }
+  };
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignUp))

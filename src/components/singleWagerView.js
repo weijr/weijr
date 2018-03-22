@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./app.css";
 import App from "./app";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
-import { db, auth } from "../fire/firestore";
+import { db, auth, userName } from "../fire/firestore";
 import { connect } from "react-redux";
 import { postMssage, writeMessage } from "../store";
 import MessageList from "./generalChat/messageList";
@@ -25,43 +25,30 @@ import { Header, Icon, Image, Segment, Grid, Button } from 'semantic-ui-react'
 
 // var db = firebase.firestore();
 
-class InitialGameView extends Component {
+class SingleWagerView extends Component {
   constructor(props) {
     super(props);
     this.state = {
       messages: [],
-      wager: this.props.match.params.id,
+      wager: this.props.match.params.address,
       currentUser: ""
     };
     this.onClick = this.onClick.bind(this);
   }
 
-  componentDidMount() {
-//     newUserUid().subscribe(auth => {
-//       // Now use value 
-//       if (auth) {
-//           console.log(auth.uid);
-//       } else {
-//          // logged out
-//       }
-//   });
-    this.setState({
-      currentUser: auth.currentUser.email
-    })
-}
+  componentWillMount() {
+    var email;
 
-    // var email;
-    // auth.onAuthStateChanged(function(user) {
-    //   if (user) { 
-    //     // User is signed in.
-    //     email = user.email;
-    //   }}
-    // )
-    // console.log("did: ", auth.currentUser)
-    // this.setState({
-    //   currentUser: email
-    // })
-  // }
+    auth.onAuthStateChanged(function(user) {
+      if (user) { 
+        email = user.email;
+        }
+      })
+
+    this.setState({
+      currentUser: email
+    })
+  }
 
   onClick= (event) => {
     event.preventDefault();
@@ -81,7 +68,8 @@ class InitialGameView extends Component {
     const wagerA = this.state.wager.split('vs')[0];
     const wagerB = this.state.wager.split('vs')[1];
     console.log("auth: ", auth.currentUser)
-    if (this.state.currentUser) {
+    console.log("state: ", this.state.currentUser)
+    if (!this.state.currentUser) {
       return (
         <div className="App">
           <Segment inverted>
@@ -165,4 +153,4 @@ class InitialGameView extends Component {
 //   mapDispatchToProps
 // )(InitialGameView);
 
-export default withRouter(InitialGameView);
+export default withRouter(SingleWagerView);

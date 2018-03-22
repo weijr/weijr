@@ -10,7 +10,7 @@ import { browserHistory } from "react-router";
 import web3 from "../web3";
 import mafiaContract from "../mafiaContract";
 import GeneralChat from "./generalChat/index";
-import InitialGameView from "./initialGameView";
+import SingleWagerView from "./singleWagerView";
 import { writeUsername } from "../store";
 import { writePassword } from "../store";
 import { Header, Icon, Image, Segment, Grid, Button, Card, Form, Checkbox } from 'semantic-ui-react'
