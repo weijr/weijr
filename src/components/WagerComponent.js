@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
-import App from './App'
+import './app.css';
+import App from './app'
 import { Switch, Route, Link } from 'react-router-dom'
 import { db, auth, userById } from '../fire/firestore'
 import { connect } from 'react-redux';
@@ -113,7 +113,7 @@ class WagerComponent extends Component {
       <Label as='a' basic color='red' pointing='left'>{this.state.wagerA.length}  Bets Placed</Label>
     </Button>
     <Button as='div' labelPosition='right'>
-      <Button basic color='blue' value={wagerB} onClick={event => this.placeWager(event)}>
+      <Button color='blue' value={wagerB} onClick={event => this.placeWager(event)}>
         <Icon name='ethereum' />
         { wagerB }
       </Button>

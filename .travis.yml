@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  - node # uses most recent stable node version
+dist: trusty # uses trusty environment
+sudo: false # when on trusty, uses Docker containers for speed
+notifications:
+  email:
+    on_success: change # default: change (only when going from broken to fixed)
+    on_failure: always # default: always (which is annoying, as it should be)
+install:
+  - npm i -g npm@5.7.1 # delete once 5.7.X is out of "pre-release"
+  - npm ci             # faster, goes only from package-lock
+
+# # see https://docs.travis-ci.com/user/deployment/heroku/
+# deploy:
+#   skip_cleanup: true # prevents travis from deleting the build
+#   provider: heroku
+#   api_key:
+#     secure: "YOUR ***ENCRYPTED*** API KEY HERE"

@@ -4,9 +4,11 @@ import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import messages from './messages';
 import newMessageEntry from './newMessageEntry';
+import newUsernameEntry from './newUsernameEntry'
+import newPasswordEntry from './newPasswordEntry'
 import loggingMiddleware from 'redux-logger'
 
-const reducer = combineReducers({ messages, newMessageEntry })
+const reducer = combineReducers({ messages, newMessageEntry, newUsernameEntry, newPasswordEntry })
 
 const store = createStore(
   reducer,
@@ -20,3 +22,5 @@ export default store
 
 export * from './messages';
 export * from './newMessageEntry';
+export * from './newUsernameEntry';
+export * from './newPasswordEntry';

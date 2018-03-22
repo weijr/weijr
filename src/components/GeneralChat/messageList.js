@@ -26,9 +26,9 @@ class messageList extends Component {
   componentDidMount() {
     let wager = this.state.wager
 
-    if (auth.currentUser) {
-      this.setState({ currentUser: auth.currentUser.uid })
-    }
+    // if (auth.currentUser) {
+    //   this.setState({ currentUser: auth.currentUser.uid })
+    // }
 
     console.log(auth.currentUser)
     db
