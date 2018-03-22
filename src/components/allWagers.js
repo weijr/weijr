@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import logo from "../logo.svg";
-import "./app.css";
+import "./App.css";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db, auth, userById, email } from "../fire/firestore";
 import history from "../history";
@@ -8,15 +8,15 @@ import store from "../store";
 import { browserHistory } from "react-router";
 import web3 from "../web3";
 import mafiaContract from "../mafiaContract";
-import GeneralChat from "./generalChat/index";
+import GeneralChat from "./GeneralChat/";
 import { definedRole, randomNameGenerator } from "../utils";
-import SingleWagerView from "./singleWagerView";
+import SingleWagerView from "./SingleWagerView";
 import basketball from "./basketball.png";
 import { Header, Icon, Image, Segment, Grid, Button, Card } from 'semantic-ui-react'
 
 
 
- 
+
 class AllWagers extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +39,7 @@ class AllWagers extends Component {
         email = user.email
       }
     })
-   
+
     db.collection("wagers").onSnapshot(snapshot => {
       this.setState({
         listOfWagers: snapshot.docs.map(doc => {
@@ -59,7 +59,7 @@ class AllWagers extends Component {
          // User is signed in.
       }
   });
-  
+
   unsubscribe()
   }
 
@@ -70,13 +70,13 @@ class AllWagers extends Component {
     if (!this.state.currentUser) {
       alert("Please sign in to see wager detail")
     } else {
-      
+
       let wager = event.target.value;
-      
+
       var data = {
         wager: wager
       };
-  
+
       var setDoc = db
         .collection("wagers")
         .doc(wager)
@@ -89,12 +89,12 @@ class AllWagers extends Component {
 
     // userById(auth.currentUser.uid).set({ id: auth.currentUser.uid });
 
-    
+
   };
 
   signUp = event => {
     event.preventDefault();
-    this.props.history.push('/game/signup');
+    this.props.history.push('/wagers');
   }
 
   logout = () => {
@@ -104,7 +104,7 @@ class AllWagers extends Component {
         currentUser: ""
       })
     })
-   
+
   }
 
   render() {

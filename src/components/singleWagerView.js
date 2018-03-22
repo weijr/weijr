@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import "./app.css";
-import App from "./app";
+import "./App.css";
+import App from "./App";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db, auth, userName } from "../fire/firestore";
 import { connect } from "react-redux";
 import { postMssage, writeMessage } from "../store";
-import MessageList from "./generalChat/messageList";
-import GeneralChat from "./generalChat/index";
-import WagerComponent from "./wagerComponent";
+import MessageList from "./GeneralChat/MessageList";
+import GeneralChat from "./GeneralChat/index";
+import WagerComponent from "./WagerComponent";
 import { Header, Icon, Image, Segment, Grid, Button } from 'semantic-ui-react'
 // const firebase = require("firebase");
 // require("firebase/firestore");
@@ -40,7 +40,7 @@ class SingleWagerView extends Component {
     var email;
 
     auth.onAuthStateChanged(function(user) {
-      if (user) { 
+      if (user) {
         email = user.email;
         }
       })
@@ -60,7 +60,7 @@ class SingleWagerView extends Component {
   render() {
     let email
     // auth.onAuthStateChanged(function(user) {
-    //   if (user) { 
+    //   if (user) {
     //     // User is signed in.
     //     email = user.email;
     //   }}
@@ -69,7 +69,7 @@ class SingleWagerView extends Component {
     const wagerB = this.state.wager.split('vs')[1];
     console.log("auth: ", auth.currentUser)
     console.log("state: ", this.state.currentUser)
-    if (!this.state.currentUser) {
+    if (this.state.currentUser) {
       return (
         <div className="App">
           <Segment inverted>

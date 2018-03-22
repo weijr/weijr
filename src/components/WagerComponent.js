@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './app.css';
-import App from './app'
+import './App.css';
+import App from './App'
 import { Switch, Route, Link } from 'react-router-dom'
 import { db, auth, userById } from '../fire/firestore'
 import { connect } from 'react-redux';
