@@ -135,7 +135,8 @@ class AllWagers extends Component {
               </Card>
             </Grid.Column>
           ))}
-        </Grid>
+          </Grid>
+          <Button onClick={() => this.props.history.push('/new-wager')}>Create New Wagr Here!</Button>
         </div>
         )
       }

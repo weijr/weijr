@@ -35,11 +35,15 @@ class App extends Component {
     let username = this.props.newUsernameEntry
     let password = this.props.newPasswordEntry
 
-    auth.createUserWithEmailAndPassword(username, password).catch(function(error) {
-      //this.props.alert.show(error.message)
+    auth.createUserWithEmailAndPassword(username, password)
+    .then (() => {
+      this.props.history.push('/wagers');
+    })
+    .catch(function(error) {
+      alert(error.message)
     });
 
-    this.props.history.push('/wagers');
+
   }
 
   login = event => {
@@ -51,7 +55,7 @@ class App extends Component {
       this.props.history.push('/wagers');
     })
     .catch(error => {
-      this.props.alert.show(error.message)
+      alert(error.message)
 
     });
     // console.log(auth.currentUser.email)
