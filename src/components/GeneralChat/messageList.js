@@ -10,7 +10,7 @@ import { Comment } from 'semantic-ui-react'
 import { ScrollBox } from 'react-scroll-box'
 
 
-class messageList extends Component {
+class MessageList extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -81,4 +81,4 @@ class messageList extends Component {
 
 }
 
-export default messageList;
+export default MessageList;

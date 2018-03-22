@@ -2,12 +2,12 @@ pragma solidity ^0.4.18;
 
 contract WagerFactory {
     address[] public deployedWagers;
-    
+
     function createWager(uint minimum) public {
         address newWager = new Wager(minimum, msg.sender);
         deployedWagers.push(newWager);
     }
-    
+
     function getDeployedwagers() public view returns (address[]) {
         return deployedWagers;
     }
@@ -25,14 +25,14 @@ contract Wager {
 
   uint public side1;
   uint public side2;
-  uint public minimumBet; 
+  uint public minimumBet;
 
   mapping(address => bool) public alreadyBetting;
 
 
   function Wager(uint minimum, address creator) public {
       manager = creator;
-      minimumBet = minimum; 
+      minimumBet = minimum;
   }
 
   function joinBet(bool side) public payable {
@@ -69,5 +69,16 @@ contract Wager {
 
   function getUsersLength() public view returns(uint) {
     return users.length;
+  }
+
+  function getWagerSummary() public view returns (uint, uint, uint, uint, uint, address) {
+      return (
+          minimumBet,
+          this.balance,
+          users.length,
+          side1,
+          side2,
+          manager
+      );
   }
 }
