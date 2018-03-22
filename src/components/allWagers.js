@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import logo from "../logo.svg";
-import "./app.css";
+import "./App.css";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db, auth, userById, email } from "../fire/firestore";
 import history from "../history";
@@ -8,7 +8,7 @@ import store from "../store";
 import { browserHistory } from "react-router";
 import web3 from "../web3";
 import mafiaContract from "../mafiaContract";
-import GeneralChat from "./generalChat/index";
+import GeneralChat from "./GeneralChat/";
 import { definedRole, randomNameGenerator } from "../utils";
 import SingleWagerView from "./singleWagerView";
 import basketball from "./basketball.png";

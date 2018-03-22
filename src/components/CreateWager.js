@@ -28,11 +28,11 @@ class CreateWager extends Component {
           from: accounts[0]
         });
         const address = await factory.methods.getDeployedwagers().call()[-1]
-        var data = {
+        let data = {
           wager: this.state.title
         }
 
-        var setDoc = db
+        let setDoc = db
           .collection("wagers")
           .doc(address)
           .set(data)
