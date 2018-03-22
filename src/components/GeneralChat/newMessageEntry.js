@@ -26,7 +26,7 @@ class NewMessageEntry extends Component {
       .doc(wager)
       .collection("wagerChat")
       .add({
-        uid: auth.currentUser.uid,
+        uid: auth.currentUser.email,
         content: message,
         sentAt: Date(Date.now()).toString()
       });
@@ -44,7 +44,7 @@ class NewMessageEntry extends Component {
           value={newMessageEntry}
           onChange={handleChange}
           placeholder="Say something nice..."
-        />
+          />
         <Button content="Add Reply" labelPosition="left" icon="edit" primary />
       </Form>
     );
