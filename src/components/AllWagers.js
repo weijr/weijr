@@ -13,10 +13,6 @@ import { definedRole, randomNameGenerator } from "../utils";
 import SingleWagerView from "./SingleWagerView";
 import basketball from "./basketball.png";
 import { Header, Icon, Image, Segment, Grid, Button, Card } from 'semantic-ui-react'
-import factory from '../ether/factory'
-
-
-
 
 class AllWagers extends Component {
   constructor(props) {
@@ -28,6 +24,7 @@ class AllWagers extends Component {
       currentUser: ""
     };
 
+    this.enterGame = this.enterGame.bind(this);
     this.signUp = this.signUp.bind(this);
     this.logout = this.logout.bind(this)
   }
@@ -39,7 +36,18 @@ class AllWagers extends Component {
         email = user.email
       }
     })
-    this.setState({listOfWagers: await factory.methods.getDeployedwagers().call()})
+
+    db.collection("wagers").onSnapshot(snapshot => {
+      this.setState({
+        listOfWagers: snapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.ref.id
+          };
+        }),
+        currentUser: email
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -52,9 +60,37 @@ class AllWagers extends Component {
   unsubscribe()
   }
 
+
+  enterGame = event => {
+    event.preventDefault();
+
+    if (!this.state.currentUser) {
+      alert("Please sign in to see wager detail")
+    } else {
+
+      let wager = event.target.value;
+
+      var data = {
+        wager: wager
+      };
+
+      var setDoc = db
+        .collection("wagers")
+        .doc(wager)
+        .set(data);
+      this.setState({
+        wager: event.target.value
+      });
+      this.props.history.push(`/wagers/${wager}`);
+    }
+
+    // userById(auth.currentUser.uid).set({ id: auth.currentUser.uid });
+
+  };
+
   signUp = event => {
     event.preventDefault();
-    this.props.history.push('/wagers/signup');
+    this.props.history.push('/wagers');
   }
 
   logout = () => {
@@ -68,8 +104,10 @@ class AllWagers extends Component {
   }
 
   render() {
-    var user = auth.currentUser;
+    // console.log("list: ", this.state.listOfWagers);
+    // console.log(auth);
 
+    var user = auth.currentUser;
 
     if (user) {
       console.log("user: ", user)
@@ -77,8 +115,9 @@ class AllWagers extends Component {
       console.log("else: ", user)
     }
 
+    console.log("state: ", this.state.currentUser)
     const wagerList = this.state.listOfWagers;
-
+    console.log("wagerlist: ", wagerList)
     if (this.state.currentUser) {
       return (
         <div>
@@ -105,12 +144,12 @@ class AllWagers extends Component {
         <Grid columns={5}>
           {wagerList.map(wager => (
             <Grid.Column>
-              <Card key={wager} className="ui segment centered">
+              <Card key={wager.id} className="ui segment centered">
                 <Image src={basketball} />
                 <Card.Header />
-                <Link to={`/wagers/${wager}`} key={wager.address} value={wager.address}>
-                  Click here to bet on {wager}
-                </Link>
+                <Button key={wager.id} value={wager.id} onClick={this.enterGame}>
+                  Click here to bet on {wager.id.split("vs").join(" vs. ")}
+                </Button>
               </Card>
             </Grid.Column>
           ))}
@@ -143,12 +182,12 @@ class AllWagers extends Component {
         <Grid columns={5}>
           {wagerList.map(wager => (
             <Grid.Column>
-              <Card key={wager.address} className="ui segment centered">
+              <Card key={wager.id} className="ui segment centered">
                 <Image src={basketball} />
                 <Card.Header />
-                <Link to={`/wagers/${wager}`} key={wager.address} value={wager.address}>
-                  Click here to bet on {wager}
-                </Link>
+                <Button key={wager.id} value={wager.id} onClick={this.enterGame}>
+                  Click here to bet on {wager.id.split("vs").join(" vs. ")}
+                </Button>
               </Card>
             </Grid.Column>
           ))}
