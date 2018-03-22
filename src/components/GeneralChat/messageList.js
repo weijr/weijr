@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
 import { db, auth, userById } from '../../fire/firestore'
 import { connect } from 'react-redux';
-import Message from './message'
+import Message from './Message'
 import logo from '../../logo.svg'
 import { Comment } from 'semantic-ui-react'
 import { ScrollBox } from 'react-scroll-box'

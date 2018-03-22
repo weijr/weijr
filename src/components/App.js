@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import logo from "../logo.svg";
-import "./app.css";
+import "./App.css";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db, auth, userById } from "../fire/firestore";
 import history from "../history";
@@ -9,13 +9,13 @@ import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import web3 from "../web3";
 import mafiaContract from "../mafiaContract";
-import GeneralChat from "./generalChat/index";
-import SingleWagerView from "./singleWagerView";
+import GeneralChat from "./GeneralChat/index";
+import SingleWagerView from "./SingleWagerView";
 import { writeUsername } from "../store";
 import { writePassword } from "../store";
 import { Header, Icon, Image, Segment, Grid, Button, Card, Form, Checkbox } from 'semantic-ui-react'
 
-class SignUp extends Component {
+class App extends Component {
   constructor(props) {
     super(props);
 
@@ -39,7 +39,7 @@ class SignUp extends Component {
       var errorMessage = error.message;
     });
 
-    this.props.history.push('/');
+    this.props.history.push('/wagers');
   }
 
   login = event => {
@@ -48,18 +48,18 @@ class SignUp extends Component {
     let password = this.props.newPasswordEntry
     auth.signInWithEmailAndPassword(username, password)
     .then(() => {
-      this.props.history.push('/');
+      this.props.history.push('/wagers');
     })
     .catch(error => {
       console.log(error.message)
     });
     // console.log(auth.currentUser.email)
-    
+
   }
 
   render() {
     const { name, newUsernameEntry, newPasswordEntry, handleChangeUsername, handleChangePassword } = this.props;
-    
+
     return (
       <div>
         <Segment inverted>
@@ -79,7 +79,7 @@ class SignUp extends Component {
         </Segment>
         <Grid>
         <Grid.Row centered>
-        <Form onSignUp={evt => this.signUp(evt)} 
+        <Form onSignUp={evt => this.signUp(evt)}
               onLogin={evt => this.login(evt)}>
           <label>User Name</label>
           <input placeholder='User Name' onChange={handleChangeUsername} value={newUsernameEntry} />
@@ -116,4 +116,4 @@ const mapDispatchToProps = function(dispatch, ownProps) {
   };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignUp))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))
