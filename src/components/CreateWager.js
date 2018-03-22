@@ -28,14 +28,7 @@ class CreateWager extends Component {
           from: accounts[0]
         });
         const address = await factory.methods.getDeployedwagers().call()[-1]
-        let data = {
-          wager: this.state.title
-        }
-
-        let setDoc = db
-          .collection("wagers")
-          .doc(address)
-          .set(data)
+        
         this.props.history.push('/');
       } catch (err) {
         this.setState({ errorMessage: err.message });

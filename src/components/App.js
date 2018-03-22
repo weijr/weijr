@@ -53,7 +53,7 @@ class App extends Component {
       this.props.history.push('/wagers');
     })
     .catch(error => {
-      this.props.alert.show(error.message)
+      alert(error.message)
 
     });
     // console.log(auth.currentUser.email)

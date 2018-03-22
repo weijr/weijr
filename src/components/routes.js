@@ -7,6 +7,7 @@ import AllWagers from './AllWagers';
 import App from './App'
 import SingleWagerView from './SingleWagerView';
 // import SignUp from './signUp'
+import CreateWager from './CreateWager';
 
 class Routes extends Component {
 
@@ -14,6 +15,7 @@ class Routes extends Component {
     return (
       <Switch>
         <Route exact path="/" component={ App } />
+        <Route exact path='/new-wager' component={CreateWager} />
         <Route exact path="/wagers" component={ AllWagers } />
         <Route exact path="/wagers/:address" component={SingleWagerView} />
         <Redirect from="*" to="/" />
