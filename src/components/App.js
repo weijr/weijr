@@ -13,6 +13,7 @@ import GeneralChat from "./GeneralChat/";
 import SingleWagerView from "./SingleWagerView";
 import { writeUsername } from "../store";
 import { writePassword } from "../store";
+import { withAlert } from 'react-alert'
 import { Header, Icon, Image, Segment, Grid, Button, Card, Form, Checkbox } from 'semantic-ui-react'
 
 class App extends Component {
@@ -35,12 +36,14 @@ class App extends Component {
     let username = this.props.newUsernameEntry
     let password = this.props.newPasswordEntry
 
-    auth.createUserWithEmailAndPassword(username, password).catch(function(error) {
-      //this.props.alert.show(error.message)
-    });
-
-    this.props.history.push('/wagers');
-  }
+    auth.createUserWithEmailAndPassword(username, password)
+    .then(() => {
+      this.props.history.push('/wagers');
+    })
+    .catch(error => {
+      this.props.alert.show(error.message)
+  })
+}
 
   login = event => {
     event.preventDefault();
@@ -57,6 +60,7 @@ class App extends Component {
     // console.log(auth.currentUser.email)
 
   }
+
 
   render() {
     const { name, newUsernameEntry, newPasswordEntry, handleChangeUsername, handleChangePassword } = this.props;
@@ -117,4 +121,4 @@ const mapDispatchToProps = function(dispatch, ownProps) {
   };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))
+export default withRouter(withAlert(connect(mapStateToProps, mapDispatchToProps)(App)))
