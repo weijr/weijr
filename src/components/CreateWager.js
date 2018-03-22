@@ -6,12 +6,14 @@ import factory from '../ether/factory';
 import web3 from '../ether/web3';
 import { Router } from './routes';
 import { withRouter } from 'react-router-dom';
+import { db, auth, userById } from "../fire/firestore";
 
 class CreateWager extends Component {
   state = {
     minimumBet: '',
     errorMessage: '',
-    loading: false
+    loading: false,
+    title: ''
   }
 
   onSubmit = async event => {
@@ -26,6 +28,15 @@ class CreateWager extends Component {
         .send({
           from: accounts[0]
         });
+        const address = await factory.methods.getDeployedwagers().call()[-1]
+        var data = {
+          wager: this.state.title
+        }
+
+        var setDoc = db
+          .collection("wagers")
+          .doc(address)
+          .set(data)
         this.props.history.push('/');
       } catch (err) {
         this.setState({ errorMessage: err.message });
@@ -39,6 +50,15 @@ class CreateWager extends Component {
       <Layout>
       <h3>Create Your Wager!</h3>
         <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
+          <Form.Field>
+          <label>What's The Name Of Your Wager</label>
+          <Input
+          value={this.state.title}
+          onChange={event => this.setState({title: event.target.value})}
+          label={"title"}
+          labelPosition="right"
+          />
+          </Form.Field>
           <Form.Field>
           <label>How much do you want the buy in to be?</label>
           <Input
