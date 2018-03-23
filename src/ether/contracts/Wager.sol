@@ -36,7 +36,7 @@ contract Wager {
   }
 
   function joinBet(bool side) public payable {
-      require(msg.value == minimumBet);
+      require(msg.value >= minimumBet);
       require(!alreadyBetting[msg.sender]);
       users.push(User({accountNumber: msg.sender, side: side}));
       alreadyBetting[msg.sender] = true;
