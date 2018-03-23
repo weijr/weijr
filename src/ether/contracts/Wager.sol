@@ -80,7 +80,8 @@ contract Wager {
           users.length,
           side1,
           side2,
-          manager, title
+          manager, 
+          title
       );
   }
 }
