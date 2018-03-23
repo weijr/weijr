@@ -33,9 +33,16 @@ class AllWagers extends Component {
   async componentDidMount() {
     try {
       const listOfWagersAddresses = await factory.methods.getDeployedwagers().call()
-      const listOfWagers = await Promise.all(listOfWagersAddresses.map(address => {
+      const listOfWagers = await Promise.all(listOfWagersAddresses.map(async address => {
         const wager = Wager(address)
-        return wager.methods.getWagerSummary().call()
+        const wagerObj = await wager.methods.getWagerSummary().call()
+        const wagerInfo = {
+          title: wagerObj[6],
+          ante: wagerObj[0],
+          address: address,
+          potSize: wagerObj[1]
+        }
+        return wagerInfo
       }))
       this.setState({
         listOfWagers
@@ -44,27 +51,6 @@ class AllWagers extends Component {
       console.error(err)
     }
   }
-
-  // componentDidMount() {
-  //   let listOfWagersInfo = []
-  //   factory.methods.getDeployedwagers().call()
-  //     .then(listOfAddress => {
-  //       return Promise.all(listOfAddress.map(address => {
-  //         let wager = Wager(address)
-  //         wager.methods.getWagerSummary().call()
-  //           .then(info => {
-  //             console.log('info: ', info)
-  //             return listOfWagersInfo.push(info)
-  //           })
-  //       }))
-  //         .then(values => {
-  //           this.setState({
-  //             listOfWagers: values
-  //           })
-  //         })
-  //     })
-  // }
-
 
   signUp = event => {
     event.preventDefault();
@@ -131,17 +117,17 @@ class AllWagers extends Component {
           <Grid columns={5}>
             {wagerList.map(wager => (
               <Grid.Column>
-                <Card key={wager[5]} className="ui segment centered">
+                <Card key={wager.address} className="ui segment centered">
                   <Image src={basketball} />
                   <Card.Header />
-                  <Link to={`/wagers/${wager[5]}`} key={wager[5]} value={wager[5]}>
+                  <Link to={`/wagers/${wager.address}`} key={wager.address} value={wager.address}>
                     Click here to bet on
                     <br></br>
-                    {wager[6]}
+                    {wager.title}
                   </Link>
-                  Ante: {wager[0]} Ether
+                  Ante: {wager.ante} Ether
                   <br></br>
-                  Current Pot Size: {wager[1]}
+                  Current Pot Size: {wager.potSize}
                 </Card>
               </Grid.Column>
             ))}
