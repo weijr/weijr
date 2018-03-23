@@ -41,7 +41,8 @@ class AllWagers extends Component {
           title: wagerObj[6],
           ante: wagerObj[0],
           address: address,
-          pot: wagerObj[1]
+          pot: wagerObj[1],
+          complete: wagerObj[7]
         }
         return wagerInfo
       }))
@@ -147,7 +148,9 @@ class AllWagers extends Component {
           </Grid.Column>
           </Grid>
           <Grid columns={5}>
-            {wagerList.map(wager => (
+          {wagerList.map(wager => 
+            wager.complete ? null :
+            (
               <Grid.Column>
                 <Card key={wager.address} className="ui segment centered">
                   <Image src={basketball} />

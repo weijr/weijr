@@ -40,12 +40,15 @@ class SingleWagerView extends Component {
       errorMessage: '',
       leftSide: '',
       rightSide: '',
-      title: ''
+      title: '',
+      accounts: []
     };
     this.onClick = this.onClick.bind(this);
     this.renderCards = this.renderCards.bind(this);
     this.betSideOne = this.betSideOne.bind(this);
     this.betSideTwo = this.betSideTwo.bind(this);
+    this.paySideOne = this.paySideOne.bind(this);
+    this.paySideTwo = this.paySideTwo.bind(this);
   }
 
   componentWillMount() {
@@ -63,22 +66,30 @@ class SingleWagerView extends Component {
   }
 
   async componentDidMount() {
-    const wager = Wager(this.props.match.params.address);
-    const summary = await wager.methods.getWagerSummary().call();
-    const left = summary[6].split(" vs. ")[0];
-    const right = summary[6].split(" vs. ")[1];
 
-    this.setState({
-      minimumBet: summary[0],
-      pot: web3.utils.fromWei(summary[1], 'ether'),
-      totalUsers: summary[2],
-      sideOne: summary[3],
-      sideTwo: summary[4],
-      manager: summary[5],
-      leftSide: left,
-      rightSide: right,
-      title: summary[6]
-    });
+      try {
+        const accounts = await web3.eth.getAccounts()
+        const wager = Wager(this.props.match.params.address);
+        const summary = await wager.methods.getWagerSummary().call();
+        const left = summary[6].split(" vs. ")[0];
+        const right = summary[6].split(" vs. ")[1];
+
+        this.setState({
+          minimumBet: summary[0],
+          pot: summary[1],
+          totalUsers: summary[2],
+          sideOne: summary[3],
+          sideTwo: summary[4],
+          manager: summary[5],
+          leftSide: left,
+          rightSide: right,
+          title: summary[6],
+          accounts: accounts
+        });
+        console.log('FIRSTSTATE', this.state.accounts)
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   onClick = event => {
@@ -86,9 +97,52 @@ class SingleWagerView extends Component {
     this.props.history.push("/wagers")
   }
 
+  renderPayoutButton() {
+    if(this.state.accounts.includes(this.state.manager)){
+      return (
+        <div>
+          <Button onClick={this.paySideOne}>
+            {this.state.leftSide} Won!
+          </Button>
+          <Button onClick={this.paySideTwo}>
+            {this.state.rightSide} Won!
+          </Button>
+        </div>
+      )
+    }
+  }
+
+  async paySideOne(event) {
+    event.preventDefault()
+    console.log('SCONDSTATE', this.state.accounts)
+    if(this.state.accounts.includes(this.state.manager)){
+      const wager = Wager(this.props.match.params.address);
+      const manager = await wager.methods.manager().call();
+
+      await wager.methods.payout(true).send({
+        from: manager
+      })
+    }
+    this.props.history.push('/wagers');
+  }
+
+  async paySideTwo(event) {
+    event.preventDefault()
+    console.log('SCONDSTATE', this.state.accounts)
+    if(this.state.accounts.includes(this.state.manager)){
+      const wager = Wager(this.props.match.params.address);
+      const manager = await wager.methods.manager().call();
+
+      await wager.methods.payout(true).send({
+        from: manager
+      })
+    }
+    this.props.history.push('/wagers');
+  } 
+
   renderCards() {
     const items = [{
-      header: `The Current Pot is ${this.state.pot} ether!`,
+      header: `The Current Pot is ${web3.utils.fromWei(this.state.pot, 'ether')} ether!`,
       meta: this.state.title,
       description: `There are ${this.state.totalUsers} people invovled in this Wager! Place Your Wagers Below!`
     }];
@@ -197,6 +251,7 @@ class SingleWagerView extends Component {
           </Button>
             <Grid.Column width={6} />
           </Grid.Row>
+          {this.renderPayoutButton()}
         </Grid>
       </div>
     )
