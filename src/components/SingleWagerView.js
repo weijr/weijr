@@ -15,7 +15,8 @@ import {
   Segment,
   Grid,
   Button,
-  Card
+  Card,
+  Label
 } from "semantic-ui-react";
 
 import Wager from "../ether/wagers";
@@ -26,7 +27,7 @@ class SingleWagerView extends Component {
     super(props);
     this.state = {
       messages: [],
-      wager: this.props.match.params.address,
+      address: this.props.match.params.address,
       currentUser: "",
       minimumBet: "",
       pot: "",
@@ -34,10 +35,14 @@ class SingleWagerView extends Component {
       sideOne: "",
       sideTwo: "",
       manager: "",
-      currentUser: this.props.currentUser
+      currentUser: this.props.currentUser,
+      loading: false,
+      errorMessage: ''
     };
     this.onClick = this.onClick.bind(this);
     this.renderCards = this.renderCards.bind(this);
+    this.betSideOne = this.betSideOne.bind(this);
+    this.betSideTwo = this.betSideTwo.bind(this);
   }
 
   componentWillMount() {
@@ -85,11 +90,60 @@ class SingleWagerView extends Component {
     return <Card.Group items={items} />;
   }
 
+  async betSideOne(event) {
+    event.preventDefault();
+    const wager = Wager(this.props.match.params.address);
+
+    this.setState({ loading: true, errorMessage: '' });
+
+    try {
+      const accounts = await web3.eth.getAccounts();
+      await wager.methods.joinBet(true).send({
+        from: accounts[0],
+        value: web3.utils.toWei(this.state.minimumBet, 'ether')
+      });
+      const summary = await wager.methods.getWagerSummary().call();
+      this.setState({
+        pot: summary[1],
+        totalUsers: summary[2],
+        sideOne: summary[3],
+        sideTwo: summary[4],
+      });
+    } catch (err) {
+      this.setState({errorMessage: err.message})
+    }
+
+  }
+
+  async betSideTwo(event) {
+    event.preventDefault();
+    const wager = Wager(this.props.match.params.address);
+
+    this.setState({ loading: true, errorMessage: '' });
+
+    try {
+      const accounts = await web3.eth.getAccounts();
+      await wager.methods.joinBet(false).send({
+        from: accounts[0],
+        value: web3.utils.toWei(this.state.minimumBet, 'ether')
+      });
+      const summary = await wager.methods.getWagerSummary().call();
+      this.setState({
+        pot: summary[1],
+        totalUsers: summary[2],
+        sideOne: summary[3],
+        sideTwo: summary[4],
+      });
+    } catch (err) {
+      this.setState({errorMessage: err.message})
+    }
+
+  }
+
   render() {
     let email;
 
-    const wagerA = this.state.wager.split("vs")[0];
-    const wagerB = this.state.wager.split("vs")[1];
+
 
     if (this.state.currentUser) {
     return this.state.manager === "" ? null : (
@@ -107,19 +161,32 @@ class SingleWagerView extends Component {
               </Grid.Column>
             </Grid>
             <Header.Content>
-              {wagerA} vs. {wagerB}
+              {this.state.sideOne} vs. {this.state.sideTwo}
             </Header.Content>
           </Header>
         </Segment>
         <Grid>
           <Grid.Column width={8}>
-            <GeneralChat wager={this.state.wager} chatType="wager" />
+            <GeneralChat wager='KnicksvsWarriors' chatType="wager" />
           </Grid.Column>
           <Grid.Column width={8}>
-            <WagerComponent wager={this.state.wager} />
           </Grid.Column>
           <Grid.Row>
             <Grid.Column width={10}>{this.renderCards()}</Grid.Column>
+            <Button as='div' labelPosition='right'>
+            <Button color='red' value={this.state.sideOne} onClick={this.betSideOne}>
+              <Icon name='ethereum' />
+              { this.state.sideOne }
+            </Button>
+            <Label as='a' basic color='red' pointing='left'>{this.state.sideOne}  Bets Placed</Label>
+          </Button>
+          <Button as='div' labelPosition='right'>
+            <Button color='blue' value={this.state.sideTwo} onClick={this.betSideTwo}>
+              <Icon name='ethereum' />
+              { this.state.sideTwo }
+            </Button>
+            <Label as='a' basic color='blue' pointing='left'>{this.state.sideTwo}  Bets Placed</Label>
+          </Button>
             <Grid.Column width={6} />
           </Grid.Row>
         </Grid>
