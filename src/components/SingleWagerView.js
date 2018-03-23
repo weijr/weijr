@@ -110,7 +110,6 @@ class SingleWagerView extends Component {
         </div>
       )
     }
-
   }
 
   async paySideOne(event) {
@@ -123,16 +122,23 @@ class SingleWagerView extends Component {
       await wager.methods.payout(true).send({
         from: manager
       })
-
-
     }
-
-
+    this.props.history.push('/wagers');
   }
 
-  paySideTwo() {
+  async paySideTwo(event) {
+    event.preventDefault()
+    console.log('SCONDSTATE', this.state.accounts)
+    if(this.state.accounts.includes(this.state.manager)){
+      const wager = Wager(this.props.match.params.address);
+      const manager = await wager.methods.manager().call();
 
-  }
+      await wager.methods.payout(true).send({
+        from: manager
+      })
+    }
+    this.props.history.push('/wagers');
+  } 
 
   renderCards() {
     const items = [{

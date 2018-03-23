@@ -27,6 +27,7 @@ contract Wager {
   uint public side2;
   uint public minimumBet;
   string public title;
+  bool complete;
 
   mapping(address => bool) public alreadyBetting;
 
@@ -35,6 +36,7 @@ contract Wager {
       manager = creator;
       minimumBet = minimum;
       title = name;
+      complete = false; 
   }
 
   function joinBet(bool side) public payable {
@@ -64,6 +66,7 @@ contract Wager {
               users[i].accountNumber.transfer(total/numberOfWinners);
           }
       }
+      complete = true; 
   }
 
  function checkIfAlreadyInBet(address possiblePlayer)  public returns(bool) {
@@ -74,7 +77,7 @@ contract Wager {
     return users.length;
   }
 
-  function getWagerSummary() public view returns (uint, uint, uint, uint, uint, address, string) {
+  function getWagerSummary() public view returns (uint, uint, uint, uint, uint, address, string, bool) {
       return (
           minimumBet,
           this.balance,
@@ -82,7 +85,8 @@ contract Wager {
           side1,
           side2,
           manager,
-          title
+          title, 
+          complete
       );
   }
 }
