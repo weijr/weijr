@@ -18,6 +18,8 @@ class Routes extends Component {
         <Route exact path='/new-wager' component={CreateWager} />
         <Route exact path="/wagers" component={ AllWagers } />
         <Route exact path="/wagers/:address" component={SingleWagerView} />
+        {/* <Route exact path='/newPrivateMessage' component={DirectChatCreation} */}
+        <Route exact path='/privateMessage/:chatName' component={DirectChatMessage} />
         <Redirect from="*" to="/" />
       </Switch>
     )
