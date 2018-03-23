@@ -41,7 +41,7 @@ class AllWagers extends Component {
           title: wagerObj[6],
           ante: wagerObj[0],
           address: address,
-          potSize: wagerObj[1]
+          pot: wagerObj[1]
         }
         return wagerInfo
       }))
@@ -76,18 +76,19 @@ class AllWagers extends Component {
   }
 
   onClickSort = (event, data) => {
-    console.log(data.value)
     event.preventDefault()
     let listOfWagersSorted = this.state.listOfWagers.slice()
-    if (data.value === 'low-high') {
+    let type = data.value.split("-")[0]
+    let order = data.value.split("-")[1] + "-" + data.value.split("-")[2] 
+    if (order === 'low-high') {
       var sortedList = listOfWagersSorted.sort(function (a, b) {
-        return parseInt(a.ante) - parseFloat(b.ante)
-      })
+        return parseInt(a[type]) - parseFloat(b[type])
+      })      
     } else {
       var sortedList = listOfWagersSorted.sort(function (a, b) {
-        return parseInt(b.ante) - parseFloat(a.ante)
-      })
-    }
+        return parseInt(b[type]) - parseFloat(a[type])
+    })
+  }
     this.setState({
       listOfWagers: sortedList
     })
@@ -98,13 +99,10 @@ class AllWagers extends Component {
     var user = auth.currentUser;
     const wagerList = this.state.listOfWagers;
 
-    // const languageOptions = [ { key: 'Arabic', text: 'Arabic', value: 'Arabic' }]
-
     console.log("list of wagers length: ", this.state.listOfWagers.length)
     console.log("list of wagers: ", this.state.listOfWagers)
     if (this.state.currentUser && this.state.listOfWagers) {
       return (
-        // this.state.listOfWagers.length === 0 ? null :
         <div>
           <Segment inverted>
             <Header inverted as="h2" icon textAlign="center">
@@ -139,8 +137,10 @@ class AllWagers extends Component {
           <Dropdown.Menu>
             <Dropdown.Header icon='tags' content='Filter by tag' />
             <Dropdown.Divider />
-            <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Ante: Low-High' value="low-high" onClick={this.onClickSort}/>
-            <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Ante: High-Low' value="high-low" onClick={this.onClickSort}/>
+            <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Ante: Low-High' value="ante-low-high" onClick={this.onClickSort}/>
+            <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Ante: High-Low' value="ante-high-low" onClick={this.onClickSort}/>
+            <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Pot Size: Low-High' value="pot-low-high" onClick={this.onClickSort}/>
+            <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Pot Size: High-Low' value="pot-high-low" onClick={this.onClickSort}/>
           </Dropdown.Menu>
         </Dropdown>
           
@@ -159,7 +159,7 @@ class AllWagers extends Component {
                   </Link>
                   Ante: {wager.ante} Ether
                   <br></br>
-                  Current Pot Size: {wager.potSize} Ether
+                  Current Pot Size: {wager.pot} Ether
                 </Card>
               </Grid.Column>
             ))}
