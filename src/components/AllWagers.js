@@ -80,18 +80,16 @@ class AllWagers extends Component {
     event.preventDefault()
     let listOfWagersSorted = this.state.listOfWagers.slice()
     if (data.value === 'low-high') {
-      var newList = listOfWagersSorted.sort(function (a, b) {
+      var sortedList = listOfWagersSorted.sort(function (a, b) {
         return parseInt(a.ante) - parseFloat(b.ante)
       })
     } else {
-      var newList = listOfWagersSorted.sort(function (a, b) {
+      var sortedList = listOfWagersSorted.sort(function (a, b) {
         return parseInt(b.ante) - parseFloat(a.ante)
       })
     }
-
-    console.log(newList)
     this.setState({
-      listOfWagers: newList
+      listOfWagers: sortedList
     })
   }
 
