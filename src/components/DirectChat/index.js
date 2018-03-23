@@ -2,46 +2,63 @@ import React, { Component } from "react";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db } from "../../fire/firestore";
 import { connect } from "react-redux";
-import MessageList from "./MessageList";
-import NewMessageEntry from "./NewMessageEntry";
 import logo from "../../logo.svg";
-import { Form } from "semantic-ui-react";
+import { Form, Button } from "semantic-ui-react";
 
-class DirectChat extends Component {
+class DirectChatCreation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: [],
-      wager: this.props.wager,
-      chatType: this.props.chatType,
-      fieldNum: 1
+      fieldNum: 1,
+      user0: ''
     };
-    this.onClick = this.onClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
+  }
+
+  handleChange(evt) {
+    evt.preventDefault();
+    console.log(evt.target)
+    const userKey = 'user' + evt.target.key
+    this.setState({userKey: evt.target.value})
   }
 
   handleSubmit(evt) {
     evt.preventDefault();
+    let chatName = ''
+    for (let j = 0; j < this.state.fieldNum; j++){
+      let chatKey = 'user' + j
+      chatName.concat(this.state[chatKey])
+    }
     db
       .collection("privateChats")
-      .add()
+      .doc('privateChats')
+      .collection(chatName)
     this.props.history.push("/");
   }
 
+  handleAdd(evt) {
+    evt.preventDefault()
+    let num = this.state.fieldNum
+    this.setState({
+      fieldNum: num++
+    })
+  }
+
   render() {
-    let fieldsArr = []
-    for(let i = 0; i < fieldNum; i++) {
-      fieldsArr.push(<Form.Field key={i} label='User Email' type='email' placeholder='UserEmail' />)
-    }
     return (
       <div>
-        <Form onSubmit={this.onSubmit}>
-        {fieldsArr}
-        <Button label='Add User' onClick={(() => this.setState({fieldNum: fieldNum++}))} />
-        <Button label='Submit' onClick={this.handleSubmit} />
+        <Form onSubmit={this.handleSubmit}>
+        {fieldsArr.map((component) => {
+          return component
+        })}
+        <Button label='Add User' onClick={this.handleAdd} />
+        <Button label='Submit'/>
         </Form>
       </div>
     );
   }
 }
 
-export default withRouter(GeneralChat);
+export default withRouter(DirectChatCreation);

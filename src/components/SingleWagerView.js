@@ -5,7 +5,6 @@ import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db, auth, userName } from "../fire/firestore";
 import { connect } from "react-redux";
 import { postMssage, writeMessage } from "../store";
-import MessageList from "./GeneralChat/MessageList";
 import GeneralChat from "./GeneralChat/index";
 import WagerComponent from "./WagerComponent";
 import {
