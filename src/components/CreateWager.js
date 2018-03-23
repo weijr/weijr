@@ -30,7 +30,7 @@ class CreateWager extends Component {
         });
         const address = await factory.methods.getDeployedwagers().call()[-1]
 
-        this.props.history.push('/');
+        this.props.history.push('/wagers');
       } catch (err) {
         this.setState({ errorMessage: err.message });
       }

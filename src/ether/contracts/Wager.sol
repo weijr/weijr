@@ -39,6 +39,7 @@ contract Wager {
 
   function joinBet(bool side) public payable {
       require(msg.value >= minimumBet);
+      require(msg.sender != manager);
       require(!alreadyBetting[msg.sender]);
       users.push(User({accountNumber: msg.sender, side: side}));
       alreadyBetting[msg.sender] = true;
@@ -80,7 +81,8 @@ contract Wager {
           users.length,
           side1,
           side2,
-          manager, title
+          manager,
+          title
       );
   }
 }
