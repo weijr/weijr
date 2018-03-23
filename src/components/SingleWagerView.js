@@ -37,7 +37,10 @@ class SingleWagerView extends Component {
       manager: "",
       currentUser: this.props.currentUser,
       loading: false,
-      errorMessage: ''
+      errorMessage: '',
+      leftSide: '',
+      rightSide: '',
+      title: ''
     };
     this.onClick = this.onClick.bind(this);
     this.renderCards = this.renderCards.bind(this);
@@ -62,14 +65,19 @@ class SingleWagerView extends Component {
   async componentDidMount() {
     const wager = Wager(this.props.match.params.address);
     const summary = await wager.methods.getWagerSummary().call();
-    console.log("SUMMARY HERE", summary);
+    const left = summary[6].split(" vs. ")[0];
+    const right = summary[6].split(" vs. ")[1];
+
     this.setState({
       minimumBet: summary[0],
-      pot: summary[1],
+      pot: web3.utils.fromWei(summary[1], 'ether'),
       totalUsers: summary[2],
       sideOne: summary[3],
       sideTwo: summary[4],
-      manager: summary[5]
+      manager: summary[5],
+      leftSide: left,
+      rightSide: right,
+      title: summary[6]
     });
   }
 
@@ -80,13 +88,10 @@ class SingleWagerView extends Component {
 
   renderCards() {
     const items = [{
-      header: this.state.pot,
-      thisSide: this.state.sideOne,
-      thatSide: this.state.sideTwo,
-      totalUsers: this.state.totalUsers,
-      description: this.state.manager
+      header: `The Current Pot is ${this.state.pot} ether!`,
+      meta: this.state.title,
+      description: `There are ${this.state.totalUsers} people invovled in this Wager! Place Your Wagers Below!`
     }];
-    console.log("ITEMS HERE", items);
     return <Card.Group items={items} />;
   }
 
@@ -161,30 +166,32 @@ class SingleWagerView extends Component {
               </Grid.Column>
             </Grid>
             <Header.Content>
-              {this.state.sideOne} vs. {this.state.sideTwo}
+              {this.state.leftSide} vs. {this.state.rightSide}
             </Header.Content>
           </Header>
         </Segment>
-        <Grid>
+        <Grid columns={2}>
           <Grid.Column width={8}>
             <GeneralChat wager={this.state.address} />
+          </Grid.Column>
+          <Grid.Column width={10}>
+            {this.renderCards()}
           </Grid.Column>
           <Grid.Column width={8}>
 
           </Grid.Column>
           <Grid.Row>
-            <Grid.Column width={10}>{this.renderCards()}</Grid.Column>
             <Button as='div' labelPosition='right'>
             <Button color='red' value={this.state.sideOne} onClick={this.betSideOne}>
               <Icon name='ethereum' />
-              { this.state.sideOne }
+              { this.state.leftSide }
             </Button>
             <Label as='a' basic color='red' pointing='left'>{this.state.sideOne}  Bets Placed</Label>
           </Button>
           <Button as='div' labelPosition='right'>
             <Button color='blue' value={this.state.sideTwo} onClick={this.betSideTwo}>
               <Icon name='ethereum' />
-              { this.state.sideTwo }
+              { this.state.rightSide }
             </Button>
             <Label as='a' basic color='blue' pointing='left'>{this.state.sideTwo}  Bets Placed</Label>
           </Button>
