@@ -16,6 +16,7 @@ import { Header, Icon, Image, Segment, Grid, Button, Card } from 'semantic-ui-re
 import factory from '../ether/factory'
 import { connect } from "react-redux";
 import App from './App'
+import Wager from "../ether/wagers";
 
 class AllWagers extends Component {
   constructor(props) {
@@ -28,14 +29,53 @@ class AllWagers extends Component {
     this.signUp = this.signUp.bind(this);
     this.logout = this.logout.bind(this)
   }
-  async componentDidMount() {
-    this.setState({listOfWagers: await factory.methods.getDeployedwagers().call()})
+
+  // async componentDidMount() {
+  //   let listOfWagersInfo = []
+    
+  //   let listOfWagersAddresses = await factory.methods.getDeployedwagers().call()
+  //   await listOfWagersAddresses.map(async address => {
+  //     let wager = Wager(address)
+  //     let info = await wager.methods.getWagerSummary().call()
+  //     //console.log("info: ", info)
+  //     let summary = {
+  //       title: info[6],
+  //       address: info[5]
+  //     }
+  //     listOfWagersInfo.push(info)
+  //   })
+  //   let listOfWagersInfoSlice = listOfWagersInfo.slice(0)
+  //   this.setState({
+  //     listOfWagers: listOfWagersInfoSlice
+  //   })
+  // }
+
+  componentDidMount() {
+    let listOfWagersInfo = []
+    factory.methods.getDeployedwagers().call()
+      .then(listOfAddress => {
+        Promise.all(listOfAddress.map(address => {
+          let wager = Wager(address)
+          wager.methods.getWagerSummary().call()
+            .then(info => {
+              console.log('info: ', info)
+              return listOfWagersInfo.push(info)
+            })
+        }))
+          .then(() => {
+            this.setState({
+              listOfWagers: listOfWagersInfo
+            })
+          })
+      })
   }
+
 
   signUp = event => {
     event.preventDefault();
     this.props.history.push('/wagers/signup');
   }
+
   logout = () => {
     auth.signOut()
     .then(() => {
@@ -47,6 +87,12 @@ class AllWagers extends Component {
       this.props.history.push('/')
     })
   }
+
+  createContract = (event) => {
+    event.preventDefault()
+    this.props.history.push('/new-wager')
+  }
+
   render() {
     var user = auth.currentUser;
     if (user) {
@@ -55,9 +101,12 @@ class AllWagers extends Component {
       console.log("else: ", user)
     }
     const wagerList = this.state.listOfWagers;
-    console.log("state.currentUser: ", this.state.currentUser )
-    if (this.state.currentUser) {
+    // console.log("state.currentUser: ", this.state.currentUser )
+    console.log("list of wagers length: ", this.state.listOfWagers.length)
+    console.log("list of wagers: ", this.state.listOfWagers)
+    if (this.state.currentUser && this.state.listOfWagers) {
       return (
+        // this.state.listOfWagers.length === 0 ? null :
         <div>
         <Segment inverted>
           <Header inverted as="h2" icon textAlign="center">
@@ -76,23 +125,32 @@ class AllWagers extends Component {
               <Button onClick={this.logout}>
                 Logout
               </Button>
+              </Header.Content>
+              <Header.Content>
+              <Button onClick={this.createContract}>
+                Create a new Contract
+              </Button>
             </Header.Content>
           </Header>
         </Segment>
         <Grid columns={5}>
-          {wagerList.map(wager => (
-            <Grid.Column>
-              <Card key={wager} className="ui segment centered">
-                <Image src={basketball} />
-                <Card.Header />
-                <Link to={`/wagers/${wager}`} key={wager.address} value={wager.address}>
-                  Click here to bet on {wager}
-                </Link>
-              </Card>
-            </Grid.Column>
-          ))}
+        {wagerList.map(wager => (
+          <Grid.Column>
+            <Card key={wager.title} className="ui segment centered">
+              <Image src={basketball} />
+              <Card.Header />
+              <Link to={`/wagers/${wager.address}`} key={wager.address} value={wager.address}>
+                Click here to bet on {wager.title}
+              </Link>
+            </Card>
+          </Grid.Column>
+        ))}
         </Grid>
         </div>
+      )
+    } else if (this.state.currentUser) {
+      return (
+        <div>Loading...</div>
       )
     } else {
       this.props.history.push('/')

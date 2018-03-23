@@ -15,7 +15,7 @@ class Routes extends Component {
     return (
       <Switch>
         <Route exact path="/" component={ App } />
-        <Route exact path='/new-wager' component={CreateWager} />
+        <Route exact path='/new-wager' component={ CreateWager } />
         <Route exact path="/wagers" component={ AllWagers } />
         <Route exact path="/wagers/:address" component={SingleWagerView} />
         <Redirect from="*" to="/" />
