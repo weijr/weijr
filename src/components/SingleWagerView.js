@@ -143,7 +143,7 @@ class SingleWagerView extends Component {
   render() {
     let email;
 
-    
+
 
     if (this.state.currentUser) {
     return this.state.manager === "" ? null : (
@@ -182,7 +182,7 @@ class SingleWagerView extends Component {
             <Label as='a' basic color='red' pointing='left'>{this.state.sideOne}  Bets Placed</Label>
           </Button>
           <Button as='div' labelPosition='right'>
-            <Button color='blue' value={this.state.sideTwo} onClick={this.state.betSideTwo}>
+            <Button color='blue' value={this.state.sideTwo} onClick={this.betSideTwo}>
               <Icon name='ethereum' />
               { this.state.sideTwo }
             </Button>
