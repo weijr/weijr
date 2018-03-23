@@ -76,7 +76,7 @@ class App extends Component {
             </Header.Content>
             <Header.Content>
               <h2 class="ui red header">
-                Complete the form below to sign up!
+                Please login to continue
               </h2>
             </Header.Content>
           </Header>
@@ -90,7 +90,7 @@ class App extends Component {
           <label>Password</label>
           <input placeholder='Password' onChange={handleChangePassword} value={newPasswordEntry} type='password' />
           <label>     </label>
-          <Button type='signUp' onClick={this.signUp}>Submit</Button>
+          <Button type='signUp' onClick={this.signUp}>Sign Up</Button>
           <Button type='login' onClick={this.login}>Login</Button>
       </Form>
       </Grid.Row>
