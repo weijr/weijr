@@ -12,7 +12,7 @@ import GeneralChat from "./GeneralChat/";
 import { definedRole, randomNameGenerator } from "../utils";
 import SingleWagerView from "./SingleWagerView";
 import basketball from "./basketball.png";
-import { Header, Icon, Image, Segment, Grid, Button, Card } from 'semantic-ui-react'
+import { Header, Icon, Image, Segment, Grid, Button, Card, Dropdown } from 'semantic-ui-react'
 import factory from '../ether/factory'
 import { connect } from "react-redux";
 import App from './App'
@@ -28,6 +28,7 @@ class AllWagers extends Component {
     };
     this.signUp = this.signUp.bind(this);
     this.logout = this.logout.bind(this)
+    this.onClickSort = this.onClickSort.bind(this)
   }
 
   async componentDidMount() {
@@ -40,7 +41,7 @@ class AllWagers extends Component {
           title: wagerObj[6],
           ante: wagerObj[0],
           address: address,
-          potSize: wagerObj[1],
+          pot: wagerObj[1],
           complete: wagerObj[7]
         }
         return wagerInfo
@@ -75,20 +76,34 @@ class AllWagers extends Component {
     this.props.history.push('/new-wager')
   }
 
+  onClickSort = (event, data) => {
+    event.preventDefault()
+    let listOfWagersSorted = this.state.listOfWagers.slice()
+    let type = data.value.split("-")[0]
+    let order = data.value.split("-")[1] + "-" + data.value.split("-")[2] 
+    if (order === 'low-high') {
+      var sortedList = listOfWagersSorted.sort(function (a, b) {
+        return parseInt(a[type]) - parseFloat(b[type])
+      })      
+    } else {
+      var sortedList = listOfWagersSorted.sort(function (a, b) {
+        return parseInt(b[type]) - parseFloat(a[type])
+    })
+  }
+    this.setState({
+      listOfWagers: sortedList
+    })
+  }
+
+
   render() {
     var user = auth.currentUser;
-    if (user) {
-      console.log("user: ", user)
-    } else {
-      console.log("else: ", user)
-    }
     const wagerList = this.state.listOfWagers;
-    // console.log("state.currentUser: ", this.state.currentUser )
+
     console.log("list of wagers length: ", this.state.listOfWagers.length)
     console.log("list of wagers: ", this.state.listOfWagers)
     if (this.state.currentUser && this.state.listOfWagers) {
       return (
-        // this.state.listOfWagers.length === 0 ? null :
         <div>
           <Segment inverted>
             <Header inverted as="h2" icon textAlign="center">
@@ -116,9 +131,26 @@ class AllWagers extends Component {
             </Header>
           </Segment>
           <Grid columns={5}>
-            {wagerList.map(wager => 
-              wager.complete ? null :
-              (
+          <Grid.Column></Grid.Column><Grid.Column></Grid.Column><Grid.Column></Grid.Column><Grid.Column></Grid.Column>
+          <Grid.Column>
+
+          <Dropdown text='Filter' icon='filter' floating labeled button className='icon'>
+          <Dropdown.Menu>
+            <Dropdown.Header icon='tags' content='Filter by tag' />
+            <Dropdown.Divider />
+            <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Ante: Low-High' value="ante-low-high" onClick={this.onClickSort}/>
+            <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Ante: High-Low' value="ante-high-low" onClick={this.onClickSort}/>
+            <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Pot Size: Low-High' value="pot-low-high" onClick={this.onClickSort}/>
+            <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Pot Size: High-Low' value="pot-high-low" onClick={this.onClickSort}/>
+          </Dropdown.Menu>
+        </Dropdown>
+          
+          </Grid.Column>
+          </Grid>
+          <Grid columns={5}>
+          {wagerList.map(wager => 
+            wager.complete ? null :
+            (
               <Grid.Column>
                 <Card key={wager.address} className="ui segment centered">
                   <Image src={basketball} />
@@ -130,7 +162,7 @@ class AllWagers extends Component {
                   </Link>
                   Ante: {wager.ante} Ether
                   <br></br>
-                  Current Pot Size: {wager.potSize}
+                  Current Pot Size: {wager.pot} Ether
                 </Card>
               </Grid.Column>
             ))}
