@@ -12,7 +12,8 @@ class CreateWager extends Component {
     minimumBet: '',
     errorMessage: '',
     loading: false,
-    title: ''
+    leftSide: '',
+    rightSide: ''
   }
 
   onSubmit = async event => {
@@ -23,7 +24,7 @@ class CreateWager extends Component {
     try {
       const accounts = await web3.eth.getAccounts();
       await factory.methods
-        .createWager(this.state.minimumBet, this.state.title)
+        .createWager(this.state.minimumBet, (this.state.leftSide + " vs. " + this.state.rightSide))
         .send({
           from: accounts[0]
         });
@@ -45,8 +46,15 @@ class CreateWager extends Component {
           <Form.Field>
           <label>What's The Name Of Your Wager</label>
           <Input
-          value={this.state.title}
-          onChange={event => this.setState({title: event.target.value})}
+          value={this.state.leftSide}
+          onChange={event => this.setState({leftSide: event.target.value})}
+          label={"title"}
+          labelPosition="right"
+          />
+          <label>Vs.</label>
+          <Input
+          value={this.state.rightSide}
+          onChange={event => this.setState({rightSide: event.target.value})}
           label={"title"}
           labelPosition="right"
           />
