@@ -23,12 +23,12 @@ class CreateWager extends Component {
     try {
       const accounts = await web3.eth.getAccounts();
       await factory.methods
-        .createWager(this.state.minimumBet)
+        .createWager(this.state.minimumBet, this.state.title)
         .send({
           from: accounts[0]
         });
         const address = await factory.methods.getDeployedwagers().call()[-1]
-        
+
         this.props.history.push('/');
       } catch (err) {
         this.setState({ errorMessage: err.message });
