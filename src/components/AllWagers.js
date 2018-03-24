@@ -100,6 +100,8 @@ class AllWagers extends Component {
     var user = auth.currentUser;
     const wagerList = this.state.listOfWagers;
 
+
+    console.log("current user: ", auth.currentUser)
     console.log("list of wagers length: ", this.state.listOfWagers.length)
     console.log("list of wagers: ", this.state.listOfWagers)
     if (this.state.currentUser && this.state.listOfWagers) {
