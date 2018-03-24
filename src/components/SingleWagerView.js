@@ -138,7 +138,7 @@ class SingleWagerView extends Component {
       })
     }
     this.props.history.push('/wagers');
-  } 
+  }
 
   renderCards() {
     const items = [{

@@ -13,7 +13,8 @@ class CreateWager extends Component {
     errorMessage: '',
     loading: false,
     leftSide: '',
-    rightSide: ''
+    rightSide: '',
+    description: ''
   }
 
   onSubmit = async event => {
@@ -24,12 +25,10 @@ class CreateWager extends Component {
     try {
       const accounts = await web3.eth.getAccounts();
       await factory.methods
-        .createWager(this.state.minimumBet, (this.state.leftSide + " vs. " + this.state.rightSide))
+        .createWager(this.state.minimumBet, (this.state.leftSide + " vs. " + this.state.rightSide), this.state.description)
         .send({
           from: accounts[0]
         });
-        const address = await factory.methods.getDeployedwagers().call()[-1]
-
         this.props.history.push('/wagers');
       } catch (err) {
         this.setState({ errorMessage: err.message });
@@ -41,21 +40,21 @@ class CreateWager extends Component {
   render() {
     return (
       <div>
-      <h3>Create Your Wager!</h3>
+      <h3>Create Your Wagr!</h3>
         <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
           <Form.Field>
-          <label>What's The Name Of Your Wager</label>
+          <label>What's The Name Of Your Wagr</label>
           <Input
           value={this.state.leftSide}
           onChange={event => this.setState({leftSide: event.target.value})}
-          label={"title"}
+          label="Side One"
           labelPosition="right"
           />
           <label>Vs.</label>
           <Input
           value={this.state.rightSide}
           onChange={event => this.setState({rightSide: event.target.value})}
-          label={"title"}
+          label="Side Two"
           labelPosition="right"
           />
           </Form.Field>
@@ -65,6 +64,15 @@ class CreateWager extends Component {
           value={this.state.minimumBet}
           onChange={event => this.setState({ minimumBet: event.target.value})}
           label="ether"
+          labelPosition="right"
+          />
+          </Form.Field>
+          <Form.Field>
+          <label>Describe What Your Wagr Is Going To Be Below!</label>
+          <Input
+          value={this.state.description}
+          onChange={event => this.setState({ description: event.target.value})}
+          label="description"
           labelPosition="right"
           />
           </Form.Field>
