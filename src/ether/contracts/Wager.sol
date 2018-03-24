@@ -3,8 +3,8 @@ pragma solidity ^0.4.18;
 contract WagerFactory {
     address[] public deployedWagers;
 
-    function createWager(uint minimum, string title) public {
-        address newWager = new Wager(minimum, msg.sender, title);
+    function createWager(uint minimum, string title, string description) public {
+        address newWager = new Wager(minimum, msg.sender, title, description);
         deployedWagers.push(newWager);
     }
 
@@ -28,15 +28,18 @@ contract Wager {
   uint public minimumBet;
   string public title;
   bool complete;
+  string public description;
+
 
   mapping(address => bool) public alreadyBetting;
 
 
-  function Wager(uint minimum, address creator, string name) public {
+  function Wager(uint minimum, address creator, string name, string desc) public {
       manager = creator;
       minimumBet = minimum;
       title = name;
-      complete = false; 
+      complete = false;
+      description = desc;
   }
 
   function joinBet(bool side) public payable {
@@ -66,7 +69,7 @@ contract Wager {
               users[i].accountNumber.transfer(total/numberOfWinners);
           }
       }
-      complete = true; 
+      complete = true;
   }
 
  function checkIfAlreadyInBet(address possiblePlayer)  public returns(bool) {
@@ -77,7 +80,7 @@ contract Wager {
     return users.length;
   }
 
-  function getWagerSummary() public view returns (uint, uint, uint, uint, uint, address, string, bool) {
+  function getWagerSummary() public view returns (uint, uint, uint, uint, uint, address, string, bool, string) {
       return (
           minimumBet,
           this.balance,
@@ -85,8 +88,9 @@ contract Wager {
           side1,
           side2,
           manager,
-          title, 
-          complete
+          title,
+          complete,
+          description
       );
   }
 }

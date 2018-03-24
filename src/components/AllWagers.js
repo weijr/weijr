@@ -42,7 +42,8 @@ class AllWagers extends Component {
           ante: wagerObj[0],
           address: address,
           pot: wagerObj[1],
-          complete: wagerObj[7]
+          complete: wagerObj[7],
+          description: wagerObj[8]
         }
         return wagerInfo
       }))
@@ -80,11 +81,11 @@ class AllWagers extends Component {
     event.preventDefault()
     let listOfWagersSorted = this.state.listOfWagers.slice()
     let type = data.value.split("-")[0]
-    let order = data.value.split("-")[1] + "-" + data.value.split("-")[2] 
+    let order = data.value.split("-")[1] + "-" + data.value.split("-")[2]
     if (order === 'low-high') {
       var sortedList = listOfWagersSorted.sort(function (a, b) {
         return parseInt(a[type]) - parseFloat(b[type])
-      })      
+      })
     } else {
       var sortedList = listOfWagersSorted.sort(function (a, b) {
         return parseInt(b[type]) - parseFloat(a[type])
@@ -144,11 +145,11 @@ class AllWagers extends Component {
             <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Pot Size: High-Low' value="pot-high-low" onClick={this.onClickSort}/>
           </Dropdown.Menu>
         </Dropdown>
-          
+
           </Grid.Column>
           </Grid>
           <Grid columns={5}>
-          {wagerList.map(wager => 
+          {wagerList.map(wager =>
             wager.complete ? null :
             (
               <Grid.Column>
@@ -161,8 +162,12 @@ class AllWagers extends Component {
                     {wager.title}
                   </Link>
                   Ante: {wager.ante} Ether
-                  <br></br>
+                  <br/>
                   Current Pot Size: {wager.pot} Ether
+                  <br/>
+                  DESCRIPTION:
+                  <br/>
+                  {wager.description}
                 </Card>
               </Grid.Column>
             ))}
