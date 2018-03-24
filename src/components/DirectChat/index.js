@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
-import { db } from "../../fire/firestore";
+import { db, auth } from "../../fire/firestore";
 import { connect } from "react-redux";
 import logo from "../../logo.svg";
 import { Form, Button } from "semantic-ui-react";
@@ -10,55 +10,52 @@ class DirectChatCreation extends Component {
     super(props);
     this.state = {
       fieldNum: 1,
-      user0: ''
+      user: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleAdd = this.handleAdd.bind(this);
   }
 
   handleChange(evt) {
     evt.preventDefault();
     console.log(evt.target)
-    const userKey = 'user' + evt.target.key
+    const userKey = 'user'
     this.setState({userKey: evt.target.value})
   }
 
   handleSubmit(evt) {
     evt.preventDefault();
-    let chatName = ''
-    for (let j = 0; j < this.state.fieldNum; j++){
-      let chatKey = 'user' + j
-      chatName.concat(this.state[chatKey])
-    }
+    let chatName = auth.currentUser.email + this.state.user
     db
       .collection("privateChats")
       .doc('privateChats')
       .collection(chatName)
-    this.props.history.push("/");
-  }
-
-  handleAdd(evt) {
-    evt.preventDefault()
-    let num = this.state.fieldNum
-    this.setState({
-      fieldNum: num++
-    })
+      .add({
+        uid: "DM Bot",
+        content: 'This is the beginning of your private message with ' + this.state.user,
+        sentAt: Date(Date.now()).toString()
+      })
+    this.props.history.push({
+      pathname: `/profile/${auth.currentUser.email}/${this.state.user}`,
+    state: {
+      type: 'PM'
+    }});
   }
 
   render() {
     return (
       <div>
         <Form onSubmit={this.handleSubmit}>
-        {fieldsArr.map((component) => {
-          return component
-        })}
-        <Button label='Add User' onClick={this.handleAdd} />
+          <Form.Input onChange={this.handleChange} label="Enter User Name" default="Enter User Name" />
         <Button label='Submit'/>
         </Form>
       </div>
     );
   }
+}
+
+const mapDispatchToProps = dispatch => {
+
 }
 
 export default withRouter(DirectChatCreation);
