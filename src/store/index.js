@@ -6,11 +6,11 @@ import messages from './messages';
 import newMessageEntry from './newMessageEntry';
 import newUsernameEntry from './newUsernameEntry'
 import newPasswordEntry from './newPasswordEntry'
-import DirectChat from './DirectChat'
+import newEmailEntry from './newEmailEntry'
 import user from './user'
 import loggingMiddleware from 'redux-logger'
 
-const reducer = combineReducers({ messages, newMessageEntry, newUsernameEntry, newPasswordEntry, DirectChat, user })
+const reducer = combineReducers({ messages, newMessageEntry, newEmailEntry, newUsernameEntry, newPasswordEntry, user })
 
 const store = createStore(
   reducer,
@@ -26,5 +26,6 @@ export * from './messages';
 export * from './newMessageEntry';
 export * from './newUsernameEntry';
 export * from './newPasswordEntry';
+export * from './newEmailEntry';
 export * from './user';
 export * from './DirectChat'

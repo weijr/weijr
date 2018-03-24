@@ -25,7 +25,7 @@ class NewMessageEntry extends Component {
       .doc(wager)
       .collection("wagerChat")
       .add({
-        uid: auth.currentUser.email,
+        uid: auth.currentUser.displayName,
         content: message,
         sentAt: Date(Date.now()).toString()
       });

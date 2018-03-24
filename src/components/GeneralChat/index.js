@@ -23,8 +23,7 @@ class GeneralChat extends Component {
   }
 
   render() {
-    const wagerA = this.state.wager.split('vs')[0];
-    const wagerB = this.state.wager.split('vs')[1];
+
     return (
       <div>
         <MessageList wager={this.state.wager} chatType={this.state.chatType} />

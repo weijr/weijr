@@ -9,7 +9,6 @@ class DirectChatCreation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fieldNum: 1,
       user: ''
     };
     this.handleChange = this.handleChange.bind(this);
@@ -19,13 +18,12 @@ class DirectChatCreation extends Component {
   handleChange(evt) {
     evt.preventDefault();
     console.log(evt.target)
-    const userKey = 'user'
-    this.setState({userKey: evt.target.value})
+    this.setState({user: evt.target.value})
   }
 
   handleSubmit(evt) {
     evt.preventDefault();
-    let chatName = auth.currentUser.email + this.state.user
+    const chatName = auth.currentUser.email + this.state.user
     db
       .collection("privateChats")
       .doc('privateChats')
@@ -36,9 +34,10 @@ class DirectChatCreation extends Component {
         sentAt: Date(Date.now()).toString()
       })
     this.props.history.push({
-      pathname: `/profile/${auth.currentUser.email}/${this.state.user}`,
+      pathname: `/profile/${auth.currentUser.email}/${this.state.user}/`,
     state: {
-      type: 'PM'
+      userName: auth.currentUser.email,
+      recipientName: this.state.user
     }});
   }
 
@@ -46,7 +45,7 @@ class DirectChatCreation extends Component {
     return (
       <div>
         <Form onSubmit={this.handleSubmit}>
-          <Form.Input onChange={this.handleChange} label="Enter User Name" default="Enter User Name" />
+          <Form.Input onChange={this.handleChange} label="Enter User Name" default="Enter User Name" value={this.state.user} />
         <Button label='Submit'/>
         </Form>
       </div>

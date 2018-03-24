@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // import './App.css';
 // import App from './App'
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db, auth, userById } from "../../fire/firestore";
 import { connect } from "react-redux";
 import Message from "./Message";
@@ -24,6 +24,7 @@ class MessageList extends Component {
   }
 
   componentDidMount() {
+    console.log(this.state.chatType)
     if (this.state.chatType === "wager") {
       let wager = this.state.wager;
 
@@ -46,7 +47,7 @@ class MessageList extends Component {
           });
         });
       this.scrollToBottom();
-    } else {
+    } else if (this.state.chatType === 'general') {
       db
         .collection("generalChat")
         .orderBy("sentAt")
@@ -65,6 +66,29 @@ class MessageList extends Component {
         });
       this.scrollToBottom();
     }
+    else {
+      console.log(this.props)
+      const name = this.props.match.params.userName.concat(this.props.match.params.recipientName)
+      console.log(name)
+      db
+        .collection("privateChats")
+        .doc("privateChats")
+        .collection(name)
+        .orderBy("sentAt")
+        .onSnapshot(snapshot => {
+          this.setState({
+            messages: snapshot.docs.map(doc => {
+              const data = doc.data();
+              return {
+                id: doc.ref.id,
+                content: data.content,
+                from: data.uid,
+                sentAt: data.sentAt
+              };
+            })
+          });
+        });
+      }
   }
 
   scrollToBottom = () => {
@@ -100,4 +124,4 @@ class MessageList extends Component {
   }
 }
 
-export default MessageList;
+export default withRouter(MessageList);
