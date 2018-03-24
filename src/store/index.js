@@ -28,3 +28,4 @@ export * from './newUsernameEntry';
 export * from './newPasswordEntry';
 export * from './newEmailEntry';
 export * from './user';
+export * from './DirectChat'

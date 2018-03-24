@@ -5,7 +5,6 @@ import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db, auth, userName } from "../fire/firestore";
 import { connect } from "react-redux";
 import { postMssage, writeMessage } from "../store";
-import MessageList from "./GeneralChat/MessageList";
 import GeneralChat from "./GeneralChat/index";
 import WagerComponent from "./WagerComponent";
 import {
@@ -203,7 +202,6 @@ class SingleWagerView extends Component {
     let email;
 
 
-
     if (this.state.currentUser) {
     return this.state.manager === "" ? null : (
       <div className="App">
@@ -226,13 +224,12 @@ class SingleWagerView extends Component {
         </Segment>
         <Grid columns={2}>
           <Grid.Column width={8}>
-            <GeneralChat wager={this.state.address} />
+            <GeneralChat wager='KnicksvsWarriors' chatType="wager" />
           </Grid.Column>
           <Grid.Column width={10}>
             {this.renderCards()}
           </Grid.Column>
           <Grid.Column width={8}>
-
           </Grid.Column>
           <Grid.Row>
             <Button as='div' labelPosition='right'>

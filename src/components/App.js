@@ -33,7 +33,7 @@ class App extends Component {
     let username = this.props.newUsernameEntry
     let email = this.props.newEmailEntry
     let password = this.props.newPasswordEntry
-    
+
     auth.createUserWithEmailAndPassword(email, password)
     .then(async (user) => {
       await user.updateProfile({
@@ -57,7 +57,8 @@ class App extends Component {
       this.props.history.push('/wagers');
     })
     .catch(error => {
-      alert(error.message)
+      this.props.alert.show(error.message)
+
     });
   }
 
@@ -68,13 +69,12 @@ class App extends Component {
     })
   }
 
-
   render() {
     const { name, newEmailEntry, newUsernameEntry, newPasswordEntry, handleChangeEmail, handleChangeUsername, handleChangePassword } = this.props;
 
-    
+
     return (
-      this.state.signUp ? 
+      this.state.signUp ?
       <div>
         <Segment inverted>
           <Header inverted as="h2" icon textAlign="center">
@@ -106,7 +106,7 @@ class App extends Component {
       </Grid.Row>
       </Grid>
       </div>
-      : 
+      :
       <div>
         <Segment inverted>
           <Header inverted as="h2" icon textAlign="center">
