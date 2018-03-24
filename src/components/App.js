@@ -11,9 +11,7 @@ import web3 from "../web3";
 import mafiaContract from "../mafiaContract";
 import GeneralChat from "./GeneralChat/";
 import SingleWagerView from "./SingleWagerView";
-import { writeUsername } from "../store";
-import { writePassword } from "../store";
-import { setUser } from "../store"
+import { writeUsername, writePassword, writeEmail, setUser } from "../store";
 import { withAlert } from 'react-alert'
 import { Header, Icon, Image, Segment, Grid, Button, Card, Form, Checkbox } from 'semantic-ui-react'
 
@@ -22,20 +20,26 @@ class App extends Component {
     super(props);
 
     this.state = {
+      signUp: false
     };
     this.login = this.login.bind(this)
     this.signUp = this.signUp.bind(this)
+    this.goToSignUp = this.goToSignUp.bind(this)
   }
 
 
   signUp = event => {
     event.preventDefault();
     let username = this.props.newUsernameEntry
+    let email = this.props.newEmailEntry
     let password = this.props.newPasswordEntry
-
-    auth.createUserWithEmailAndPassword(username, password)
-    .then((user) => {
-      this.props.setUser(user.email)
+    
+    auth.createUserWithEmailAndPassword(email, password)
+    .then(async (user) => {
+      await user.updateProfile({
+        displayName: username
+      })
+      this.props.setUser(user)
       this.props.history.push('/wagers');
     })
     .catch(error => {
@@ -45,26 +49,32 @@ class App extends Component {
 
   login = event => {
     event.preventDefault();
-    let username = this.props.newUsernameEntry
+    let username = this.props.newEmailEntry
     let password = this.props.newPasswordEntry
     auth.signInWithEmailAndPassword(username, password)
     .then((user) => {
-      this.props.setUser(user.email)
+      this.props.setUser(user)
       this.props.history.push('/wagers');
     })
     .catch(error => {
       alert(error.message)
-
     });
-    // console.log(auth.currentUser.email)
+  }
 
+  goToSignUp = event => {
+    event.preventDefault();
+    this.setState({
+      signUp: true
+    })
   }
 
 
   render() {
-    const { name, newUsernameEntry, newPasswordEntry, handleChangeUsername, handleChangePassword } = this.props;
+    const { name, newEmailEntry, newUsernameEntry, newPasswordEntry, handleChangeEmail, handleChangeUsername, handleChangePassword } = this.props;
 
+    
     return (
+      this.state.signUp ? 
       <div>
         <Segment inverted>
           <Header inverted as="h2" icon textAlign="center">
@@ -76,7 +86,7 @@ class App extends Component {
             </Header.Content>
             <Header.Content>
               <h2 class="ui red header">
-                Please login to continue
+                Sign up for an account!
               </h2>
             </Header.Content>
           </Header>
@@ -87,10 +97,41 @@ class App extends Component {
               onLogin={evt => this.login(evt)}>
           <label>User Name</label>
           <input placeholder='User Name' onChange={handleChangeUsername} value={newUsernameEntry} />
+          <label>E-mail</label>
+          <input placeholder='Email' onChange={handleChangeEmail} value={newEmailEntry} />
           <label>Password</label>
           <input placeholder='Password' onChange={handleChangePassword} value={newPasswordEntry} type='password' />
-          <label>     </label>
           <Button type='signUp' onClick={this.signUp}>Sign Up</Button>
+      </Form>
+      </Grid.Row>
+      </Grid>
+      </div>
+      : 
+      <div>
+        <Segment inverted>
+          <Header inverted as="h2" icon textAlign="center">
+            <Icon name="ethereum" circular />
+            <Header.Content>
+              <h2 class="ui red header">
+                Welcome 2 Wagr
+            </h2>
+            </Header.Content>
+            <Header.Content>
+              <h2 class="ui red header">
+                Please login to continue. Don't Have an account? Sign up for one!
+              </h2>
+            </Header.Content>
+          </Header>
+        </Segment>
+        <Grid>
+        <Grid.Row centered>
+        <Form onSignUp={evt => this.signUp(evt)}
+              onLogin={evt => this.login(evt)}>
+          <label>E-mail</label>
+          <input placeholder='User Name' onChange={handleChangeEmail} value={newEmailEntry} />
+          <label>Password</label>
+          <input placeholder='Password' onChange={handleChangePassword} value={newPasswordEntry} type='password' />
+          <Button type='signUp' onClick={this.goToSignUp}>Sign Up</Button>
           <Button type='login' onClick={this.login}>Login</Button>
       </Form>
       </Grid.Row>
@@ -99,9 +140,11 @@ class App extends Component {
     );
   }
 }
+
 const mapStateToProps = function(state, ownProps) {
   return {
     newUsernameEntry: state.newUsernameEntry,
+    newEmailEntry: state.newEmailEntry,
     newPasswordEntry: state.newPasswordEntry,
     currentUser: state.user
   };
@@ -114,6 +157,9 @@ const mapDispatchToProps = function(dispatch, ownProps) {
     },
     handleChangePassword(evt) {
       dispatch(writePassword(evt.target.value));
+    },
+    handleChangeEmail(evt) {
+      dispatch(writeEmail(evt.target.value))
     },
     clearForm() {
       dispatch(writeUsername(""));
