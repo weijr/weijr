@@ -165,7 +165,7 @@ class AllWagers extends Component {
                   </Link>
                   Ante: {wager.ante} Ether
                   <br/>
-                  Current Pot Size: {wager.pot} Ether
+                  Current Pot Size: {web3.utils.fromWei(wager.pot, 'ether')} Ether
                   <br/>
                   DESCRIPTION:
                   <br/>
