@@ -96,6 +96,11 @@ class AllWagers extends Component {
     })
   }
 
+  profilePage = (event) => {
+    event.preventDefault();
+    this.props.history.push("/your-profile")
+  }
+
 
   render() {
     var user = auth.currentUser;
@@ -129,7 +134,12 @@ class AllWagers extends Component {
               <Header.Content>
                 <Button onClick={this.createContract}>
                   Create a new Contract
-              </Button>
+                </Button>
+              </Header.Content>
+              <Header.Content>
+                <Button onClick={this.profilePage}>
+                  Profile Page
+                </Button>
               </Header.Content>
             </Header>
           </Segment>

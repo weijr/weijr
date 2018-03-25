@@ -50,7 +50,7 @@ contract Wager {
       alreadyBetting[msg.sender] = true;
       if (side) {
         side1++;
-    }else {
+    } else {
         side2++;
       }
   }
