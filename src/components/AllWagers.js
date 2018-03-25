@@ -184,6 +184,7 @@ class AllWagers extends Component {
               </Grid.Column>
             ))}
           </Grid>
+          <GeneralChat chatType='general' />
         </div>
       )
     } else if (this.state.currentUser) {
