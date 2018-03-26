@@ -49,21 +49,9 @@ class SingleWagerView extends Component {
     this.betSideTwo = this.betSideTwo.bind(this);
     this.paySideOne = this.paySideOne.bind(this);
     this.paySideTwo = this.paySideTwo.bind(this);
+    this.updateProfileWagerAmount = this.updateProfileWagerAmount.bind(this)
   }
 
-  componentWillMount() {
-    var email;
-
-    auth.onAuthStateChanged(function(user) {
-      if (user) {
-        email = user.email;
-      }
-    });
-
-    this.setState({
-      currentUser: this.props.currentUser
-    });
-  }
 
   async componentDidMount() {
 
@@ -149,6 +137,32 @@ class SingleWagerView extends Component {
     return <Card.Group items={items} />;
   }
 
+  // updateProfileWagerAmount(type) {
+  //   const account = this.state.accounts[0]
+  //   console.log('account!: ', account)
+  //   // event.preventDefault()
+  //   const minBet = this.state.minimumBet
+  //   console.log("MADE IT HERERERERERERERE")
+  //   let totalWagerRef = db.collection('users').doc(account).collection('wagerInfo').doc(type);
+  //   let count = 0
+  //   return db.runTransaction(function(transaction) {
+  //     return transaction.get(totalWagerRef).then(function(totalWagerDoc) {
+  //       console.log(totalWagerDoc, ++count)
+  //       if (!totalWagerDoc.exists) {
+  //         console.log('doesnt exisst......')
+  //         totalWage rRef.set({ amount: minBet })
+  //       } else {
+  //         console.log("elseeee")
+  //           newTotal = 100
+  //         console.log("am i here")
+  //         transaction.update(db.collection('users').doc(account).collection('wagerInfo').doc(type), { amount: newTotal })
+  //       }
+  //     }).then(console.log("Transaction successful!"))
+  //   }).catch(function(error) {
+  //     console.log(error.message)
+  //   })
+  // }
+  
   async betSideOne(event) {
     event.preventDefault();
     const wager = Wager(this.props.match.params.address);
@@ -159,19 +173,21 @@ class SingleWagerView extends Component {
       const accounts = await web3.eth.getAccounts();
       await wager.methods.joinBet(true).send({
         from: accounts[0],
-        value: web3.utils.toWei(this.state.minimumBet, 'ether')
+        value: web3.utils.toWei(this.state.minimumBet, 'ether'),
       });
       const summary = await wager.methods.getWagerSummary().call();
+      console.log('maybe this is sthe problem')
       this.setState({
         pot: summary[1],
         totalUsers: summary[2],
         sideOne: summary[3],
         sideTwo: summary[4],
       });
+      
     } catch (err) {
       this.setState({errorMessage: err.message})
     }
-
+    
   }
 
   async betSideTwo(event) {
@@ -208,18 +224,20 @@ class SingleWagerView extends Component {
       <div className="App">
         <Segment inverted>
           <Header inverted as="h2" icon textAlign="center">
+          <Header.Content>
+              <Icon name="ethereum" circular />
+            </Header.Content>
+            <Header.Content>
             <Grid columns={3}>
-              <Grid.Column>
-                <Button circular onClick={this.onClick}>
+            <Grid.Column>
+                <Button className= "ui left floated primary button"circular onClick={this.onClick}>
                   <Icon name="home" circular />
                 </Button>
               </Grid.Column>
               <Grid.Column>
-                <Icon name="users" circular />
+              <h2 className="ui blue header">{this.state.leftSide} vs. {this.state.rightSide}</h2>
               </Grid.Column>
-            </Grid>
-            <Header.Content>
-              {this.state.leftSide} vs. {this.state.rightSide}
+              </Grid>
             </Header.Content>
           </Header>
         </Segment>

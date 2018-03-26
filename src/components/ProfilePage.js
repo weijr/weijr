@@ -24,65 +24,86 @@ class ProfilePage extends Component {
     this.goHome = this.goHome.bind(this)
   }
 
-  async componentDidMount() {
-    try {
-      const acccounts = await web3.eth.getAccounts()
-      const addresses = await db
-        .collection("userAddresses")
-        .doc(acccounts[0])
-        .collection("contracts")
-        .get()
-      console.log("addresses: ", addresses.docs[0].id)
-      const listOfWagers = await Promise.all(addresses.docs.map(async address => {
-        const wager = Wager(address.id)
-        const wagerObj = await wager.methods.getWagerSummary().call()
-        const wagerInfo = {
-          title: wagerObj[6],
-          ante: wagerObj[0],
-          address: address,
-          pot: wagerObj[1],
-          complete: wagerObj[7],
-          description: wagerObj[8]
-        }
-        return wagerInfo
-      }))
-      this.setState({
-        listOfWagers
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
   goHome = (event) => {
     this.props.history.push('/wagers')
   }
 
+  async componentDidMount() {
+    try {
+      const accounts = await web3.eth.getAccounts()
+      this.setState({
+        metamask: accounts[0]
+      })
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+
   render() {
-    console.log("metamask: ", this.state.metamask)
+    console.log("metamask: ", this.props.currentUser)
     console.log("props: ", this.props.listOfWagers)
 
-    const wagerList = this.state.listOfWagers
+    const wagerList = this.props.listOfWagers
 
+    const managedWagers = wagerList.filter(wager => {
+      return (wager.manager === this.state.metamask && !wager.complete)
+    })
+
+    const inTheseWagers = wagerList.filter(wager => {
+      return ((wager.side1).concat(wager.side2)).indexOf(this.state.metamask) > -1
+    })
+
+    console.log("managed: ", managedWagers)
     return (
       <div>
         <Segment inverted>
-          <Header inverted as="h2" icon textAlign="center">
+          <Header as="h2" icon textAlign="center">
             <Icon name="ethereum" circular />
             <Header.Content>
-              <h2 className="ui red header">
+              <h2 className="ui blue header">
                 Hello {auth.currentUser.displayName}
               </h2>
             </Header.Content>
             <Header.Content>
-              <Button circular onClick={this.goHome}>
-                <Icon name="home" circular />
-              </Button>
+              <Grid columns={4}>
+                <Grid.Column>
+                  <Button className="ui left floated primary button" circular onClick={this.goHome}>
+                    <Icon name="home" circular />
+                  </Button>
+                </Grid.Column>
+              </Grid>
             </Header.Content>
           </Header>
         </Segment>
+        <h2>  
+          Wagers you are currently managing:
+        </h2>
         <Grid columns={5}>
-          {wagerList.map(wager =>
+          {managedWagers.map(wager =>
+            wager.complete ? null :
+              (
+                <Grid.Column>
+                  <Card key={wager.address} className="ui segment centered">
+                    <Image src={basketball} />
+                    <Card.Header />
+                    <Link to={`/wagers/${wager.address}`} key={wager.address} value={wager.address}>
+                      Click here to bet on
+                    <br></br>
+                      {wager.title}
+                    </Link>
+                    Ante: {wager.ante} Ether
+                  <br />
+                    Current Pot Size: {web3.utils.fromWei(wager.pot, 'ether')} Ether
+                </Card>
+                </Grid.Column>
+              ))}
+        </Grid>
+        <h2> 
+          Wagers you are currently participating in:
+        </h2>
+        <Grid columns={5}>
+          {inTheseWagers.map(wager =>
             wager.complete ? null :
               (
                 <Grid.Column>
@@ -109,7 +130,7 @@ class ProfilePage extends Component {
 const mapStateToProps = function (state, ownProps) {
   return {
     currentUser: state.user,
-    listOfWagers: state.messages
+    listOfWagers: state.wagers
   };
 };
 
