@@ -207,18 +207,20 @@ class SingleWagerView extends Component {
       <div className="App">
         <Segment inverted>
           <Header inverted as="h2" icon textAlign="center">
+          <Header.Content>
+                <Icon name="users" circular />
+            </Header.Content>
+            <Header.Content>
             <Grid columns={3}>
-              <Grid.Column>
-                <Button circular onClick={this.onClick}>
+            <Grid.Column>
+                <Button className= "ui left floated primary button"circular onClick={this.onClick}>
                   <Icon name="home" circular />
                 </Button>
               </Grid.Column>
               <Grid.Column>
-                <Icon name="users" circular />
+              <h2 className="ui blue header">{this.state.leftSide} vs. {this.state.rightSide}</h2>
               </Grid.Column>
-            </Grid>
-            <Header.Content>
-              {this.state.leftSide} vs. {this.state.rightSide}
+              </Grid>
             </Header.Content>
           </Header>
         </Segment>

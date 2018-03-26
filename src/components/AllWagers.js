@@ -99,30 +99,33 @@ class AllWagers extends Component {
             <Header inverted as="h2" icon textAlign="center">
               <Icon name="ethereum" circular />
               <Header.Content>
-                <h2 className="ui red header">
+                <h2 className="ui blue header">
                   Welcome 2 Wagr
             </h2>
               </Header.Content>
+              <Grid columns={3}>
+              <Grid.Column>
               <Header.Content>
-                <h2 className="ui red header">
-                  See a wager that you like? Sign in to see more!
-              </h2>
-              </Header.Content>
-              <Header.Content>
-                <Button onClick={this.logout}>
+                <Button className="primary button" circular onClick={this.logout}>
                   Logout
               </Button>
               </Header.Content>
+              </Grid.Column>
+              <Grid.Column>
               <Header.Content>
-                <Button onClick={this.createContract}>
+                <Button className="primary button" circular onClick={this.createContract}>
                   Create a new Contract
                 </Button>
               </Header.Content>
+              </Grid.Column>
+              <Grid.Column>
               <Header.Content>
-                <Button onClick={this.profilePage}>
+                <Button className ="primary button" circular onClick={this.profilePage}>
                   Profile Page
                 </Button>
               </Header.Content>
+              </Grid.Column>
+              </Grid> 
             </Header>
           </Segment>
           <Grid columns={5}>
