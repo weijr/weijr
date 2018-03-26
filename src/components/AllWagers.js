@@ -33,13 +33,8 @@ class AllWagers extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchAllWagers()
-    
-      this.setState({
-        listOfWagers: this.props.listOfWagers
-      
-    })
-    
+    this.props.fetchAllWagers()    
+    this.setState({ listOfWagers: this.props.listOfWagers })
   }
 
   signUp = event => {
@@ -91,13 +86,13 @@ class AllWagers extends Component {
 
   render() {
     var user = auth.currentUser;
-    const wagerList = this.state.listOfWagers;
+    const wagerList = this.props.listOfWagers;
 
 
     console.log("current user: ", auth.currentUser)
-    console.log("list of wagers length: ", this.state.listOfWagers.length)
-    console.log("list of wagers: ", this.state.listOfWagers)
-    if (this.state.currentUser && this.state.listOfWagers) {
+    console.log("list of wagers length: ", this.props.listOfWagers.length)
+    console.log("list of wagers: ", this.props.listOfWagers)
+    if (this.state.currentUser && this.props.listOfWagers) {
       return (
         <div>
           <Segment inverted>
@@ -188,7 +183,7 @@ class AllWagers extends Component {
 const mapStateToProps = function (state, ownProps) {
   return {
     currentUser: state.user,
-    listOfWagers: state.messages
+    listOfWagers: state.wagers
   };
 };
 

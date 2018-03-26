@@ -59,8 +59,11 @@ class ProfilePage extends Component {
   }
 
   render() {
-    console.log(this.state.metamask)
+    console.log("metamask: ", this.state.metamask)
+    console.log("props: ", this.props.listOfWagers)
+
     const wagerList = this.state.listOfWagers
+
     return (
       <div>
         <Segment inverted>
@@ -103,6 +106,13 @@ class ProfilePage extends Component {
   }
 }
 
-export default ProfilePage
+const mapStateToProps = function (state, ownProps) {
+  return {
+    currentUser: state.user,
+    listOfWagers: state.messages
+  };
+};
+
+export default withRouter(connect(mapStateToProps, null)(ProfilePage))
 
 

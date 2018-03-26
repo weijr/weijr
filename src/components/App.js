@@ -80,12 +80,12 @@ class App extends Component {
           <Header inverted as="h2" icon textAlign="center">
             <Icon name="ethereum" circular />
             <Header.Content>
-              <h2 class="ui red header">
+              <h2 className="ui red header">
                 Welcome 2 Wagr
             </h2>
             </Header.Content>
             <Header.Content>
-              <h2 class="ui red header">
+              <h2 className="ui red header">
                 Sign up for an account!
               </h2>
             </Header.Content>
@@ -111,12 +111,12 @@ class App extends Component {
           <Header inverted as="h2" icon textAlign="center">
             <Icon name="ethereum" circular />
             <Header.Content>
-              <h2 class="ui red header">
+              <h2 className="ui red header">
                 Welcome 2 Wagr
             </h2>
             </Header.Content>
             <Header.Content>
-              <h2 class="ui red header">
+              <h2 className="ui red header">
                 Please login to continue. Don't Have an account? Sign up for one!
               </h2>
             </Header.Content>
