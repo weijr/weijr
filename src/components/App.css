@@ -14,8 +14,10 @@ Field {
   align-self: center;
 }
 
-.homeButton {
-  position: absolute; 
-  right: 0; 
-  top: 10px;
+.borderFix {
+  border: 20px solid white;
+}
+
+.large.text {
+  font-size: 2rem;
 }
