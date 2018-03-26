@@ -33,7 +33,7 @@ class AllWagers extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchAllWagers()    
+    this.props.fetchAllWagers()
     this.setState({ listOfWagers: this.props.listOfWagers })
   }
 
@@ -87,11 +87,6 @@ class AllWagers extends Component {
   render() {
     var user = auth.currentUser;
     const wagerList = this.props.listOfWagers;
-
-
-    console.log("current user: ", auth.currentUser)
-    console.log("list of wagers length: ", this.props.listOfWagers.length)
-    console.log("list of wagers: ", this.props.listOfWagers)
     if (this.state.currentUser && this.props.listOfWagers) {
       return (
         <div>
@@ -125,48 +120,52 @@ class AllWagers extends Component {
               </Header.Content>
             </Header>
           </Segment>
-          <Grid columns={5}>
-          <Grid.Column></Grid.Column><Grid.Column></Grid.Column><Grid.Column></Grid.Column><Grid.Column></Grid.Column>
-          <Grid.Column>
+          <div className='borderFix'>
+            <Grid columns={5}>
+            <Grid.Column></Grid.Column><Grid.Column></Grid.Column><Grid.Column><h3>Wagrs Below</h3></Grid.Column><Grid.Column></Grid.Column>
+            <Grid.Column>
 
-          <Dropdown text='Filter' icon='filter' floating labeled button className='icon'>
-          <Dropdown.Menu>
-            <Dropdown.Header icon='tags' content='Filter by tag' />
-            <Dropdown.Divider />
-            <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Ante: Low-High' value="ante-low-high" onClick={this.onClickSort}/>
-            <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Ante: High-Low' value="ante-high-low" onClick={this.onClickSort}/>
-            <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Pot Size: Low-High' value="pot-low-high" onClick={this.onClickSort}/>
-            <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Pot Size: High-Low' value="pot-high-low" onClick={this.onClickSort}/>
-          </Dropdown.Menu>
-        </Dropdown>
+            <Dropdown text='Filter' icon='filter' floating labeled button className='icon'>
+            <Dropdown.Menu>
+              <Dropdown.Header icon='tags' content='Filter by tag' />
+              <Dropdown.Divider />
+              <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Ante: Low-High' value="ante-low-high" onClick={this.onClickSort}/>
+              <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Ante: High-Low' value="ante-high-low" onClick={this.onClickSort}/>
+              <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Pot Size: Low-High' value="pot-low-high" onClick={this.onClickSort}/>
+              <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Pot Size: High-Low' value="pot-high-low" onClick={this.onClickSort}/>
+            </Dropdown.Menu>
+          </Dropdown>
 
-          </Grid.Column>
-          </Grid>
-          <Grid columns={5}>
-          {wagerList.map(wager =>
-            wager.complete ? null :
-            (
-              <Grid.Column>
-                <Card key={wager.address} className="ui segment centered">
-                  <Image src={basketball} />
-                  <Card.Header />
-                  <Link to={`/wagers/${wager.address}`} key={wager.address} value={wager.address}>
-                    Click here to bet on
-                    <br></br>
-                    {wager.title}
-                  </Link>
-                  Ante: {wager.ante} Ether
-                  <br/>
-                  Current Pot Size: {web3.utils.fromWei(wager.pot, 'ether')} Ether
-                  <br/>
-                  DESCRIPTION:
-                  <br/>
-                  {wager.description}
-                </Card>
+            </Grid.Column>
+            </Grid>
+            <Grid columns={2}>
+              <Grid.Column width="6">
+                <GeneralChat chatType='general' />
               </Grid.Column>
-            ))}
-          </Grid>
-          <GeneralChat chatType='general' />
+              <Grid.Column width="10">
+                <Grid columns={4}>
+                  {wagerList.map(wager =>
+                    wager.complete ? null :
+                    (
+                      <Grid.Column width="4">
+                        <Card key={wager.address} className="ui segment centered">
+                          <Image src={basketball} />
+                          <Card.Header />
+                          <Link to={`/wagers/${wager.address}`} key={wager.address} value={wager.address}>
+                            Click here to bet on
+                            <br></br>
+                            {wager.title}
+                          </Link>
+                          Ante: {wager.ante} Ether
+                          <br/>
+                          Current Pot Size: {web3.utils.fromWei(wager.pot, 'ether')} Ether
+                        </Card>
+                      </Grid.Column>
+                    ))}
+                  </Grid>
+                </Grid.Column>
+            </Grid>
+          </div>
         </div>
       )
     } else if (this.state.currentUser) {

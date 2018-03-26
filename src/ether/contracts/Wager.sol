@@ -31,7 +31,7 @@ contract Wager {
   string public title;
   bool complete;
   string public description;
-  
+
 
 
   mapping(address => bool) public alreadyBetting;
@@ -47,7 +47,7 @@ contract Wager {
 
   function joinBet(bool side) public payable {
       require(msg.value >= minimumBet);
-    //   require(msg.sender != manager);
+      require(msg.sender != manager);
       require(!alreadyBetting[msg.sender]);
       users.push(User({accountNumber: msg.sender, side: side}));
       alreadyBetting[msg.sender] = true;
