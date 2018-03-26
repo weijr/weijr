@@ -67,18 +67,19 @@ class CreateWager extends Component {
       <div className="App">
         <Segment inverted>
           <Header inverted as="h2" icon textAlign="center">
-            <Grid columns={3}>
-              <Grid.Column>
-                <Button circular onClick={this.onClick}>
-                  <Icon name="home" circular />
-                </Button>
-              </Grid.Column>
-              <Grid.Column>
-                <Icon name="users" circular />
-              </Grid.Column>
-            </Grid>
+          <Icon name="ethereum" circular />
             <Header.Content>
-              Create a Wagr For All
+            <Grid columns= {3}>
+            <Grid.Column>
+            <Button className= "ui left floated primary button" circular onClick={this.onClick}>
+              <Icon name="home" circular />
+            </Button>
+            </Grid.Column>
+            <Grid.Column>
+              <h2 className ="ui blue text header">Create a Wagr For All
+              </h2>
+            </Grid.Column>
+            </Grid>
             </Header.Content>
           </Header>
         </Segment>
