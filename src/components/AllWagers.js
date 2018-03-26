@@ -4,7 +4,7 @@ import "./App.css";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db, auth, userById, email } from "../fire/firestore";
 import history from "../history";
-import store from "../store";
+import store, { getAllWagers } from "../store";
 import { browserHistory } from "react-router";
 import web3 from "../web3";
 import mafiaContract from "../mafiaContract";
@@ -17,6 +17,7 @@ import factory from '../ether/factory'
 import { connect } from "react-redux";
 import App from './App'
 import Wager from "../ether/wagers";
+import { writeMessage } from "../store";
 
 class AllWagers extends Component {
   constructor(props) {
@@ -31,28 +32,9 @@ class AllWagers extends Component {
     this.onClickSort = this.onClickSort.bind(this)
   }
 
-  async componentDidMount() {
-    try {
-      const listOfWagersAddresses = await factory.methods.getDeployedwagers().call()
-      const listOfWagers = await Promise.all(listOfWagersAddresses.map(async address => {
-        const wager = Wager(address)
-        const wagerObj = await wager.methods.getWagerSummary().call()
-        const wagerInfo = {
-          title: wagerObj[6],
-          ante: wagerObj[0],
-          address: address,
-          pot: wagerObj[1],
-          complete: wagerObj[7],
-          description: wagerObj[8]
-        }
-        return wagerInfo
-      }))
-      this.setState({
-        listOfWagers
-      })
-    } catch (err) {
-      console.error(err)
-    }
+  componentDidMount() {
+    this.props.fetchAllWagers()    
+    this.setState({ listOfWagers: this.props.listOfWagers })
   }
 
   signUp = event => {
@@ -96,16 +78,21 @@ class AllWagers extends Component {
     })
   }
 
+  profilePage = (event) => {
+    event.preventDefault();
+    this.props.history.push("/your-profile")
+  }
+
 
   render() {
     var user = auth.currentUser;
-    const wagerList = this.state.listOfWagers;
+    const wagerList = this.props.listOfWagers;
 
 
     console.log("current user: ", auth.currentUser)
-    console.log("list of wagers length: ", this.state.listOfWagers.length)
-    console.log("list of wagers: ", this.state.listOfWagers)
-    if (this.state.currentUser && this.state.listOfWagers) {
+    console.log("list of wagers length: ", this.props.listOfWagers.length)
+    console.log("list of wagers: ", this.props.listOfWagers)
+    if (this.state.currentUser && this.props.listOfWagers) {
       return (
         <div>
           <Segment inverted>
@@ -129,7 +116,12 @@ class AllWagers extends Component {
               <Header.Content>
                 <Button onClick={this.createContract}>
                   Create a new Contract
-              </Button>
+                </Button>
+              </Header.Content>
+              <Header.Content>
+                <Button onClick={this.profilePage}>
+                  Profile Page
+                </Button>
               </Header.Content>
             </Header>
           </Segment>
@@ -190,12 +182,16 @@ class AllWagers extends Component {
 
 const mapStateToProps = function (state, ownProps) {
   return {
-    currentUser: state.user
+    currentUser: state.user,
+    listOfWagers: state.wagers
   };
 };
 
 const mapDispatchToProps = function (dispatch, ownProps) {
   return {
+    fetchAllWagers() {
+      dispatch(getAllWagers())
+    }
   }
 }
 

@@ -36,7 +36,7 @@ class NewMessageEntry extends Component {
       db
         .collection('generalChat')
         .add({
-          uid: auth.currentUser.email,
+          uid: auth.currentUser.displayName,
           content: message,
           sentAt: Date(Date.now()).toString()
         });

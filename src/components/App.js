@@ -80,12 +80,12 @@ class App extends Component {
           <Header inverted as="h2" icon textAlign="center">
             <Icon name="ethereum" circular />
             <Header.Content>
-              <h2 class="ui red header">
+              <h2 className="ui red header">
                 Welcome 2 Wagr
             </h2>
             </Header.Content>
             <Header.Content>
-              <h2 class="ui red header">
+              <h2 className="ui red header">
                 Sign up for an account!
               </h2>
             </Header.Content>
@@ -93,8 +93,7 @@ class App extends Component {
         </Segment>
         <Grid>
         <Grid.Row centered>
-        <Form onSignUp={evt => this.signUp(evt)}
-              onLogin={evt => this.login(evt)}>
+        <Form>
           <label>User Name</label>
           <input placeholder='User Name' onChange={handleChangeUsername} value={newUsernameEntry} />
           <label>E-mail</label>
@@ -112,12 +111,12 @@ class App extends Component {
           <Header inverted as="h2" icon textAlign="center">
             <Icon name="ethereum" circular />
             <Header.Content>
-              <h2 class="ui red header">
+              <h2 className="ui red header">
                 Welcome 2 Wagr
             </h2>
             </Header.Content>
             <Header.Content>
-              <h2 class="ui red header">
+              <h2 className="ui red header">
                 Please login to continue. Don't Have an account? Sign up for one!
               </h2>
             </Header.Content>
@@ -125,8 +124,7 @@ class App extends Component {
         </Segment>
         <Grid>
         <Grid.Row centered>
-        <Form onSignUp={evt => this.signUp(evt)}
-              onLogin={evt => this.login(evt)}>
+        <Form>
           <label>E-mail</label>
           <input placeholder='User Name' onChange={handleChangeEmail} value={newEmailEntry} />
           <label>Password</label>

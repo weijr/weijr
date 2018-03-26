@@ -8,6 +8,7 @@ import App from './App'
 import SingleWagerView from './SingleWagerView';
 // import SignUp from './signUp'
 import CreateWager from './CreateWager';
+import ProfilePage from './ProfilePage'
 import DirectChatCreation from './DirectChat/index'
 import GeneralChat from './GeneralChat'
 
@@ -21,6 +22,7 @@ class Routes extends Component {
         <Route exact path='/new-wager' component={ CreateWager } />
         <Route exact path="/wagers" component={ AllWagers } />
         <Route exact path="/wagers/:address" component={SingleWagerView} />
+        <Route exact path="/your-profile" component={ProfilePage} />
         <Route exact path='/newPrivateMessage' component={DirectChatCreation} />
         <Route exact path='/profile/:userName/:recipientName' component={ GeneralChat } chatType='PM' />
         <Redirect from="*" to="/" />

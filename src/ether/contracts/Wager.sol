@@ -23,12 +23,15 @@ contract Wager {
   User[] public users;
   address public manager;
 
+  address[] side1Array;
+  address[] side2Array;
   uint public side1;
   uint public side2;
   uint public minimumBet;
   string public title;
   bool complete;
   string public description;
+  
 
 
   mapping(address => bool) public alreadyBetting;
@@ -44,14 +47,16 @@ contract Wager {
 
   function joinBet(bool side) public payable {
       require(msg.value >= minimumBet);
-      require(msg.sender != manager);
+    //   require(msg.sender != manager);
       require(!alreadyBetting[msg.sender]);
       users.push(User({accountNumber: msg.sender, side: side}));
       alreadyBetting[msg.sender] = true;
       if (side) {
         side1++;
-    }else {
+        side1Array.push(msg.sender);
+    } else {
         side2++;
+        side1Array.push(msg.sender);
       }
   }
 
@@ -80,7 +85,7 @@ contract Wager {
     return users.length;
   }
 
-  function getWagerSummary() public view returns (uint, uint, uint, uint, uint, address, string, bool, string) {
+  function getWagerSummary() public view returns (uint, uint, uint, uint, uint, address, string, bool, string, address[], address[]) {
       return (
           minimumBet,
           this.balance,
@@ -90,7 +95,9 @@ contract Wager {
           manager,
           title,
           complete,
-          description
+          description,
+          side1Array,
+          side2Array
       );
   }
 }
