@@ -41,12 +41,12 @@ class MessageList extends Component {
                 id: doc.ref.id,
                 content: data.content,
                 from: data.uid,
-                sentAt: data.sentAt
+                sentAt: (data.sentAt).toString()
               };
             })
           });
         });
-      this.scrollToBottom();
+      // this.scrollToBottom();
     } else if (this.state.chatType === 'general') {
       db
         .collection("generalChat")
@@ -59,17 +59,15 @@ class MessageList extends Component {
                 id: doc.ref.id,
                 content: data.content,
                 from: data.uid,
-                sentAt: data.sentAt
+                sentAt: (data.sentAt).toString()
               };
             })
           });
         });
-      this.scrollToBottom();
+      // this.scrollToBottom();
     }
     else {
-      console.log(this.props)
       const name = this.props.match.params.userName.concat(this.props.match.params.recipientName)
-      console.log(name)
       db
         .collection("privateChats")
         .doc("privateChats")
@@ -83,7 +81,7 @@ class MessageList extends Component {
                 id: doc.ref.id,
                 content: data.content,
                 from: data.uid,
-                sentAt: data.sentAt
+                sentAt: (data.sentAt).toString()
               };
             })
           });
@@ -96,7 +94,7 @@ class MessageList extends Component {
   };
 
   componentDidUpdate() {
-    this.scrollToBottom();
+    // this.scrollToBottom();
   }
 
   render() {

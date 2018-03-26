@@ -53,8 +53,4 @@ class DirectChatCreation extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-
-}
-
 export default withRouter(DirectChatCreation);

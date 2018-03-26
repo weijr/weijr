@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db, auth } from "../../fire/firestore";
 import { connect } from "react-redux";
 import { writeMessage } from "../../store";
@@ -10,12 +10,15 @@ class NewMessageEntry extends Component {
     super(props);
     this.state = {
       wager: this.props.wager,
-      chatType: this.props.chatType
+      chatType: this.props.chatType,
+      userName: '',
+      recipientName: ''
     };
     this.sendMessage = this.sendMessage.bind(this);
   }
 
   sendMessage = (evt, message) => {
+    const date = Date(Date.now())
     if (this.state.chatType === 'wager'){
     let wager = this.state.wager;
     evt.preventDefault();
@@ -27,24 +30,45 @@ class NewMessageEntry extends Component {
       .add({
         uid: auth.currentUser.displayName,
         content: message,
-        sentAt: Date(Date.now()).toString()
+        sentAt: date
       });
     this.props.clearForm();
     }
-    else {
+    else if (this.state.chatType === 'general') {
       evt.preventDefault();
       db
         .collection('generalChat')
         .add({
           uid: auth.currentUser.displayName,
           content: message,
-          sentAt: Date(Date.now()).toString()
+          sentAt: date
         });
       this.props.clearForm();
+    }
+    else {
+      evt.preventDefault()
+      // if (this.props.location.state.userName > this.props.location.state.recipientName){
+      //   name = this.props.location.state.userName.concat(this.props.location.state.recipientName)
+      // }
+      // else {
+      //   name = this.props.location.state.recipientName.concat(this.props.location.state.userName)
+      // }
+      const name = this.props.match.params.userName.concat(this.props.match.params.recipientName)
+      db
+        .collection("privateChats")
+        .doc("privateChats")
+        .collection(name)
+        .add({
+          uid: auth.currentUser.displayName,
+          content: message,
+          sentAt: date
+        })
+        this.props.clearForm();
     }
   };
 
   render() {
+    console.log(this.props)
     const { name, newMessageEntry, handleChange, handleSubmit } = this.props;
     return (
       <Form reply onSubmit={evt => this.sendMessage(evt, newMessageEntry)}>
@@ -62,7 +86,9 @@ class NewMessageEntry extends Component {
 
 const mapStateToProps = function(state, ownProps) {
   return {
-    newMessageEntry: state.newMessageEntry
+    newMessageEntry: state.newMessageEntry,
+    userName: ownProps.match.params.userName,
+    recipientName: ownProps.match.params.recipientName,
   };
 };
 
@@ -77,4 +103,4 @@ const mapDispatchToProps = function(dispatch, ownProps) {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewMessageEntry);
+export default connect(withRouter(mapStateToProps, mapDispatchToProps))(NewMessageEntry);
