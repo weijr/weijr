@@ -42,8 +42,7 @@ class AllWagers extends Component {
           ante: wagerObj[0],
           address: address,
           pot: wagerObj[1],
-          complete: wagerObj[7],
-          description: wagerObj[8]
+          complete: wagerObj[7]
         }
         return wagerInfo
       }))
@@ -166,10 +165,6 @@ class AllWagers extends Component {
                   Ante: {wager.ante} Ether
                   <br/>
                   Current Pot Size: {web3.utils.fromWei(wager.pot, 'ether')} Ether
-                  <br/>
-                  DESCRIPTION:
-                  <br/>
-                  {wager.description}
                 </Card>
               </Grid.Column>
             ))}

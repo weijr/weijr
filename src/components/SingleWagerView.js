@@ -41,7 +41,8 @@ class SingleWagerView extends Component {
       leftSide: '',
       rightSide: '',
       title: '',
-      accounts: []
+      accounts: [],
+      description: ''
     };
     this.onClick = this.onClick.bind(this);
     this.renderCards = this.renderCards.bind(this);
@@ -84,12 +85,12 @@ class SingleWagerView extends Component {
           leftSide: left,
           rightSide: right,
           title: summary[6],
-          accounts: accounts
+          accounts: accounts,
+          description: summary[8]
         });
-        console.log('FIRSTSTATE', this.state.accounts)
-    } catch (err) {
-      console.error(err);
-    }
+      } catch (err) {
+        console.error(err);
+      }
   }
 
   onClick = event => {
@@ -225,15 +226,15 @@ class SingleWagerView extends Component {
           </Header>
         </Segment>
         <Grid columns={2}>
-          <Grid.Column width={8}>
+          <Grid.Column width={9}>
             <GeneralChat wager={this.state.address} />
           </Grid.Column>
-          <Grid.Column width={10}>
-            {this.renderCards()}
-          </Grid.Column>
-          <Grid.Column width={8}>
-
-          </Grid.Column>
+          <Grid.Column width={7} className="ui centered grid">
+          <Grid.Row>
+            <div>
+              {this.renderCards()}
+            </div>
+          </Grid.Row>
           <Grid.Row>
             <Button as='div' labelPosition='right'>
             <Button color='red' value={this.state.sideOne} onClick={this.betSideOne}>
@@ -242,6 +243,7 @@ class SingleWagerView extends Component {
             </Button>
             <Label as='a' basic color='red' pointing='left'>{this.state.sideOne}  Bets Placed</Label>
           </Button>
+          <br/>
           <Button as='div' labelPosition='right'>
             <Button color='blue' value={this.state.sideTwo} onClick={this.betSideTwo}>
               <Icon name='ethereum' />
@@ -251,7 +253,13 @@ class SingleWagerView extends Component {
           </Button>
             <Grid.Column width={6} />
           </Grid.Row>
+          <div className="ui raised segment">
+            <p>
+              {this.state.description}
+            </p>
+          </div>
           {this.renderPayoutButton()}
+          </Grid.Column>
         </Grid>
       </div>
     )
