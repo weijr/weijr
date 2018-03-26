@@ -45,15 +45,6 @@ class CreateWager extends Component {
           from: accounts[0]
         });
       const createdContract = await factory.methods.getDeployedwagers().call()
-
-      await db
-        .collection('userAddresses')
-        .doc(accounts[0])
-        .collection('contracts')
-        .doc(createdContract.slice(-1)[0])
-        .set({
-          active: true
-        })
       console.log("new-new: ", createdContract.slice(-1))
       this.props.history.push('/wagers');
     } catch (err) {
