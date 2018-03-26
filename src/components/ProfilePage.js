@@ -21,6 +21,7 @@ class ProfilePage extends Component {
       metamask: "",
       listOfWagers: []
     }
+    this.goHome = this.goHome.bind(this)
   }
 
   async componentDidMount() {
@@ -31,8 +32,8 @@ class ProfilePage extends Component {
         .doc(acccounts[0])
         .collection("contracts")
         .get()
-        console.log("addresses: ", addresses.docs[0].id)
-        const listOfWagers = await Promise.all(addresses.docs.map(async address => {
+      console.log("addresses: ", addresses.docs[0].id)
+      const listOfWagers = await Promise.all(addresses.docs.map(async address => {
         const wager = Wager(address.id)
         const wagerObj = await wager.methods.getWagerSummary().call()
         const wagerInfo = {
@@ -43,16 +44,19 @@ class ProfilePage extends Component {
           complete: wagerObj[7],
           description: wagerObj[8]
         }
-          return wagerInfo
+        return wagerInfo
       }))
-        this.setState({
-          listOfWagers
-        })
+      this.setState({
+        listOfWagers
+      })
     } catch (err) {
       console.log(err)
     }
   }
 
+  goHome = (event) => {
+    this.props.history.push('/wagers')
+  }
 
   render() {
     console.log(this.state.metamask)
@@ -65,30 +69,35 @@ class ProfilePage extends Component {
             <Header.Content>
               <h2 className="ui red header">
                 Hello {auth.currentUser.displayName}
-            </h2>
+              </h2>
+            </Header.Content>
+            <Header.Content>
+              <Button circular onClick={this.goHome}>
+                <Icon name="home" circular />
+              </Button>
             </Header.Content>
           </Header>
         </Segment>
         <Grid columns={5}>
           {wagerList.map(wager =>
             wager.complete ? null :
-            (
-              <Grid.Column>
-                <Card key={wager.address} className="ui segment centered">
-                  <Image src={basketball} />
-                  <Card.Header />
-                  <Link to={`/wagers/${wager.address}`} key={wager.address} value={wager.address}>
-                    Click here to bet on
+              (
+                <Grid.Column>
+                  <Card key={wager.address} className="ui segment centered">
+                    <Image src={basketball} />
+                    <Card.Header />
+                    <Link to={`/wagers/${wager.address}`} key={wager.address} value={wager.address}>
+                      Click here to bet on
                     <br></br>
-                    {wager.title}
-                  </Link>
-                  Ante: {wager.ante} Ether
-                  <br/>
-                  Current Pot Size: {web3.utils.fromWei(wager.pot, 'ether')} Ether
+                      {wager.title}
+                    </Link>
+                    Ante: {wager.ante} Ether
+                  <br />
+                    Current Pot Size: {web3.utils.fromWei(wager.pot, 'ether')} Ether
                 </Card>
-              </Grid.Column>
-            ))}
-            </Grid>
+                </Grid.Column>
+              ))}
+        </Grid>
       </div>
     )
   }

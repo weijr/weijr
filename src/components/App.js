@@ -93,8 +93,7 @@ class App extends Component {
         </Segment>
         <Grid>
         <Grid.Row centered>
-        <Form onSignUp={evt => this.signUp(evt)}
-              onLogin={evt => this.login(evt)}>
+        <Form>
           <label>User Name</label>
           <input placeholder='User Name' onChange={handleChangeUsername} value={newUsernameEntry} />
           <label>E-mail</label>
@@ -125,8 +124,7 @@ class App extends Component {
         </Segment>
         <Grid>
         <Grid.Row centered>
-        <Form onSignUp={evt => this.signUp(evt)}
-              onLogin={evt => this.login(evt)}>
+        <Form>
           <label>E-mail</label>
           <input placeholder='User Name' onChange={handleChangeEmail} value={newEmailEntry} />
           <label>Password</label>
