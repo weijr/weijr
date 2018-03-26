@@ -5,7 +5,6 @@ import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db, auth, userName } from "../fire/firestore";
 import { connect } from "react-redux";
 import { postMssage, writeMessage } from "../store";
-import MessageList from "./GeneralChat/MessageList";
 import GeneralChat from "./GeneralChat/index";
 import WagerComponent from "./WagerComponent";
 import {
@@ -204,7 +203,6 @@ class SingleWagerView extends Component {
     let email;
 
 
-
     if (this.state.currentUser) {
     return this.state.manager === "" ? null : (
       <div className="App">
@@ -225,42 +223,44 @@ class SingleWagerView extends Component {
             </Header.Content>
           </Header>
         </Segment>
-        <Grid columns={2}>
-          <Grid.Column width={9}>
-            <GeneralChat wager={this.state.address} />
-          </Grid.Column>
-          <Grid.Column width={7} className="ui centered grid">
-          <Grid.Row>
-            <div>
-              {this.renderCards()}
-            </div>
-          </Grid.Row>
-          <Grid.Row>
+        <div className='borderFix'>
+          <Grid columns={2}>
+            <Grid.Column width={9}>
+              <GeneralChat wager={this.state.title} chatType="wager"/>
+            </Grid.Column>
+            <Grid.Column width={7} className="ui centered grid">
+            <Grid.Row>
+              <div>
+                {this.renderCards()}
+              </div>
+            </Grid.Row>
+            <Grid.Row>
+              <Button as='div' labelPosition='right'>
+              <Button color='red' value={this.state.sideOne} onClick={this.betSideOne}>
+                <Icon name='ethereum' />
+                { this.state.leftSide }
+              </Button>
+              <Label as='a' basic color='red' pointing='left'>{this.state.sideOne}  Bets Placed</Label>
+            </Button>
+            <br/>
             <Button as='div' labelPosition='right'>
-            <Button color='red' value={this.state.sideOne} onClick={this.betSideOne}>
-              <Icon name='ethereum' />
-              { this.state.leftSide }
+              <Button color='blue' value={this.state.sideTwo} onClick={this.betSideTwo}>
+                <Icon name='ethereum' />
+                { this.state.rightSide }
+              </Button>
+              <Label as='a' basic color='blue' pointing='left'>{this.state.sideTwo}  Bets Placed</Label>
             </Button>
-            <Label as='a' basic color='red' pointing='left'>{this.state.sideOne}  Bets Placed</Label>
-          </Button>
-          <br/>
-          <Button as='div' labelPosition='right'>
-            <Button color='blue' value={this.state.sideTwo} onClick={this.betSideTwo}>
-              <Icon name='ethereum' />
-              { this.state.rightSide }
-            </Button>
-            <Label as='a' basic color='blue' pointing='left'>{this.state.sideTwo}  Bets Placed</Label>
-          </Button>
-            <Grid.Column width={6} />
-          </Grid.Row>
-          <div className="ui raised segment">
-            <p>
-              {this.state.description}
-            </p>
-          </div>
-          {this.renderPayoutButton()}
-          </Grid.Column>
-        </Grid>
+              <Grid.Column width={6} />
+            </Grid.Row>
+            <div className="ui raised segment">
+              <p>
+                {this.state.description}
+              </p>
+            </div>
+            {this.renderPayoutButton()}
+            </Grid.Column>
+          </Grid>
+        </div>
       </div>
     )
   } else {

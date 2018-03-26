@@ -4,7 +4,7 @@ import "./App.css";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db, auth, userById, email } from "../fire/firestore";
 import history from "../history";
-import store from "../store";
+import store, { getAllWagers } from "../store";
 import { browserHistory } from "react-router";
 import web3 from "../web3";
 import mafiaContract from "../mafiaContract";
@@ -17,6 +17,7 @@ import factory from '../ether/factory'
 import { connect } from "react-redux";
 import App from './App'
 import Wager from "../ether/wagers";
+import { writeMessage } from "../store";
 
 class AllWagers extends Component {
   constructor(props) {
@@ -31,27 +32,9 @@ class AllWagers extends Component {
     this.onClickSort = this.onClickSort.bind(this)
   }
 
-  async componentDidMount() {
-    try {
-      const listOfWagersAddresses = await factory.methods.getDeployedwagers().call()
-      const listOfWagers = await Promise.all(listOfWagersAddresses.map(async address => {
-        const wager = Wager(address)
-        const wagerObj = await wager.methods.getWagerSummary().call()
-        const wagerInfo = {
-          title: wagerObj[6],
-          ante: wagerObj[0],
-          address: address,
-          pot: wagerObj[1],
-          complete: wagerObj[7]
-        }
-        return wagerInfo
-      }))
-      this.setState({
-        listOfWagers
-      })
-    } catch (err) {
-      console.error(err)
-    }
+  componentDidMount() {
+    this.props.fetchAllWagers()
+    this.setState({ listOfWagers: this.props.listOfWagers })
   }
 
   signUp = event => {
@@ -95,16 +78,16 @@ class AllWagers extends Component {
     })
   }
 
+  profilePage = (event) => {
+    event.preventDefault();
+    this.props.history.push("/your-profile")
+  }
+
 
   render() {
     var user = auth.currentUser;
-    const wagerList = this.state.listOfWagers;
-
-
-    console.log("current user: ", auth.currentUser)
-    console.log("list of wagers length: ", this.state.listOfWagers.length)
-    console.log("list of wagers: ", this.state.listOfWagers)
-    if (this.state.currentUser && this.state.listOfWagers) {
+    const wagerList = this.props.listOfWagers;
+    if (this.state.currentUser && this.props.listOfWagers) {
       return (
         <div>
           <Segment inverted>
@@ -128,47 +111,61 @@ class AllWagers extends Component {
               <Header.Content>
                 <Button onClick={this.createContract}>
                   Create a new Contract
-              </Button>
+                </Button>
+              </Header.Content>
+              <Header.Content>
+                <Button onClick={this.profilePage}>
+                  Profile Page
+                </Button>
               </Header.Content>
             </Header>
           </Segment>
-          <Grid columns={5}>
-          <Grid.Column></Grid.Column><Grid.Column></Grid.Column><Grid.Column></Grid.Column><Grid.Column></Grid.Column>
-          <Grid.Column>
+          <div className='borderFix'>
+            <Grid columns={5}>
+            <Grid.Column></Grid.Column><Grid.Column></Grid.Column><Grid.Column><h3>Wagrs Below</h3></Grid.Column><Grid.Column></Grid.Column>
+            <Grid.Column>
 
-          <Dropdown text='Filter' icon='filter' floating labeled button className='icon'>
-          <Dropdown.Menu>
-            <Dropdown.Header icon='tags' content='Filter by tag' />
-            <Dropdown.Divider />
-            <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Ante: Low-High' value="ante-low-high" onClick={this.onClickSort}/>
-            <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Ante: High-Low' value="ante-high-low" onClick={this.onClickSort}/>
-            <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Pot Size: Low-High' value="pot-low-high" onClick={this.onClickSort}/>
-            <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Pot Size: High-Low' value="pot-high-low" onClick={this.onClickSort}/>
-          </Dropdown.Menu>
-        </Dropdown>
+            <Dropdown text='Filter' icon='filter' floating labeled button className='icon'>
+            <Dropdown.Menu>
+              <Dropdown.Header icon='tags' content='Filter by tag' />
+              <Dropdown.Divider />
+              <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Ante: Low-High' value="ante-low-high" onClick={this.onClickSort}/>
+              <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Ante: High-Low' value="ante-high-low" onClick={this.onClickSort}/>
+              <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Pot Size: Low-High' value="pot-low-high" onClick={this.onClickSort}/>
+              <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Pot Size: High-Low' value="pot-high-low" onClick={this.onClickSort}/>
+            </Dropdown.Menu>
+          </Dropdown>
 
-          </Grid.Column>
-          </Grid>
-          <Grid columns={5}>
-          {wagerList.map(wager =>
-            wager.complete ? null :
-            (
-              <Grid.Column>
-                <Card key={wager.address} className="ui segment centered">
-                  <Image src={basketball} />
-                  <Card.Header />
-                  <Link to={`/wagers/${wager.address}`} key={wager.address} value={wager.address}>
-                    Click here to bet on
-                    <br></br>
-                    {wager.title}
-                  </Link>
-                  Ante: {wager.ante} Ether
-                  <br/>
-                  Current Pot Size: {web3.utils.fromWei(wager.pot, 'ether')} Ether
-                </Card>
+            </Grid.Column>
+            </Grid>
+            <Grid columns={2}>
+              <Grid.Column width="6">
+                <GeneralChat chatType='general' />
               </Grid.Column>
-            ))}
-          </Grid>
+              <Grid.Column width="10">
+                <Grid columns={4}>
+                  {wagerList.map(wager =>
+                    wager.complete ? null :
+                    (
+                      <Grid.Column width="4">
+                        <Card key={wager.address} className="ui segment centered">
+                          <Image src={basketball} />
+                          <Card.Header />
+                          <Link to={`/wagers/${wager.address}`} key={wager.address} value={wager.address}>
+                            Click here to bet on
+                            <br></br>
+                            {wager.title}
+                          </Link>
+                          Ante: {wager.ante} Ether
+                          <br/>
+                          Current Pot Size: {web3.utils.fromWei(wager.pot, 'ether')} Ether
+                        </Card>
+                      </Grid.Column>
+                    ))}
+                  </Grid>
+                </Grid.Column>
+            </Grid>
+          </div>
         </div>
       )
     } else if (this.state.currentUser) {
@@ -184,12 +181,16 @@ class AllWagers extends Component {
 
 const mapStateToProps = function (state, ownProps) {
   return {
-    currentUser: state.user
+    currentUser: state.user,
+    listOfWagers: state.wagers
   };
 };
 
 const mapDispatchToProps = function (dispatch, ownProps) {
   return {
+    fetchAllWagers() {
+      dispatch(getAllWagers())
+    }
   }
 }
 

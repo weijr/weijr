@@ -3,7 +3,7 @@ import WagerFactory from './build/WagerFactory';
 
 const instance = new web3.eth.Contract(
   JSON.parse(WagerFactory.interface),
-  '0x23C2e14fD5A48Bec0afe378BDF6BDf098E05ABC3'
+  '0x4b790Ec98F0a9c5C642A2c591d559e057E436489'
 );
 
 export default instance;
