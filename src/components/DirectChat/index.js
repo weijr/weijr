@@ -56,7 +56,10 @@ class DirectChatCreation extends Component {
         </Form>
       </div>
     ) : (
+      <div>
       <MessageList userName={this.props.userName} recipientName={this.state.recipientName} />
+      <NewMessageEntry userName userName={this.props.userName} recipientName={this.state.recipientName} />
+      </div>
     )
   }
 }
