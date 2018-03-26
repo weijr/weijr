@@ -13,7 +13,9 @@ class GeneralChat extends Component {
     this.state = {
       messages: [],
       wager: this.props.wager,
-      chatType: this.props.chatType
+      chatType: this.props.chatType,
+      userName: '',
+      recipientName: ''
     };
     this.onClick = this.onClick.bind(this);
   }
@@ -26,8 +28,8 @@ class GeneralChat extends Component {
 
     return (
       <div>
-        <MessageList wager={this.state.wager} chatType={this.state.chatType} />
-        <NewMessageEntry wager={this.state.wager} chatType={this.state.chatType} />
+        <MessageList wager={this.state.wager} chatType={this.state.chatType} userName={this.state.userName} recipientName={this.state.recipientName}/>
+        <NewMessageEntry wager={this.state.wager} chatType={this.state.chatType} userName={this.state.userName} recipientName={this.state.recipientName}/>
       </div>
     );
   }

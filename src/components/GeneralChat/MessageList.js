@@ -15,6 +15,8 @@ class MessageList extends Component {
     this.state = {
       messages: [],
       currentUser: "",
+      userName: '',
+      recipientName: '',
       wager: this.props.wager,
       wagerA: [],
       wagerB: [],
@@ -67,7 +69,14 @@ class MessageList extends Component {
       // this.scrollToBottom();
     }
     else {
-      const name = this.props.match.params.userName.concat(this.props.match.params.recipientName)
+      let name
+      if (this.state.userName > this.state.recipientName){
+        name = this.state.userName.concat(this.state.recipientName)
+      }
+      else {
+        name = this.state.recipientName.concat(this.state.userName)
+      }
+      console.log(this.state)
       db
         .collection("privateChats")
         .doc("privateChats")
@@ -92,10 +101,6 @@ class MessageList extends Component {
   scrollToBottom = () => {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
-
-  componentDidUpdate() {
-    // this.scrollToBottom();
-  }
 
   render() {
     const { messages } = this.state;

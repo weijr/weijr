@@ -49,48 +49,79 @@ class CreateWager extends Component {
 
   render() {
     return (
-      <div>
-        <h3>Create Your Wagr!</h3>
-        <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
-          <Form.Field>
-            <label>What's The Name Of Your Wagr</label>
-            <Input
-              value={this.state.leftSide}
-              onChange={event => this.setState({ leftSide: event.target.value })}
-              label="Side One"
-              labelPosition="right"
-            />
-            <label>Vs.</label>
-            <Input
-              value={this.state.rightSide}
-              onChange={event => this.setState({ rightSide: event.target.value })}
-              label="Side Two"
-              labelPosition="right"
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>How much do you want the buy in to be?</label>
-            <Input
-              value={this.state.minimumBet}
-              onChange={event => this.setState({ minimumBet: event.target.value })}
-              label="ether"
-              labelPosition="right"
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Describe What Your Wagr Is Going To Be Below!</label>
-            <Input
-              value={this.state.description}
-              onChange={event => this.setState({ description: event.target.value })}
-              label="description"
-              labelPosition="right"
-            />
-          </Form.Field>
-          <Message error header="Oops!" content={this.state.errorMessage} />
-          <Button loading={this.state.loading} primary>
-            Create!
-          </Button>
-        </Form>
+      <div className="App">
+        <Segment inverted>
+          <Header inverted as="h2" icon textAlign="center">
+            <Grid columns={3}>
+              <Grid.Column>
+                <Button circular onClick={this.onClick}>
+                  <Icon name="home" circular />
+                </Button>
+              </Grid.Column>
+              <Grid.Column>
+                <Icon name="users" circular />
+              </Grid.Column>
+            </Grid>
+            <Header.Content>
+              Create a Wagr For All
+            </Header.Content>
+          </Header>
+        </Segment>
+        <div classname='borderFix' centered>
+          <Grid className="segment centered">
+
+              <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
+                <Form.Field>
+                <label>What's The Name Of Your Wagr</label>
+                <div className="fields">
+                    <div className="nine wide field">
+                      <Input
+                        value={this.state.leftSide}
+                        onChange={event => this.setState({ leftSide: event.target.value })}
+                        label="Side One"
+                        labelPosition="right"
+                      />
+                    </div>
+                    <label className="large text">Vs.</label>
+                    <div className="nine wide field">
+                      <Input
+                        value={this.state.rightSide}
+                        onChange={event => this.setState({ rightSide: event.target.value })}
+                        label="Side Two"
+                        labelPosition="right"
+                      />
+                    </div>
+                  </div>
+                </Form.Field>
+                <Form.Field>
+                  <label>How much do you want the buy in to be?</label>
+                  <Input
+                    value={this.state.minimumBet}
+                    onChange={event => this.setState({ minimumBet: event.target.value })}
+                    label="ether"
+                    labelPosition="right"
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <label>Describe What Your Wagr Is Going To Be Below!</label>
+                  <textarea
+                    defaultValue="Enter Description"
+                    rows="2"
+                    value={this.state.description}
+                    onChange={event => this.setState({ description: event.target.value })}
+                    label="description"
+                    labelPosition="right"
+                  >
+                  </textarea>
+                </Form.Field>
+                <Message error header="Oops!" content={this.state.errorMessage} />
+                <Button loading={this.state.loading} primary>
+                  Create!
+                </Button>
+              </Form>
+
+          </Grid>
+        </div>
       </div>
     )
   }

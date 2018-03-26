@@ -4,12 +4,15 @@ import { db, auth } from "../../fire/firestore";
 import { connect } from "react-redux";
 import logo from "../../logo.svg";
 import { Form, Button } from "semantic-ui-react";
+import MessageList from '../GeneralChat/MessageList'
+import NewMessageEntry from '../GeneralChat/NewMessageEntry'
 
 class DirectChatCreation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: ''
+      recipientName: '',
+      showChat: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,39 +21,50 @@ class DirectChatCreation extends Component {
   handleChange(evt) {
     evt.preventDefault();
     console.log(evt.target)
-    this.setState({user: evt.target.value})
+    this.setState({recipientName: evt.target.value})
   }
 
   handleSubmit(evt) {
     evt.preventDefault();
-    const chatName = auth.currentUser.email + this.state.user
+    let chatName
+    if (this.state.recipientName > this.props.user){
+      chatName = this.state.recipientName + this.props.user
+    }
+    else{
+      chatName = this.props.user + this.state.recipientName
+    }
     db
       .collection("privateChats")
       .doc('privateChats')
       .collection(chatName)
       .add({
         uid: "DM Bot",
-        content: 'This is the beginning of your private message with ' + this.state.user,
+        content: 'You have logged into your private message with ' + this.props.user,
         sentAt: Date(Date.now()).toString()
       })
-    this.props.history.push({
-      pathname: `/profile/${auth.currentUser.email}/${this.state.user}/`,
-    state: {
-      userName: auth.currentUser.email,
-      recipientName: this.state.user
-    }});
+      this.setState({
+        showChat: true
+      })
   }
 
   render() {
-    return (
+    return !this.state.showChat ? (
       <div>
         <Form onSubmit={this.handleSubmit}>
-          <Form.Input onChange={this.handleChange} label="Enter User Name" default="Enter User Name" value={this.state.user} />
+          <Form.Input onChange={this.handleChange} label="Enter User Name" default="Enter User Name" value={this.state.recipientName} />
         <Button label='Submit'/>
         </Form>
       </div>
-    );
+    ) : (
+      <MessageList userName={this.props.userName} recipientName={this.state.recipientName} />
+    )
   }
 }
 
-export default withRouter(DirectChatCreation);
+const mapStateToProps = function(state, ownProps) {
+  return {
+    user: state.userName
+  };
+};
+
+export default withRouter(connect(mapStateToProps, null)(DirectChatCreation))
