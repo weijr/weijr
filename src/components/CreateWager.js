@@ -32,6 +32,11 @@ class CreateWager extends Component {
     description: ''
   }
 
+  onClick = event => {
+    event.preventDefault();
+    this.props.history.push("/wagers")
+  }
+
   onSubmit = async event => {
     event.preventDefault();
 
@@ -87,7 +92,7 @@ class CreateWager extends Component {
 
               <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
                 <Form.Field>
-                <label>What's The Name Of Your Wagr</label>
+                <h3>What's The Name Of Your Wagr</h3>
                 <div className="fields">
                     <div className="nine wide field">
                       <Input
@@ -109,7 +114,7 @@ class CreateWager extends Component {
                   </div>
                 </Form.Field>
                 <Form.Field>
-                  <label>How much do you want the buy in to be?</label>
+                  <h4>How much do you want the buy in to be?</h4>
                   <Input
                     value={this.state.minimumBet}
                     onChange={event => this.setState({ minimumBet: event.target.value })}
