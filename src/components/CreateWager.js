@@ -59,7 +59,6 @@ class CreateWager extends Component {
         .set({
           active: true
         })
-      console.log("new-new: ", createdContract.slice(-1))
       this.props.history.push('/wagers');
     } catch (err) {
       this.setState({ errorMessage: err.message });
@@ -100,7 +99,8 @@ class CreateWager extends Component {
                         value={this.state.leftSide}
                         onChange={event => this.setState({ leftSide: event.target.value })}
                         label="Side One"
-                        labelPosition="right"
+                        labelPosition="left"
+                        required
                       />
                     </div>
                     <label className="large text">Vs.</label>
@@ -110,6 +110,7 @@ class CreateWager extends Component {
                         onChange={event => this.setState({ rightSide: event.target.value })}
                         label="Side Two"
                         labelPosition="right"
+                        required
                       />
                     </div>
                   </div>
@@ -121,6 +122,7 @@ class CreateWager extends Component {
                     onChange={event => this.setState({ minimumBet: event.target.value })}
                     label="ether"
                     labelPosition="right"
+                    required
                   />
                 </Form.Field>
                 <Form.Field>
@@ -131,6 +133,7 @@ class CreateWager extends Component {
                     onChange={event => this.setState({ description: event.target.value })}
                     label="description"
                     labelPosition="right"
+                    required
                   >
                   </textarea>
                 </Form.Field>

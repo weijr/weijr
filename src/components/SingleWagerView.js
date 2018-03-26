@@ -15,7 +15,8 @@ import {
   Grid,
   Button,
   Card,
-  Label
+  Label,
+  Message
 } from "semantic-ui-react";
 
 import Wager from "../ether/wagers";
@@ -41,7 +42,9 @@ class SingleWagerView extends Component {
       rightSide: '',
       title: '',
       accounts: [],
-      description: ''
+      description: '',
+      loading: false,
+      errorMessage: ''
     };
     this.onClick = this.onClick.bind(this);
     this.renderCards = this.renderCards.bind(this);
@@ -101,10 +104,10 @@ class SingleWagerView extends Component {
     if(this.state.accounts.includes(this.state.manager)){
       return (
         <div>
-          <Button onClick={this.paySideOne}>
+          <Button onClick={this.paySideOne} error={!!this.state.errorMessage} loading={this.state.loading}>
             {this.state.leftSide} Won!
           </Button>
-          <Button onClick={this.paySideTwo}>
+          <Button onClick={this.paySideTwo} error={!!this.state.errorMessage} loading={this.state.loading}>
             {this.state.rightSide} Won!
           </Button>
         </div>
@@ -114,29 +117,40 @@ class SingleWagerView extends Component {
 
   async paySideOne(event) {
     event.preventDefault()
-    console.log('SCONDSTATE', this.state.accounts)
     if(this.state.accounts.includes(this.state.manager)){
       const wager = Wager(this.props.match.params.address);
       const manager = await wager.methods.manager().call();
 
-      await wager.methods.payout(true).send({
-        from: manager
-      })
+      this.setState({ loading: true, errorMessage: '' });
+      try {
+        await wager.methods.payout(true).send({
+          from: manager
+        })
+      } catch(err) {
+        this.setState({ errorMessage: "You either do not have enough ether, or you're not the manager of this Wagr!" });
+      }
     }
+    this.setState({ loading: false });
     this.props.history.push('/wagers');
   }
 
   async paySideTwo(event) {
     event.preventDefault()
-    console.log('SCONDSTATE', this.state.accounts)
     if(this.state.accounts.includes(this.state.manager)){
       const wager = Wager(this.props.match.params.address);
       const manager = await wager.methods.manager().call();
 
-      await wager.methods.payout(true).send({
-        from: manager
-      })
+      this.setState({ loading: true, errorMessage: '' });
+      try {
+        await wager.methods.payout(true).send({
+          from: manager
+        })
+      } catch (err) {
+        this.setState({ errorMessage: "You either do not have enough ether, or you're not the manager of this Wagr!" });
+      }
+
     }
+    this.setState({ loading: false });
     this.props.history.push('/wagers');
   }
 
@@ -144,7 +158,7 @@ class SingleWagerView extends Component {
     const items = [{
       header: `The Current Pot is ${web3.utils.fromWei(this.state.pot, 'ether')} ether!`,
       meta: this.state.title,
-      description: `There are ${this.state.totalUsers} people invovled in this Wager! Place Your Wagers Below!`
+      description: `There are ${this.state.totalUsers} people invovled in this Wagr! Place Your Bets Below!`
     }];
     return <Card.Group items={items} />;
   }
@@ -154,7 +168,6 @@ class SingleWagerView extends Component {
     const wager = Wager(this.props.match.params.address);
 
     this.setState({ loading: true, errorMessage: '' });
-
     try {
       const accounts = await web3.eth.getAccounts();
       await wager.methods.joinBet(true).send({
@@ -169,9 +182,9 @@ class SingleWagerView extends Component {
         sideTwo: summary[4],
       });
     } catch (err) {
-      this.setState({errorMessage: err.message})
+      this.setState({errorMessage: "You may have already bet in this Wagr! No Cheating!"})
     }
-
+    this.setState({ loading: false });
   }
 
   async betSideTwo(event) {
@@ -194,14 +207,13 @@ class SingleWagerView extends Component {
         sideTwo: summary[4],
       });
     } catch (err) {
-      this.setState({errorMessage: err.message})
+      this.setState({errorMessage: "You may have already bet in this Wagr! No Cheating!"})
     }
-
+    this.setState({ loading: false });
   }
 
   render() {
     let email;
-
 
     if (this.state.currentUser) {
     return this.state.manager === "" ? null : (
@@ -238,7 +250,7 @@ class SingleWagerView extends Component {
             </Grid.Row>
             <Grid.Row>
               <Button as='div' labelPosition='right'>
-              <Button color='red' value={this.state.sideOne} onClick={this.betSideOne}>
+              <Button color='red' value={this.state.sideOne} onClick={this.betSideOne} loading={this.state.loading}>
                 <Icon name='ethereum' />
                 { this.state.leftSide }
               </Button>
@@ -246,7 +258,7 @@ class SingleWagerView extends Component {
             </Button>
             <br/>
             <Button as='div' labelPosition='right'>
-              <Button color='blue' value={this.state.sideTwo} onClick={this.betSideTwo}>
+              <Button color='blue' value={this.state.sideTwo} onClick={this.betSideTwo} error={!!this.state.errorMessage} loading={this.state.loading}>
                 <Icon name='ethereum' />
                 { this.state.rightSide }
               </Button>
