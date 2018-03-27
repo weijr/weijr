@@ -51,19 +51,6 @@ class SingleWagerView extends Component {
     this.paySideTwo = this.paySideTwo.bind(this);
   }
 
-  componentWillMount() {
-    var email;
-
-    auth.onAuthStateChanged(function(user) {
-      if (user) {
-        email = user.email;
-      }
-    });
-
-    this.setState({
-      currentUser: this.props.currentUser
-    });
-  }
 
   async componentDidMount() {
 
@@ -159,15 +146,17 @@ class SingleWagerView extends Component {
       const accounts = await web3.eth.getAccounts();
       await wager.methods.joinBet(true).send({
         from: accounts[0],
-        value: web3.utils.toWei(this.state.minimumBet, 'ether')
+        value: web3.utils.toWei(this.state.minimumBet, 'ether'),
       });
       const summary = await wager.methods.getWagerSummary().call();
+      console.log('maybe this is sthe problem')
       this.setState({
         pot: summary[1],
         totalUsers: summary[2],
         sideOne: summary[3],
         sideTwo: summary[4],
       });
+
     } catch (err) {
       this.setState({errorMessage: err.message})
     }
@@ -209,7 +198,7 @@ class SingleWagerView extends Component {
         <Segment inverted>
           <Header inverted as="h2" icon textAlign="center">
           <Header.Content>
-              <Icon name="ethereum" circular />
+          <i className="ethereum icon circular"></i>
             </Header.Content>
             <Header.Content>
             <Grid columns={3}>

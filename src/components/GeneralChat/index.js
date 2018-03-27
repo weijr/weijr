@@ -16,6 +16,11 @@ class GeneralChat extends Component {
       chatType: this.props.chatType,
       userName: '',
     };
+    this.onClick = this.onClick.bind(this);
+  }
+
+  onClick = () => {
+    this.props.history.push('/')
   }
 
   render() {
@@ -36,9 +41,4 @@ const mapStateToProps = function(state, ownProps) {
   };
 };
 
-const mapDispatchToProps = function(dispatch, ownProps) {
-  return {
-  };
-};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(GeneralChat));
+export default withRouter(connect(mapStateToProps, null)(GeneralChat));

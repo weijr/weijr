@@ -4,6 +4,7 @@ import { db, auth } from "../../fire/firestore";
 import { connect } from "react-redux";
 import { writeMessage } from "../../store";
 import { Form, Button } from "semantic-ui-react";
+import "../App.css"
 
 class NewMessageEntry extends Component {
   constructor(props) {
@@ -17,11 +18,13 @@ class NewMessageEntry extends Component {
     this.sendMessage = this.sendMessage.bind(this);
   }
 
-  sendMessage = (evt, message) => {
+  sendMessage = event => {
+    console.log(event.target.message.value)
     const date = Date(Date.now())
+    const message = event.target.message.value
     if (this.state.chatType === 'wager'){
-    let wager = this.state.wager;
-    evt.preventDefault();
+    const wager = this.state.wager;
+    event.preventDefault();
 
     db
       .collection("wagers")
@@ -32,10 +35,10 @@ class NewMessageEntry extends Component {
         content: message,
         sentAt: date
       });
-    this.props.clearForm();
+      event.target.message.value =""
     }
     else if (this.state.chatType === 'general') {
-      evt.preventDefault();
+      event.preventDefault();
       db
         .collection('generalChat')
         .add({
@@ -43,10 +46,10 @@ class NewMessageEntry extends Component {
           content: message,
           sentAt: date
         });
-      this.props.clearForm();
+        event.target.message.value = ""
     }
     else {
-      evt.preventDefault()
+      event.preventDefault()
       db
         .collection("privateChats")
         .doc("privateChats")
@@ -56,22 +59,15 @@ class NewMessageEntry extends Component {
           content: message,
           sentAt: date
         })
-        this.props.clearForm();
     }
   };
 
   render() {
     console.log(this.props)
-    const { name, newMessageEntry, handleChange, handleSubmit } = this.props;
     return (
-      <Form reply onSubmit={evt => this.sendMessage(evt, newMessageEntry)}>
-        <Form.TextArea
-          type="text"
-          value={newMessageEntry}
-          onChange={handleChange}
-          placeholder="Say something nice..."
-          />
-        <Button content="Add Reply" labelPosition="left" icon="edit" primary />
+      <Form onSubmit={this.sendMessage}>
+        <input name="message" placeholder="Your reply" />
+        <Button type="submit" content="Add Reply" labelPosition="left" icon="edit" primary />
       </Form>
     );
   }
@@ -79,20 +75,8 @@ class NewMessageEntry extends Component {
 
 const mapStateToProps = function(state, ownProps) {
   return {
-    newMessageEntry: state.newMessageEntry,
     recipientName: state.DirectChat,
   };
 };
 
-const mapDispatchToProps = function(dispatch, ownProps) {
-  return {
-    handleChange(evt) {
-      dispatch(writeMessage(evt.target.value));
-    },
-    clearForm() {
-      dispatch(writeMessage(""));
-    }
-  };
-};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NewMessageEntry))
+export default withRouter(connect(mapStateToProps, null)(NewMessageEntry))

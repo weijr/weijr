@@ -32,6 +32,23 @@ class CreateWager extends Component {
     description: ''
   }
 
+  componentDidMount(){
+    if (this.props.location.state){
+      let arr = []
+      const dateCode = this.props.location.state.date.toString()
+      arr.push(dateCode.slice(0, 4))
+      arr.push(dateCode.slice(4, 6))
+      arr.push(dateCode.slice(6))
+      const dateStr = Date(arr.join('-'))
+      const desc = 'Game between ' + this.props.location.state.away + ' at ' + this.props.location.state.home + ' to be played on ' + dateStr.slice(0, 15) + ' at ' + this.props.location.state.time
+      this.setState({
+        leftSide: this.props.location.state.away,
+        rightSide: this.props.location.state.home,
+        description: desc
+      })
+    }
+  }
+
   onSubmit = async event => {
     event.preventDefault();
 
@@ -45,15 +62,6 @@ class CreateWager extends Component {
           from: accounts[0]
         });
       const createdContract = await factory.methods.getDeployedwagers().call()
-
-      await db
-        .collection('userAddresses')
-        .doc(accounts[0])
-        .collection('contracts')
-        .doc(createdContract.slice(-1)[0])
-        .set({
-          active: true
-        })
       console.log("new-new: ", createdContract.slice(-1))
       this.props.history.push('/wagers');
     } catch (err) {
@@ -63,11 +71,13 @@ class CreateWager extends Component {
   }
 
   render() {
+    let desc = ''
+    let arr = []
     return (
       <div className="App">
         <Segment inverted>
           <Header inverted as="h2" icon textAlign="center">
-          <Icon name="ethereum" circular />
+          <i className="ethereum icon circular"></i>
             <Header.Content>
             <Grid columns= {3}>
             <Grid.Column>
@@ -86,7 +96,7 @@ class CreateWager extends Component {
         <div classname='borderFix' centered>
           <Grid className="segment centered">
 
-              <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
+              <Form className= "createWager" onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
                 <Form.Field>
                 <label>What's The Name Of Your Wagr</label>
                 <div className="fields">
@@ -122,7 +132,7 @@ class CreateWager extends Component {
                   <label>Describe What Your Wagr Is Going To Be Below!</label>
                   <textarea
                     rows="2"
-                    value={this.state.description}
+                    value={desc || this.state.description}
                     onChange={event => this.setState({ description: event.target.value })}
                     label="description"
                     labelPosition="right"
@@ -141,5 +151,4 @@ class CreateWager extends Component {
     )
   }
 }
-
 export default withRouter(CreateWager);

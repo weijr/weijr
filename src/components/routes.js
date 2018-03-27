@@ -11,6 +11,7 @@ import CreateWager from './CreateWager';
 import ProfilePage from './ProfilePage'
 import DirectChatCreation from './DirectChat/index'
 import GeneralChat from './GeneralChat'
+import NBASchedule from './NBASchedule'
 
 
 class Routes extends Component {
@@ -25,6 +26,7 @@ class Routes extends Component {
         <Route exact path="/your-profile" component={ProfilePage} />
         <Route exact path='/newPrivateMessage' component={DirectChatCreation} />
         <Route exact path='/privateChat' component={ GeneralChat } />
+        <Route exact path='/nbaschedule' component={ NBASchedule } />
         <Redirect from="*" to="/" />
       </Switch>
     )
