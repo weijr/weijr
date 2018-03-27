@@ -7,8 +7,7 @@ import history from "../history";
 import store from "../store";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
-import web3 from "../web3";
-import mafiaContract from "../mafiaContract";
+import web3 from "../ether/web3";
 import GeneralChat from "./GeneralChat/";
 import SingleWagerView from "./SingleWagerView";
 import { setUser } from "../store";
@@ -74,10 +73,12 @@ class App extends Component {
 
     return (
       this.state.signUp ?
-      <div>
+      <div style={{
+        fontFamily: "Courier New, Courier, monospace"
+      }} >
         <Segment inverted>
           <Header inverted as="h2" icon textAlign="center">
-            <Icon name="ethereum" circular />
+          <i className="ethereum icon circular"></i>
             <Header.Content>
               <h2 className="ui blue header">
                 Welcome 2 Wagr
@@ -92,7 +93,7 @@ class App extends Component {
         </Segment>
         <Grid>
         <Grid.Row centered>
-        <Form onSubmit={this.signUp}>
+        <Form onSubmit={this.signUp} className= "signup">
           <label>User Name</label>
           <input name="username" placeholder='User Name' />
           <label>E-mail</label>
@@ -108,7 +109,7 @@ class App extends Component {
       <div>
         <Segment inverted>
           <Header inverted as="h2" icon textAlign="center">
-            <Icon name="ethereum" circular />
+          <i className="ethereum icon circular"></i>
             <Header.Content>
               <h2 className="ui blue header">
                 Welcome 2 Wagr
@@ -123,7 +124,7 @@ class App extends Component {
         </Segment>
         <Grid>
         <Grid.Row centered>
-        <Form onSubmit={this.login}>
+        <Form onSubmit={this.login} className= "signin">
           <label>E-mail</label>
           <input name="email" placeholder='User Name'/>
           <label id="password">Password</label>

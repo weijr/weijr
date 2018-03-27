@@ -4,7 +4,7 @@ import { db, auth } from "../../fire/firestore";
 import { connect } from "react-redux";
 import { writeMessage } from "../../store";
 import { Form, Button } from "semantic-ui-react";
-import '../App.css'
+import "../App.css"
 
 class NewMessageEntry extends Component {
   constructor(props) {

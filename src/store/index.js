@@ -17,7 +17,6 @@ const store = createStore(
 );
 
 export default store
-
 export * from './wagers';
 export * from './user';
 export * from './DirectChat'
