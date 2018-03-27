@@ -150,7 +150,7 @@ class AllWagers extends Component {
                     (
                       <Grid.Column width="4">
                         <Card key={wager.address} className="ui segment centered">
-                          <Image src={wager.url} />
+                          <Image src={basketball} />
                           <Card.Header />
                           <Link to={`/wagers/${wager.address}`} value={wager.address}>
                             Click here to bet on
