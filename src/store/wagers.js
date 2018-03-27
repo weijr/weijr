@@ -21,7 +21,8 @@ export function getAllWagers() {
           description: wagerObj[8],
           manager: wagerObj[5],
           side1: wagerObj[9],
-          side2: wagerObj[10]
+          side2: wagerObj[10],
+          url: wagerObj[11]
         }
         return wagerInfo
       }))

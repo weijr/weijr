@@ -120,7 +120,7 @@ class AllWagers extends Component {
                 </Button>
               </Header.Content>
               </Grid.Column>
-              </Grid> 
+              </Grid>
             </Header>
           </Segment>
           <div className='borderFix'>
@@ -152,11 +152,11 @@ class AllWagers extends Component {
                     (
                       <Grid.Column width="4">
                         <Card key={wager.address} className="ui segment centered">
-                          <Image src={basketball} />
+                          <Image src={wager.url} />
                           <Card.Header />
                           <Link to={`/wagers/${wager.address}`} key={wager.address} value={wager.address}>
                             Click here to bet on
-                            <br></br>
+                            <br/>
                             {wager.title}
                           </Link>
                           Ante: {wager.ante} Ether

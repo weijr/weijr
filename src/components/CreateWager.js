@@ -29,7 +29,8 @@ class CreateWager extends Component {
     loading: false,
     leftSide: '',
     rightSide: '',
-    description: ''
+    description: '',
+    url: ''
   }
 
   onClick = event => {
@@ -45,20 +46,12 @@ class CreateWager extends Component {
     try {
       const accounts = await web3.eth.getAccounts();
       await factory.methods
-        .createWager(this.state.minimumBet, (this.state.leftSide + " vs. " + this.state.rightSide), this.state.description)
+        .createWager(this.state.minimumBet, (this.state.leftSide + " vs. " + this.state.rightSide), this.state.description, this.state.url)
         .send({
           from: accounts[0]
         });
       const createdContract = await factory.methods.getDeployedwagers().call()
-
-      await db
-        .collection('userAddresses')
-        .doc(accounts[0])
-        .collection('contracts')
-        .doc(createdContract.slice(-1)[0])
-        .set({
-          active: true
-        })
+      console.log("new-new: ", createdContract.slice(-1))
       this.props.history.push('/wagers');
     } catch (err) {
       this.setState({ errorMessage: err.message });
@@ -136,6 +129,16 @@ class CreateWager extends Component {
                     required
                   >
                   </textarea>
+                </Form.Field>
+                <Form.Field>
+                  <label>Provide a Link to a Picture for Your Wagr Here!</label>
+                  <Input
+                    value={this.state.description}
+                    onChange={event => this.setState({ description: event.target.value })}
+                    label="URL"
+                    labelPosition="right"
+                    required
+                  />
                 </Form.Field>
                 <Message error header="Oops!" content={this.state.errorMessage} />
                 <Button loading={this.state.loading} primary>
