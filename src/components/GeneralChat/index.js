@@ -24,7 +24,6 @@ class GeneralChat extends Component {
   }
 
   render() {
-
     return (
       <div>
         <MessageList wager={this.state.wager} chatType={this.state.chatType} userName={this.state.userName} recipientName={this.props.recipientName}/>
