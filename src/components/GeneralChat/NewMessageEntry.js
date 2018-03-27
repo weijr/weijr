@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db, auth } from "../../fire/firestore";
 import { connect } from "react-redux";
 import { writeMessage } from "../../store";
@@ -11,13 +11,16 @@ class NewMessageEntry extends Component {
     super(props);
     this.state = {
       wager: this.props.wager,
-      chatType: this.props.chatType
+      chatType: this.props.chatType,
+      userName: '',
+      recipientName: ''
     };
     this.sendMessage = this.sendMessage.bind(this);
   }
 
   sendMessage = event => {
     console.log(event.target.message.value)
+    const date = Date(Date.now())
     const message = event.target.message.value
     if (this.state.chatType === 'wager'){
     const wager = this.state.wager;
@@ -30,24 +33,37 @@ class NewMessageEntry extends Component {
       .add({
         uid: auth.currentUser.displayName,
         content: message,
-        sentAt: Date(Date.now()).toString()
+        sentAt: date
       });
       event.target.message.value =""
     }
-    else {
+    else if (this.state.chatType === 'general') {
       event.preventDefault();
       db
         .collection('generalChat')
         .add({
           uid: auth.currentUser.displayName,
           content: message,
-          sentAt: Date(Date.now()).toString()
+          sentAt: date
         });
         event.target.message.value = ""
+    }
+    else {
+      event.preventDefault()
+      db
+        .collection("privateChats")
+        .doc("privateChats")
+        .collection(this.props.recipientName)
+        .add({
+          uid: auth.currentUser.displayName,
+          content: message,
+          sentAt: date
+        })
     }
   };
 
   render() {
+    console.log(this.props)
     return (
       <Form onSubmit={this.sendMessage}>
         <input name="message" placeholder="Your reply" />
@@ -57,4 +73,10 @@ class NewMessageEntry extends Component {
   }
 }
 
-export default NewMessageEntry;
+const mapStateToProps = function(state, ownProps) {
+  return {
+    recipientName: state.DirectChat,
+  };
+};
+
+export default withRouter(connect(mapStateToProps, null)(NewMessageEntry))

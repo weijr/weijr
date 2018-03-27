@@ -13,7 +13,8 @@ class GeneralChat extends Component {
     this.state = {
       messages: [],
       wager: this.props.wager,
-      chatType: this.props.chatType
+      chatType: this.props.chatType,
+      userName: '',
     };
     this.onClick = this.onClick.bind(this);
   }
@@ -26,11 +27,18 @@ class GeneralChat extends Component {
 
     return (
       <div>
-        <MessageList wager={this.state.wager} chatType={this.state.chatType} />
-        <NewMessageEntry wager={this.state.wager} chatType={this.state.chatType} />
+        <MessageList wager={this.state.wager} chatType={this.state.chatType} userName={this.state.userName} recipientName={this.props.recipientName}/>
+        <NewMessageEntry wager={this.state.wager} chatType={this.state.chatType} userName={this.state.userName} recipientName={this.props.recipientName}/>
       </div>
     );
   }
 }
 
-export default withRouter(GeneralChat);
+const mapStateToProps = function(state, ownProps) {
+  console.log(state)
+  return {
+    recipientName: state.DirectChat
+  };
+};
+
+export default withRouter(connect(mapStateToProps, null)(GeneralChat));

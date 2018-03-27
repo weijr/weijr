@@ -73,11 +73,6 @@ class NBASchedule extends Component {
   render() {
     if (this.state.games) {
       return (
-        <Grid columns={2}>
-          <Grid.Column width="6">
-            <GeneralChat chatType="general" />
-          </Grid.Column>
-          <Grid.Column width="10">
             <Grid columns={4}>
               {this.state.games.map(game => (
                 <Grid.Column width="4">
@@ -106,8 +101,6 @@ class NBASchedule extends Component {
                 </Grid.Column>
               ))}
             </Grid>
-          </Grid.Column>
-        </Grid>
       );
     } else if (this.state.currentUser) {
       return <div>Loading...</div>;

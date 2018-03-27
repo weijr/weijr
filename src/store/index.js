@@ -4,9 +4,10 @@ import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import wagers from './wagers';
 import user from './user'
+import DirectChat from './DirectChat'
 import loggingMiddleware from 'redux-logger'
 
-const reducer = combineReducers({ wagers, user })
+const reducer = combineReducers({ wagers, user, DirectChat })
 
 const store = createStore(
   reducer,

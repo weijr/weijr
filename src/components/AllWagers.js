@@ -118,7 +118,7 @@ class AllWagers extends Component {
                 </Button>
               </Header.Content>
               </Grid.Column>
-              </Grid> 
+              </Grid>
             </Header>
           </Segment>
           <div className='borderFix'>

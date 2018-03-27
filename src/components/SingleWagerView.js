@@ -135,7 +135,7 @@ class SingleWagerView extends Component {
     }];
     return <Card.Group items={items} />;
   }
-  
+
   async betSideOne(event) {
     event.preventDefault();
     const wager = Wager(this.props.match.params.address);
@@ -156,11 +156,11 @@ class SingleWagerView extends Component {
         sideOne: summary[3],
         sideTwo: summary[4],
       });
-      
+
     } catch (err) {
       this.setState({errorMessage: err.message})
     }
-    
+
   }
 
   async betSideTwo(event) {
