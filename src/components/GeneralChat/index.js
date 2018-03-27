@@ -15,43 +15,29 @@ class GeneralChat extends Component {
       wager: this.props.wager,
       chatType: this.props.chatType,
       userName: '',
-      recipientName: ''
     };
-    this.onClick = this.onClick.bind(this);
-  }
-
-  onClick() {
-    this.props.history.push('/')
   }
 
   render() {
 
     return (
       <div>
-        <MessageList wager={this.state.wager} chatType={this.state.chatType} userName={this.state.userName} recipientName={this.state.recipientName}/>
-        <NewMessageEntry wager={this.state.wager} chatType={this.state.chatType} userName={this.state.userName} recipientName={this.state.recipientName}/>
+        <MessageList wager={this.state.wager} chatType={this.state.chatType} userName={this.state.userName} recipientName={this.props.recipientName}/>
+        <NewMessageEntry wager={this.state.wager} chatType={this.state.chatType} userName={this.state.userName} recipientName={this.props.recipientName}/>
       </div>
     );
   }
 }
 
 const mapStateToProps = function(state, ownProps) {
+  console.log(state)
   return {
-    // newMessageEntry: state.newMessageEntry,
-    // name: state.name
+    recipientName: state.DirectChat
   };
 };
 
 const mapDispatchToProps = function(dispatch, ownProps) {
   return {
-    // handleChange (evt) {
-    //   dispatch(writeMessage(evt.target.value));
-    // },
-    // handleSubmit (name, content, evt) {
-    //   evt.preventDefault();
-    //   // const { channelId } = ownProps;
-    //   dispatch(postMessage({ name, content, evt }));
-    //   // dispatch(writeMessage(''));
   };
 };
 

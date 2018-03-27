@@ -1,11 +1,11 @@
 // ACTION TYPES
 
-const ADD_USER = 'ADD_USER';
+const ADD_RECIPIENT = 'ADD_RECIPIENT';
 
 // ACTION CREATORS
 
-export function addUser (content) {
-  const action = { type: ADD_USER, content };
+export function addRecipient (content) {
+  const action = { type: ADD_RECIPIENT, content };
   return action;
 }
 
@@ -14,7 +14,7 @@ export default function reducer (state = '', action) {
 
   switch (action.type) {
 
-    case ADD_USER:
+    case ADD_RECIPIENT:
       return action.content;
 
     default:

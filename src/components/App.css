@@ -13,3 +13,11 @@ Form {
 Field {
   align-self: center;
 }
+
+.borderFix {
+  border: 20px solid white;
+}
+
+.large.text {
+  font-size: 2rem;
+}

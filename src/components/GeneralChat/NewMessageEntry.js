@@ -47,17 +47,10 @@ class NewMessageEntry extends Component {
     }
     else {
       evt.preventDefault()
-      let name
-      if (this.state.userName > this.state.recipientName){
-        name = this.state.userName.concat(this.state.recipientName)
-      }
-      else {
-        name = this.state.recipientName.concat(this.state.userName)
-      }
       db
         .collection("privateChats")
         .doc("privateChats")
-        .collection(name)
+        .collection(this.props.recipientName)
         .add({
           uid: auth.currentUser.displayName,
           content: message,
@@ -87,8 +80,7 @@ class NewMessageEntry extends Component {
 const mapStateToProps = function(state, ownProps) {
   return {
     newMessageEntry: state.newMessageEntry,
-    userName: ownProps.match.params.userName,
-    recipientName: ownProps.match.params.recipientName,
+    recipientName: state.DirectChat,
   };
 };
 
@@ -103,4 +95,4 @@ const mapDispatchToProps = function(dispatch, ownProps) {
   };
 };
 
-export default connect(withRouter(mapStateToProps, mapDispatchToProps))(NewMessageEntry);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NewMessageEntry))

@@ -8,9 +8,10 @@ import newUsernameEntry from './newUsernameEntry'
 import newPasswordEntry from './newPasswordEntry'
 import newEmailEntry from './newEmailEntry'
 import user from './user'
+import DirectChat from './DirectChat'
 import loggingMiddleware from 'redux-logger'
 
-const reducer = combineReducers({ wagers, newMessageEntry, newEmailEntry, newUsernameEntry, newPasswordEntry, user })
+const reducer = combineReducers({ wagers, newMessageEntry, newEmailEntry, newUsernameEntry, newPasswordEntry, DirectChat, user })
 
 const store = createStore(
   reducer,

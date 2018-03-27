@@ -67,17 +67,21 @@ class ProfilePage extends Component {
     return (
       <div>
         <Segment inverted>
-          <Header inverted as="h2" icon textAlign="center">
+          <Header as="h2" icon textAlign="center">
             <Icon name="ethereum" circular />
             <Header.Content>
-              <h2 className="ui red header">
+              <h2 className="ui blue header">
                 Hello {auth.currentUser.displayName}
               </h2>
             </Header.Content>
             <Header.Content>
-              <Button circular onClick={this.goHome}>
+            <Grid columns={4}>
+            <Grid.Column>
+              <Button className= "ui left floated primary button" circular onClick={this.goHome}>
                 <Icon name="home" circular />
               </Button>
+             </Grid.Column>
+             </Grid>
             </Header.Content>
           </Header>
         </Segment>

@@ -24,7 +24,7 @@ class Routes extends Component {
         <Route exact path="/wagers/:address" component={SingleWagerView} />
         <Route exact path="/your-profile" component={ProfilePage} />
         <Route exact path='/newPrivateMessage' component={DirectChatCreation} />
-        <Route exact path='/profile/:userName/:recipientName' component={ GeneralChat } />
+        <Route exact path='/privateChat' component={ GeneralChat } />
         <Redirect from="*" to="/" />
       </Switch>
     )

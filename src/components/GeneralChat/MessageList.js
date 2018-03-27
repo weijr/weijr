@@ -26,7 +26,9 @@ class MessageList extends Component {
   }
 
   componentDidMount() {
-    console.log(this.state.chatType)
+    console.log('RN', this.props.recipientName)
+    if (this.props.recipientName) this.setState({recipientName: this.props.recipientName}, () => console.log(this.state))
+    // console.log(this.state.chatType
     if (this.state.chatType === "wager") {
       let wager = this.state.wager;
 
@@ -69,18 +71,11 @@ class MessageList extends Component {
       // this.scrollToBottom();
     }
     else {
-      let name
-      if (this.state.userName > this.state.recipientName){
-        name = this.state.userName.concat(this.state.recipientName)
-      }
-      else {
-        name = this.state.recipientName.concat(this.state.userName)
-      }
-      console.log(this.state)
+      console.log(this.props)
       db
         .collection("privateChats")
         .doc("privateChats")
-        .collection(name)
+        .collection(this.props.recipientName)
         .orderBy("sentAt")
         .onSnapshot(snapshot => {
           this.setState({
@@ -127,4 +122,11 @@ class MessageList extends Component {
   }
 }
 
-export default withRouter(MessageList);
+const mapStateToProps = function(state, ownProps) {
+  return {
+    recipientName: state.DirectChat,
+    userName: state.userName
+  }
+}
+
+export default withRouter(connect(mapStateToProps, null)(MessageList));

@@ -1,11 +1,26 @@
 
 import React, { Component } from 'react';
-import { Form, Button, Input, Message } from 'semantic-ui-react';
 import factory from '../ether/factory';
 import web3 from '../ether/web3';
 import { Router } from './routes';
 import { withRouter } from 'react-router-dom';
 import { db, auth, userById } from "../fire/firestore";
+import "./App.css";
+
+
+import {
+  Header,
+  Icon,
+  Image,
+  Segment,
+  Grid,
+  Button,
+  Card,
+  Label,
+  Form,
+  Input,
+  Message
+} from "semantic-ui-react";
 
 class CreateWager extends Component {
   state = {
@@ -52,18 +67,19 @@ class CreateWager extends Component {
       <div className="App">
         <Segment inverted>
           <Header inverted as="h2" icon textAlign="center">
-            <Grid columns={3}>
-              <Grid.Column>
-                <Button circular onClick={this.onClick}>
-                  <Icon name="home" circular />
-                </Button>
-              </Grid.Column>
-              <Grid.Column>
-                <Icon name="users" circular />
-              </Grid.Column>
-            </Grid>
+          <Icon name="ethereum" circular />
             <Header.Content>
-              Create a Wagr For All
+            <Grid columns= {3}>
+            <Grid.Column>
+            <Button className= "ui left floated primary button" circular onClick={this.onClick}>
+              <Icon name="home" circular />
+            </Button>
+            </Grid.Column>
+            <Grid.Column>
+              <h2 className ="ui blue text header">Create a Wagr For All
+              </h2>
+            </Grid.Column>
+            </Grid>
             </Header.Content>
           </Header>
         </Segment>
@@ -105,7 +121,6 @@ class CreateWager extends Component {
                 <Form.Field>
                   <label>Describe What Your Wagr Is Going To Be Below!</label>
                   <textarea
-                    defaultValue="Enter Description"
                     rows="2"
                     value={this.state.description}
                     onChange={event => this.setState({ description: event.target.value })}

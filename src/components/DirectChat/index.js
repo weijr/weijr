@@ -4,15 +4,16 @@ import { db, auth } from "../../fire/firestore";
 import { connect } from "react-redux";
 import logo from "../../logo.svg";
 import { Form, Button } from "semantic-ui-react";
-import MessageList from '../GeneralChat/MessageList'
-import NewMessageEntry from '../GeneralChat/NewMessageEntry'
+import MessageList from "../GeneralChat/MessageList";
+import NewMessageEntry from "../GeneralChat/NewMessageEntry";
+import { addRecipient } from "../../store";
 
 class DirectChatCreation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recipientName: '',
-      showChat: false,
+      recipientName: "",
+      showChat: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,54 +21,62 @@ class DirectChatCreation extends Component {
 
   handleChange(evt) {
     evt.preventDefault();
-    console.log(evt.target)
-    this.setState({recipientName: evt.target.value})
+    this.props.includeRecipient(evt.target.value);
   }
 
-  handleSubmit(evt) {
-    evt.preventDefault();
-    let chatName
-    if (this.state.recipientName > this.props.user){
-      chatName = this.state.recipientName + this.props.user
+  handleSubmit(event) {
+    event.preventDefault();
+    const recipientName = event.target.recipient.value;
+    let chatName;
+    if (recipientName > auth.currentUser.displayName) {
+      chatName = recipientName + auth.currentUser.displayName;
+    } else {
+      chatName = auth.currentUser.displayName + recipientName;
     }
-    else{
-      chatName = this.props.user + this.state.recipientName
-    }
+    this.props.includeRecipient(chatName);
     db
       .collection("privateChats")
-      .doc('privateChats')
+      .doc("privateChats")
       .collection(chatName)
       .add({
         uid: "DM Bot",
-        content: 'You have logged into your private message with ' + this.props.user,
+        content:
+          "You have logged into your private message with " +
+          recipientName,
         sentAt: Date(Date.now()).toString()
-      })
-      this.setState({
-        showChat: true
-      })
+      });
+    this.setState({
+      showChat: true
+    });
+    this.props.history.push('/privateChat')
   }
 
   render() {
-    return !this.state.showChat ? (
+    return (
       <div>
         <Form onSubmit={this.handleSubmit}>
-          <Form.Input onChange={this.handleChange} label="Enter User Name" default="Enter User Name" value={this.state.recipientName} />
-        <Button label='Submit'/>
+          <Form.Input name="recipient" label="Enter User Name" />
+          <Button type="submit" label="Submit" />
         </Form>
       </div>
-    ) : (
-      <div>
-      <MessageList userName={this.props.userName} recipientName={this.state.recipientName} />
-      <NewMessageEntry userName userName={this.props.userName} recipientName={this.state.recipientName} />
-      </div>
-    )
+    );
   }
 }
 
 const mapStateToProps = function(state, ownProps) {
   return {
-    user: state.userName
+    userName: state.userName
   };
 };
 
-export default withRouter(connect(mapStateToProps, null)(DirectChatCreation))
+const mapDispatchToProps = function(dispatch, ownProps) {
+  return {
+    includeRecipient(name) {
+      dispatch(addRecipient(name));
+    }
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(DirectChatCreation)
+);
