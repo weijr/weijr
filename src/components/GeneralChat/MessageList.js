@@ -15,6 +15,8 @@ class MessageList extends Component {
     this.state = {
       messages: [],
       currentUser: "",
+      userName: '',
+      recipientName: '',
       wager: this.props.wager,
       wagerA: [],
       wagerB: [],
@@ -24,7 +26,9 @@ class MessageList extends Component {
   }
 
   componentDidMount() {
-    console.log(this.state.chatType)
+    console.log('RN', this.props.recipientName)
+    if (this.props.recipientName) this.setState({recipientName: this.props.recipientName}, () => console.log(this.state))
+    // console.log(this.state.chatType
     if (this.state.chatType === "wager") {
       let wager = this.state.wager;
 
@@ -41,12 +45,12 @@ class MessageList extends Component {
                 id: doc.ref.id,
                 content: data.content,
                 from: data.uid,
-                sentAt: data.sentAt
+                sentAt: (data.sentAt).toString()
               };
             })
           });
         });
-      this.scrollToBottom();
+      // this.scrollToBottom();
     } else if (this.state.chatType === 'general') {
       db
         .collection("generalChat")
@@ -59,21 +63,19 @@ class MessageList extends Component {
                 id: doc.ref.id,
                 content: data.content,
                 from: data.uid,
-                sentAt: data.sentAt
+                sentAt: (data.sentAt).toString()
               };
             })
           });
         });
-      this.scrollToBottom();
+      // this.scrollToBottom();
     }
     else {
       console.log(this.props)
-      const name = this.props.match.params.userName.concat(this.props.match.params.recipientName)
-      console.log(name)
       db
         .collection("privateChats")
         .doc("privateChats")
-        .collection(name)
+        .collection(this.props.recipientName)
         .orderBy("sentAt")
         .onSnapshot(snapshot => {
           this.setState({
@@ -83,7 +85,7 @@ class MessageList extends Component {
                 id: doc.ref.id,
                 content: data.content,
                 from: data.uid,
-                sentAt: data.sentAt
+                sentAt: (data.sentAt).toString()
               };
             })
           });
@@ -94,10 +96,6 @@ class MessageList extends Component {
   scrollToBottom = () => {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
-
-  componentDidUpdate() {
-    this.scrollToBottom();
-  }
 
   render() {
     const { messages } = this.state;
@@ -124,4 +122,11 @@ class MessageList extends Component {
   }
 }
 
-export default withRouter(MessageList);
+const mapStateToProps = function(state, ownProps) {
+  return {
+    recipientName: state.DirectChat,
+    userName: state.userName
+  }
+}
+
+export default withRouter(connect(mapStateToProps, null)(MessageList));

@@ -76,7 +76,7 @@ class ProfilePage extends Component {
             </Header.Content>
           </Header>
         </Segment>
-        <h2>  
+        <h2>
           Wagers you are currently managing:
         </h2>
         <Grid columns={5}>
@@ -99,7 +99,7 @@ class ProfilePage extends Component {
                 </Grid.Column>
               ))}
         </Grid>
-        <h2> 
+        <h2>
           Wagers you are currently participating in:
         </h2>
         <Grid columns={5}>
