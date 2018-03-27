@@ -40,6 +40,15 @@ Field {
   width: 18%;
 }
 
+#loading-false {
+  display: none;
+}
 
+.loading-text{
+  width: 15em;
+}
 
+#error {
+  display: none;
+}
 
