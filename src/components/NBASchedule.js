@@ -6,10 +6,7 @@ import { db, auth, userById, email } from "../fire/firestore";
 import history from "../history";
 import store from "../store";
 import { browserHistory } from "react-router";
-import web3 from "../web3";
-import mafiaContract from "../mafiaContract";
 import GeneralChat from "./GeneralChat/";
-import { definedRole, randomNameGenerator } from "../utils";
 import basketball from "./basketball.png";
 import {
   Header,

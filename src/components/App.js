@@ -10,7 +10,7 @@ import { browserHistory } from "react-router";
 import web3 from "../ether/web3";
 import GeneralChat from "./GeneralChat/";
 import SingleWagerView from "./SingleWagerView";
-import { writeUsername, writePassword, writeEmail, setUser } from "../store";
+import { setUser } from "../store";
 import { withAlert } from 'react-alert'
 import { Header, Icon, Image, Segment, Grid, Button, Card, Form, Checkbox } from 'semantic-ui-react'
 
@@ -29,9 +29,9 @@ class App extends Component {
 
   signUp = event => {
     event.preventDefault();
-    let username = this.props.newUsernameEntry
-    let email = this.props.newEmailEntry
-    let password = this.props.newPasswordEntry
+    const username = event.target.username.value
+    const email = event.target.email.value
+    const password = event.target.password.value
 
     auth.createUserWithEmailAndPassword(email, password)
     .then(async (user) => {
@@ -48,16 +48,15 @@ class App extends Component {
 
   login = event => {
     event.preventDefault();
-    let username = this.props.newEmailEntry
-    let password = this.props.newPasswordEntry
-    auth.signInWithEmailAndPassword(username, password)
+    const email = event.target.email.value
+    const password = event.target.password.value
+    auth.signInWithEmailAndPassword(email, password)
     .then((user) => {
       this.props.setUser(user)
       this.props.history.push('/wagers');
     })
     .catch(error => {
       this.props.alert.show(error.message)
-
     });
   }
 
@@ -69,7 +68,7 @@ class App extends Component {
   }
 
   render() {
-    const { name, newEmailEntry, newUsernameEntry, newPasswordEntry, handleChangeEmail, handleChangeUsername, handleChangePassword } = this.props;
+    const { name } = this.props;
 
 
     return (
@@ -94,14 +93,14 @@ class App extends Component {
         </Segment>
         <Grid>
         <Grid.Row centered>
-        <Form className= "signup">
+        <Form onSubmit={this.signUp} className= "signup">
           <label>User Name</label>
-          <input placeholder='User Name' onChange={handleChangeUsername} value={newUsernameEntry} />
+          <input name="username" placeholder='User Name' />
           <label>E-mail</label>
-          <input placeholder='Email' onChange={handleChangeEmail} value={newEmailEntry} />
+          <input name="email" placeholder='Email' />
           <label>Password</label>
-          <input placeholder='Password' onChange={handleChangePassword} value={newPasswordEntry} type='password' />
-          <Button type='signUp' onClick={this.signUp}>Sign Up</Button>
+          <input name="password" type="password" placeholder='Password' />
+          <Button type='submit'>Sign Up</Button>
       </Form>
       </Grid.Row>
       </Grid>
@@ -125,13 +124,13 @@ class App extends Component {
         </Segment>
         <Grid>
         <Grid.Row centered>
-        <Form className= "signin">
+        <Form onSubmit={this.login} className= "signin">
           <label>E-mail</label>
-          <input placeholder='User Name' onChange={handleChangeEmail} value={newEmailEntry} />
-          <label>Password</label>
-          <input placeholder='Password' onChange={handleChangePassword} value={newPasswordEntry} type='password' />
+          <input name="email" placeholder='User Name'/>
+          <label id="password">Password</label>
+          <input name="password" placeholder='Password' type='password' />
           <Button type='signUp' onClick={this.goToSignUp}>Sign Up</Button>
-          <Button type='login' onClick={this.login}>Login</Button>
+          <Button type='submit'>Login</Button>
       </Form>
       </Grid.Row>
       </Grid>
@@ -142,27 +141,12 @@ class App extends Component {
 
 const mapStateToProps = function(state, ownProps) {
   return {
-    newUsernameEntry: state.newUsernameEntry,
-    newEmailEntry: state.newEmailEntry,
-    newPasswordEntry: state.newPasswordEntry,
     currentUser: state.user
   };
 };
 
 const mapDispatchToProps = function(dispatch, ownProps) {
   return {
-    handleChangeUsername(evt) {
-      dispatch(writeUsername(evt.target.value));
-    },
-    handleChangePassword(evt) {
-      dispatch(writePassword(evt.target.value));
-    },
-    handleChangeEmail(evt) {
-      dispatch(writeEmail(evt.target.value))
-    },
-    clearForm() {
-      dispatch(writeUsername(""));
-    },
     setUser(user) {
       dispatch(setUser(user))
     }
