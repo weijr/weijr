@@ -1,15 +1,15 @@
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
-const config = {
-  apiKey: "AIzaSyD-SRNhQPjUTiCCFjb8miJPkvaNwaEIvxA",
-  authDomain: "mafia-blockchain.firebaseapp.com",
-  databaseURL: "https://mafia-blockchain.firebaseio.com",
-  projectId: "mafia-blockchain",
-  storageBucket: "mafia-blockchain.appspot.com",
-  messagingSenderId: "291156435310"
-};
 
+const config = {
+  apiKey: "AIzaSyCA0rBrs0L1ypciJ-3-GcycOkBu7UrtY1s",
+  authDomain: "weijr-up.firebaseapp.com",
+  databaseURL: "https://weijr-up.firebaseio.com",
+  projectId: "weijr-up",
+  storageBucket: "",
+  messagingSenderId: "198786688745"
+}
 
 
 firebase.initializeApp(config);
