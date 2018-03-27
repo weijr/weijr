@@ -4,7 +4,7 @@ import "./App.css";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 import { db, auth, userById, email } from "../fire/firestore";
 import history from "../history";
-import store, { getAllWagers } from "../store";
+import store, { getAllWagers, getSortedWagers } from "../store";
 import { browserHistory } from "react-router";
 import web3 from "../ether/web3";
 import GeneralChat from "./GeneralChat/";
@@ -74,23 +74,21 @@ class AllWagers extends Component {
   };
 
   onClickSort = (event, data) => {
-    event.preventDefault();
-    let listOfWagersSorted = this.state.listOfWagers.slice();
-    let type = data.value.split("-")[0];
-    let order = data.value.split("-")[1] + "-" + data.value.split("-")[2];
-    if (order === "low-high") {
-      var sortedList = listOfWagersSorted.sort(function(a, b) {
-        return parseInt(a[type]) - parseFloat(b[type]);
-      });
+    event.preventDefault()
+    let listOfWagersSorted = this.props.listOfWagers.slice()
+    let type = data.value.split("-")[0]
+    let order = data.value.split("-")[1] + "-" + data.value.split("-")[2]
+    if (order === 'low-high') {
+      var sortedList = listOfWagersSorted.sort(function (a, b) {
+        return parseInt(a[type]) - parseFloat(b[type])
+      })
     } else {
-      var sortedList = listOfWagersSorted.sort(function(a, b) {
-        return parseInt(b[type]) - parseFloat(a[type]);
-      });
-    }
-    this.setState({
-      listOfWagers: sortedList
-    });
-  };
+      var sortedList = listOfWagersSorted.sort(function (a, b) {
+        return parseInt(b[type]) - parseFloat(a[type])
+    })
+  }
+    this.props.fetchSortedWagers(sortedList)
+  }
 
   profilePage = event => {
     event.preventDefault();
@@ -264,7 +262,10 @@ const mapStateToProps = function(state, ownProps) {
 const mapDispatchToProps = function(dispatch, ownProps) {
   return {
     fetchAllWagers() {
-      dispatch(getAllWagers());
+      dispatch(getAllWagers())
+    },
+    fetchSortedWagers(listOfWagers) {
+      dispatch(getSortedWagers(listOfWagers))
     }
   };
 };
