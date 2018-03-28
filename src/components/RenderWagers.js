@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const RenderWagers = props => {
   return (
-    <Grid columns={props.columns}>
+    <Grid columns={props.columns} centered>
       {props.wagerList.map(wager =>
         wager.complete ? null :
           <Grid.Column width="4">

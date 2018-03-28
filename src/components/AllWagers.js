@@ -91,7 +91,7 @@ class AllWagers extends Component {
     const wagerList = this.props.listOfWagers;
     if (this.state.currentUser && this.props.listOfWagers) {
       return (
-        <div>
+        <div id="all-wagers">
           <Segment inverted>
             <NavBar />
             <HeaderButtons
@@ -101,7 +101,7 @@ class AllWagers extends Component {
           </Segment>
           <div className='borderFix'>
             <DropDownSort onClickSort={this.onClickSort} />
-            <Grid columns={2}>
+            <Grid columns={2} centered>
               <Grid.Column width="6">
                 <GeneralChat chatType='general' />
               </Grid.Column>
