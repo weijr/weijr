@@ -263,6 +263,7 @@ class SingleWagerView extends Component {
     let email;
     let loading = this.state.loading ? "loading" : "loading-false";
 
+
     if (this.state.currentUser) {
       return this.state.manager === "" ? null : (
         <div>
@@ -360,6 +361,7 @@ class SingleWagerView extends Component {
       this.props.history.push("/");
       return null;
     }
+
   }
 }
 
