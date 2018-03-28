@@ -11,9 +11,9 @@ const NavBar = ({ message }) => {
         </h1>
       </Header.Content>
       <Header.Content>
-        <h2 className="ui blue header">
+        <h3 className="ui blue header">
           {message}
-        </h2>
+        </h3>
       </Header.Content>
     </Header>
   )
