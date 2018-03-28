@@ -7,6 +7,8 @@ import { connect } from "react-redux";
 import { postMssage, writeMessage } from "../store";
 import GeneralChat from "./GeneralChat/index";
 import WagerComponent from "./WagerComponent";
+import NavBar from './NavBar'
+import HomeButton from './HomeButton'
 import {
   Header,
   Icon,
@@ -45,7 +47,7 @@ class SingleWagerView extends Component {
       errorMessage: "",
       error: ""
     };
-    this.onClick = this.onClick.bind(this);
+    this.goHome = this.goHome.bind(this);
     this.renderCards = this.renderCards.bind(this);
     this.betSideOne = this.betSideOne.bind(this);
     this.betSideTwo = this.betSideTwo.bind(this);
@@ -80,7 +82,7 @@ class SingleWagerView extends Component {
     }
   }
 
-  onClick = event => {
+  goHome = event => {
     event.preventDefault();
     this.props.history.push("/wagers");
   };
@@ -261,111 +263,72 @@ class SingleWagerView extends Component {
 
   render() {
     let email;
-    let loading = this.state.loading ? "loading" : "loading-false";
-
+    let loading = this.state.loading ? "loading" : "loading-false"
+    const title = this.state.leftSide + " vs. " + this.state.rightSide
 
     if (this.state.currentUser) {
       return this.state.manager === "" ? null : (
         <div>
           <div id={loading} className="ui active dimmer">
             <div className="ui large text loader">
-              <p className="loading-text">
-                This Honestly Takes A Long Time! Be Patient! Don't Leave The
-                Page!
-              </p>
+              <p className="loading-text" >This Honestly Takes A Long Time! Be Patient! Don't Leave The Page!
+            </p>
             </div>
           </div>
-          <div className="App">
-            <Segment inverted>
-              <Header inverted as="h2" icon textAlign="center">
-                <Header.Content>
-                  <i className="ethereum icon circular" />
-                </Header.Content>
-                <Header.Content>
-                  <Grid columns={3}>
-                    <Grid.Column>
-                      <Button
-                        className="ui left floated primary button"
-                        circular
-                        onClick={this.onClick}
-                      >
-                        <Icon name="home" circular />
-                      </Button>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <h2 className="ui blue header">
-                        {this.state.leftSide} vs. {this.state.rightSide}
-                      </h2>
-                    </Grid.Column>
-                  </Grid>
-                </Header.Content>
-              </Header>
-            </Segment>
-            <div className="borderFix">
-              <Grid columns={2}>
-                <Grid.Column width={9}>
-                  <GeneralChat wager={this.state.title} chatType="wager" />
-                </Grid.Column>
-                <Grid.Column width={7} className="ui centered grid">
-                  <Grid.Row>
-                    <div>{this.renderCards()}</div>
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Button as="div" labelPosition="right">
-                      <Button
-                        color="red"
-                        value={this.state.sideOne}
-                        onClick={this.betSideOne}
-                      >
-                        <Icon name="ethereum" />
-                        {this.state.leftSide}
-                      </Button>
-                      <Label as="a" basic color="red" pointing="left">
-                        {this.state.sideOne} Bets Placed
-                      </Label>
-                    </Button>
-                    <br />
-                    <Button as="div" labelPosition="right">
-                      <Button
-                        color="blue"
-                        value={this.state.sideTwo}
-                        onClick={this.betSideTwo}
-                        error={!!this.state.errorMessage}
-                      >
-                        <Icon name="ethereum" />
-                        {this.state.rightSide}
-                      </Button>
-                      <Label as="a" basic color="blue" pointing="left">
-                        {this.state.sideTwo} Bets Placed
-                      </Label>
-                    </Button>
-                    <Grid.Column width={6} />
-                  </Grid.Row>
-                  <div className="ui raised segment">
-                    <p>{this.state.description}</p>
+          <Segment inverted textAlign="center">
+            <NavBar message={'Create a Weijr For All'} />
+            <HomeButton goHome={this.goHome} />
+          </Segment>
+          <div className='borderFix'>
+            <Grid columns={2}>
+              <Grid.Column width={9}>
+                <GeneralChat wager={this.state.title} chatType="wager" />
+              </Grid.Column>
+              <Grid.Column width={7} className="ui centered grid">
+                <Grid.Row>
+                  <div>
+                    {this.renderCards()}
                   </div>
-                  {this.renderPayoutButton()}
-                  <Message
-                    id={`${this.state.error}`}
-                    error
-                    header="Oops!"
-                    content={this.state.errorMessage}
-                  />
-                </Grid.Column>
-              </Grid>
-            </div>
+                </Grid.Row>
+                <Grid.Row>
+                  <Button as='div' labelPosition='right'>
+                    <Button color='red' value={this.state.sideOne} onClick={this.betSideOne}>
+                      <Icon name='ethereum' />
+                      {this.state.leftSide}
+                    </Button>
+                    <Label as='a' basic color='red' pointing='left'>{this.state.sideOne}  Bets Placed</Label>
+                  </Button>
+                  <br />
+                  <Button as='div' labelPosition='right'>
+                    <Button color='blue' value={this.state.sideTwo} onClick={this.betSideTwo} error={!!this.state.errorMessage}>
+                      <Icon name='ethereum' />
+                      {this.state.rightSide}
+                    </Button>
+                    <Label as='a' basic color='blue' pointing='left'>{this.state.sideTwo}  Bets Placed</Label>
+                  </Button>
+                  <Grid.Column width={6} />
+                </Grid.Row>
+                <div className="ui raised segment">
+                  <p>
+                    {this.state.description}
+                  </p>
+                </div>
+                {this.renderPayoutButton()}
+                <Message id={`${this.state.error}`} error header="Oops!" content={this.state.errorMessage} />
+              </Grid.Column>
+            </Grid>
           </div>
         </div>
-      );
+      )
     } else {
-      this.props.history.push("/");
-      return null;
+      this.props.history.push('/')
+      return null
     }
 
   }
 }
 
-const mapStateToProps = function(state, ownProps) {
+const mapStateToProps = function (state, ownProps) {
   return {
     currentUser: state.user
   };
