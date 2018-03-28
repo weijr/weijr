@@ -70,45 +70,65 @@ class App extends Component {
   login = async event => {
     event.preventDefault();
     try {
-      const email = event.target.email.value
-      const password = event.target.password.value
-      const user = await auth.signInWithEmailAndPassword(email, password)
+      const email = event.target.email.value;
+      const password = event.target.password.value;
+      const user = await auth.signInWithEmailAndPassword(email, password);
 
-      this.props.setUser(user)
-      this.props.history.push('/wagers');
+      this.props.setUser(user);
+      this.props.history.push("/wagers");
     } catch (error) {
-      this.props.alert.show(error.message)
+      this.props.alert.show(error.message);
     }
-  }
+  };
 
   goToSignUp = event => {
-    this.props.history.push('/signup')
-  }
+    this.props.history.push("/signup");
+    console.log(web3._provider.host);
+  };
+
+  noMet;
 
   render() {
-    return (
+    return web3._provider.host ===
+      "https://rinkeby.infura.io/orDImgKRzwNrVCDrAk5Q" ? (
       <div>
-      <Segment inverted>
-        <NavBar message={"Please Login to Enter Weijr"} />
-      </Segment>
-        <LoginForm goToSignUp={this.goToSignUp} login={this.login} />
+        <Segment inverted>
+          <NavBar message={""} />
+        </Segment>
+        <div class="ui one column stackable center aligned page grid">
+          <div class="column twelve wide">
+            <h2>
+              Please install MetaMask chrome extension to view our website!
+            </h2>
+            <h3>Visit https://metamask.io/ for more info.</h3>
+          </div>
+        </div>
       </div>
-    )
+    ) : (
+      <div>
+        <Segment inverted>
+          <NavBar message={"Please Login to Enter Weijr"} />
+        </Segment>
+          <LoginForm goToSignUp={this.goToSignUp} login={this.login} />
+      </div>
+    );
   }
 }
 
-const mapStateToProps = function (state, ownProps) {
+const mapStateToProps = function(state, ownProps) {
   return {
     currentUser: state.user
   };
 };
 
-const mapDispatchToProps = function (dispatch, ownProps) {
+const mapDispatchToProps = function(dispatch, ownProps) {
   return {
     setUser(user) {
-      dispatch(setUser(user))
+      dispatch(setUser(user));
     }
   };
 };
 
-export default withRouter(withAlert(connect(mapStateToProps, mapDispatchToProps)(App)))
+export default withRouter(
+  withAlert(connect(mapStateToProps, mapDispatchToProps)(App))
+);

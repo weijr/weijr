@@ -107,6 +107,7 @@ class SignUp extends Component {
   }
 }
 
+
 const mapDispatchToProps = function (dispatch, ownProps) {
   return {
     setUser(user) {
