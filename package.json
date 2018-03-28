@@ -11,10 +11,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@firebase/polyfill": "^0.3.0",
     "axios": "^0.18.0",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
     "firebase": "^4.11.0",
     "ganache-cli": "^6.1.0",
+    "metamascara": "^2.2.1",
     "mocha": "^5.0.4",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",

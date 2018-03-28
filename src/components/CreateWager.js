@@ -134,9 +134,8 @@ class CreateWager extends Component {
     let desc = "";
     let arr = [];
     let loading = this.state.loading ? "loading" : "loading-false";
-    const currentUser = auth.currentUser.displayName;
 
-    if (this.state.currentUser) {
+    if (this.props.currentUser) {
       return (
         <div>
           <div id={loading} className="ui active dimmer">

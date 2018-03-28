@@ -21,8 +21,9 @@ import {
 import { connect } from "react-redux";
 import Wager from "../ether/wagers";
 import web3 from "../ether/web3";
-import NavBar from './NavBar'
-import HomeButton from './HomeButton'
+import NavBar from "./NavBar";
+import HomeButton from "./HomeButton";
+import RenderWagers from "./RenderWagers";
 
 class ProfilePage extends Component {
   constructor(props) {
@@ -51,10 +52,6 @@ class ProfilePage extends Component {
   }
 
   render() {
-    console.log("metamask: ", this.props.currentUser)
-    console.log("props: ", this.props.listOfWagers)
-    const headerMessage = "Hello " + auth.currentUser.displayName
-
     const wagerList = this.props.listOfWagers;
 
     const managedWagers = wagerList.filter(wager => {
@@ -62,118 +59,69 @@ class ProfilePage extends Component {
     });
 
     const inTheseWagers = wagerList.filter(wager => {
-      return (wager.joined).indexOf(this.state.metamask) > -1;
+      return wager.joined.indexOf(this.state.metamask) > -1;
     });
+    if (this.props.currentUser) {
+      return (
+        <div>
+          <Segment inverted textAlign="center">
+            <NavBar message={"Hello " + auth.currentUser.displayName} />
+            <HomeButton goHome={this.goHome} />
+          </Segment>
 
-    console.log("managed: ", managedWagers);
-    return (
-      <div>
-        <Segment inverted textAlign="center">
-        <NavBar message={headerMessage} />
-        <HomeButton goHome={this.goHome} />
-        </Segment>
+          <Header as="h1" icon textAlign="center">
+            <Icon name="hourglass half" circular />
+            <Header.Content>Wager Status</Header.Content>
+          </Header>
 
-
-        <Header as="h1" icon textAlign="center">
-          <Icon name="hourglass half" circular />
-          <Header.Content>Wager Status</Header.Content>
-        </Header>
-
-
-        <Grid columns={2} celled>
-          <Grid.Column>
-          <Header as='h2' textAlign='centered'>Wagers you are currently managing:</Header>
-          <Grid columns={3}>
+          <Grid columns={2} celled>
+            <Grid.Column>
+              <Header as="h2" textAlign="centered">
+                Wagers you are currently managing:
+              </Header>
               {managedWagers.length ? (
-                managedWagers.map(
-                  wager =>
-                    wager.complete ? null : (
-                      <Grid.Column>
-                        <Card
-                          key={wager.address}
-                          className="ui segment centered"
-                        >
-                          <Image src={basketball} />
-                          <Card.Header />
-                          <Link
-                            to={`/wagers/${wager.address}`}
-                            key={wager.address}
-                            value={wager.address}
-                          >
-                            Click here to bet on
-                            <br />
-                            {wager.title}
-                          </Link>
-                          Ante: {wager.ante} Ether
-                          <br />
-                          Current Pot Size:{" "}
-                          {web3.utils.fromWei(wager.pot, "ether")} Ether
-                        </Card>
-                      </Grid.Column>
-                    )
-                )
+                <RenderWagers wagerList={managedWagers} columns={3} />
               ) : (
                 <div>
-                <Grid.Column />
-                <Grid.Column>
-                  <br />
-                  <br />
-                  <Message warning>
-                  <Message.Header textAlign='centered'>You are not currently managing any wagers.</Message.Header>
-                  </Message>
+                  <Grid.Column />
+                  <Grid.Column>
+                    <br />
+                    <br />
+                    <Header as="h3" textAlign="centered">
+                      You are not currently managing any wagers.
+                    </Header>
                   </Grid.Column>
-                  </div>
+                </div>
               )}
-            </Grid>
-          </Grid.Column>
-          <Grid.Column>
-            <Header as='h2' textAlign='centered'>Wagers you are currently participating in:</Header>
-            <Grid columns={3}>
+            </Grid.Column>
+            <Grid.Column>
+              <Header as="h2" textAlign="centered">
+                Wagers you are currently participating in:
+              </Header>
               {inTheseWagers.length ? (
-                inTheseWagers.map(
-                  wager =>
-                    wager.complete ? null : (
-                      <Grid.Column>
-                        <Card
-                          key={wager.address}
-                          className="ui segment centered"
-                        >
-                          <Image src={basketball} />
-                          <Card.Header />
-                          <Link
-                            to={`/wagers/${wager.address}`}
-                            key={wager.address}
-                            value={wager.address}
-                          >
-                            Click here to bet on
-                            <br />
-                            {wager.title}
-                          </Link>
-                          Ante: {wager.ante} Ether
-                          <br />
-                          Current Pot Size:{" "}
-                          {web3.utils.fromWei(wager.pot, "ether")} Ether
-                        </Card>
-                      </Grid.Column>
-                    )
-                )
+                <RenderWagers wagerList={inTheseWagers} columns={3} />
               ) : (
                 <div>
-                <Grid.Column />
-                <Grid.Column>
-                  <br/>
-                  <br/>
-                  <Message warning>
-                  <Message.Header textAlign='centered'>You are not currently participating in any wagers.</Message.Header>
-                  </Message>
+                  <Grid.Column />
+                  <Grid.Column>
+                    <br />
+                    <br />
+                    <Message warning>
+                      <Message.Header textAlign="centered">
+                        You are not currently participating in any wagers.
+                      </Message.Header>
+                    </Message>
                   </Grid.Column>
-                  </div>
+                </div>
               )}
-            </Grid>
-          </Grid.Column>
-        </Grid>
-      </div>
-    );
+            </Grid.Column>
+          </Grid>
+        </div>
+      );
+    } else {
+      this.props.history.push("/");
+      return null;
+    }
   }
 }
 
