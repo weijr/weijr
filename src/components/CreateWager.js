@@ -23,7 +23,7 @@ class CreateWager extends Component {
       description: '',
       currentUser: this.props.currentUser
     }
-    this.onClick = this.onClick.bind(this)
+    this.goHome = this.goHome.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
