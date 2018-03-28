@@ -43,10 +43,10 @@ class AllWagers extends Component {
 
   async componentDidMount() {
     await this.props.fetchAllWagers();
-    // let completeWagers = this.props.listOfWagers;
-    // completeWagers.forEach(wager => {
-    //   wager["imageURL"] = this.getImageFromFB(wager.title);
-    // });
+    let completeWagers = this.props.listOfWagers;
+    completeWagers.forEach(wager => {
+      wager["imageURL"] = this.getImageFromFB(wager.title);
+    });
     this.setState({ listOfWagers: this.props.listOfWagers });
   }
 
