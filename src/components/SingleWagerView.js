@@ -209,7 +209,7 @@ class SingleWagerView extends Component {
     let email;
     let loading = this.state.loading ? "loading" : "loading-false"
 
-    if (this.state.currentUser) {
+    // if (this.state.currentUser) {
     return this.state.manager === "" ? null : (
       <div>
         <div id={loading} className="ui active dimmer">
@@ -281,10 +281,10 @@ class SingleWagerView extends Component {
       </div>
 
     )
-  } else {
-    this.props.history.push('/')
-    return null
-    }
+  // } else {
+  //   this.props.history.push('/')
+  //   return null
+  //   }
   }
 }
 
