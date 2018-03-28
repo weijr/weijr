@@ -48,13 +48,9 @@ class NBASchedule extends Component {
             time: obj.data.league.standard[i].startTimeEastern
           });
         }
-        return arr;
-      })
-      .then(arr =>
         this.setState({
-          games: arr
-        })
-      );
+          games: arr })
+      })
   }
 
   onClick = (evt, away, home, date, time) => {

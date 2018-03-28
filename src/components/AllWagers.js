@@ -32,7 +32,7 @@ class AllWagers extends Component {
     this.state = {
       wager: "",
       listOfWagers: [],
-      wagerImages: [],
+      wagerURLs: [],
       currentUser: this.props.currentUser
     };
     this.signUp = this.signUp.bind(this);
@@ -41,13 +41,16 @@ class AllWagers extends Component {
     this.getImageFromFB = this.getImageFromFB.bind(this);
   }
 
-  async componentDidMount() {
-    await this.props.fetchAllWagers();
-    let completeWagers = this.props.listOfWagers;
-    completeWagers.forEach(wager => {
-      wager["imageURL"] = this.getImageFromFB(wager.title);
-    });
-    this.setState({ listOfWagers: this.props.listOfWagers });
+  componentDidMount() {
+    this.props.fetchAllWagers();
+    // const completeWagers = this.props.listOfWagers;
+    // const allWagers = await Promise.all(
+    //   completeWagers.map(async wager => {
+    //     const image = await this.getImageFromFB(wager.title)
+    //     return Object.assign({}, wager, {
+    //       imageURL: image
+    //     });
+    //   });
   }
 
   signUp = event => {
@@ -74,21 +77,21 @@ class AllWagers extends Component {
   };
 
   onClickSort = (event, data) => {
-    event.preventDefault()
-    let listOfWagersSorted = this.props.listOfWagers.slice()
-    let type = data.value.split("-")[0]
-    let order = data.value.split("-")[1] + "-" + data.value.split("-")[2]
-    if (order === 'low-high') {
-      var sortedList = listOfWagersSorted.sort(function (a, b) {
-        return parseInt(a[type]) - parseFloat(b[type])
-      })
+    event.preventDefault();
+    let listOfWagersSorted = this.props.listOfWagers.slice();
+    let type = data.value.split("-")[0];
+    let order = data.value.split("-")[1] + "-" + data.value.split("-")[2];
+    if (order === "low-high") {
+      var sortedList = listOfWagersSorted.sort(function(a, b) {
+        return parseInt(a[type]) - parseFloat(b[type]);
+      });
     } else {
-      var sortedList = listOfWagersSorted.sort(function (a, b) {
-        return parseInt(b[type]) - parseFloat(a[type])
-    })
-  }
-    this.props.fetchSortedWagers(sortedList)
-  }
+      var sortedList = listOfWagersSorted.sort(function(a, b) {
+        return parseInt(b[type]) - parseFloat(a[type]);
+      });
+    }
+    this.props.fetchSortedWagers(sortedList);
+  };
 
   profilePage = event => {
     event.preventDefault();
@@ -101,17 +104,20 @@ class AllWagers extends Component {
       .doc(name)
       .collection("image")
       .onSnapshot(snapshot => {
-        return snapshot.docs[0].data().imageURL;
+        console.log(snapshot);
+        if (snapshot.docs.length) {
+          console.log(snapshot.docs[0].data().imageURL)
+          return snapshot.docs[0].data().imageURL;
+        } else return basketball;
       });
   };
 
   render() {
-    console.log(this.state);
     let index = 0;
-    console.log("made it");
     const user = auth.currentUser;
-    const wagerList = this.state.listOfWagers;
-    if (this.state.currentUser && this.state.listOfWagers) {
+    const wagerList = this.props.listOfWagers;
+    console.log(wagerList)
+    if (this.state.currentUser && this.props.listOfWagers) {
       return (
         <div>
           <Segment inverted>
@@ -219,7 +225,7 @@ class AllWagers extends Component {
                             key={wager.address}
                             className="ui segment centered"
                           >
-                            <Image src={wager.imageURL} />
+                            <Image src={wager.imageUrl || basketball} />
                             <Card.Header />
                             <Link
                               to={`/wagers/${wager.address}`}
@@ -262,10 +268,10 @@ const mapStateToProps = function(state, ownProps) {
 const mapDispatchToProps = function(dispatch, ownProps) {
   return {
     fetchAllWagers() {
-      dispatch(getAllWagers())
+      dispatch(getAllWagers());
     },
     fetchSortedWagers(listOfWagers) {
-      dispatch(getSortedWagers(listOfWagers))
+      dispatch(getSortedWagers(listOfWagers));
     }
   };
 };

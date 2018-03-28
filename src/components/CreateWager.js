@@ -79,7 +79,8 @@ class CreateWager extends Component {
         .createWager(
           this.state.minimumBet,
           this.state.leftSide + " vs. " + this.state.rightSide,
-          this.state.description
+          this.state.description,
+          this.state.imageURL
         )
         .send({
           from: accounts[0]
@@ -184,6 +185,14 @@ class CreateWager extends Component {
                     >
                     </textarea>
                   </Form.Field>
+                  <Form.Field>
+                    <label>Provide an image URL:</label>
+                    <Input
+                    value={this.state.imageURL}
+                    onChange={event => this.setState({ imageURL: event.target.value})}
+                    labelPosition='right'
+                    />
+                    </Form.Field>
                   <Message error header="Oops!" content={this.state.errorMessage} />
                   <Button primary>
                     Create!

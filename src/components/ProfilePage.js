@@ -15,7 +15,8 @@ import {
   Grid,
   Button,
   Card,
-  Dropdown
+  Dropdown,
+  Message
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Wager from "../ether/wagers";
@@ -58,7 +59,7 @@ class ProfilePage extends Component {
     });
 
     const inTheseWagers = wagerList.filter(wager => {
-      return wager.side1.concat(wager.side2).indexOf(this.state.metamask) > -1;
+      return (wager.joined).indexOf(this.state.metamask) > -1;
     });
 
     console.log("managed: ", managedWagers);
@@ -95,7 +96,7 @@ class ProfilePage extends Component {
         </Header>
 
 
-        <Grid columns={2}>
+        <Grid columns={2} celled>
           <Grid.Column>
           <Header as='h2' textAlign='centered'>Wagers you are currently managing:</Header>
           <Grid columns={3}>
@@ -133,7 +134,9 @@ class ProfilePage extends Component {
                 <Grid.Column>
                   <br />
                   <br />
-                  <Header as='h3' textAlign='centered'>You are not currently managing any wagers.</Header>
+                  <Message warning>
+                  <Message.Header textAlign='centered'>You are not currently managing any wagers.</Message.Header>
+                  </Message>
                   </Grid.Column>
                   </div>
               )}
@@ -176,7 +179,9 @@ class ProfilePage extends Component {
                 <Grid.Column>
                   <br/>
                   <br/>
-                  <Header as='h3' textAlign='centered'>You are not current participating in any wagers.</Header>
+                  <Message warning>
+                  <Message.Header textAlign='centered'>You are not currently participating in any wagers.</Message.Header>
+                  </Message>
                   </Grid.Column>
                   </div>
               )}
