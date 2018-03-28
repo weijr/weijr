@@ -155,7 +155,7 @@ class AllWagers extends Component {
                             key={wager.address}
                             className="ui segment centered"
                           >
-                            <Image src={wager.imageUrl || basketball} />
+                            <Image src={wager.imageUrl} />
                             <Card.Header />
                             <Link
                               to={`/wagers/${wager.address}`}

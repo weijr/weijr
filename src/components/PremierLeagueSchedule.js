@@ -7,7 +7,7 @@ import history from "../history";
 import store from "../store";
 import { browserHistory } from "react-router";
 import GeneralChat from "./GeneralChat/";
-import basketball from "./basketball.png";
+import soccer from "./soccer.png";
 import NavBar from "./NavBar";
 import HeaderButtons from "./HeaderButtons";
 import {
@@ -25,6 +25,7 @@ import { connect } from "react-redux";
 import App from "./App";
 import { writeMessage } from "../store";
 import axios from "axios";
+import HomeButton from "./HomeButton";
 
 class PremierLeagueSchedule extends Component {
   constructor(props) {
@@ -60,44 +61,30 @@ class PremierLeagueSchedule extends Component {
       );
   }
 
-  onClick = (evt, away, home, date, time) => {
+  onClick = (evt, away, home, date) => {
     evt.preventDefault();
     this.props.history.push({
       pathname: "/new-wager",
       state: {
         away,
         home,
-        date
+        date,
+        logo: 'soccer'
       }
     });
   };
 
-  createContract = event => {
-    event.preventDefault();
-    this.props.history.push("/new-wager");
-  };
-
-  profilePage = event => {
-    event.preventDefault();
-    this.props.history.push("/your-profile");
-  };
-
-  signUp = event => {
-    event.preventDefault();
-    this.props.history.push("/wagers/signup");
+  goHome = event => {
+    this.props.history.push("/wagers");
   };
 
   render() {
     if (this.state.games) {
       return (
         <div>
-          <Segment inverted>
+          <Segment inverted textAlign='center'>
             <NavBar />
-            <HeaderButtons
-              logout={this.logout}
-              createContract={this.createContract}
-              profilePage={this.profilePage}
-            />
+            <HomeButton goHome={this.goHome} />
           </Segment>
           <div className="borderFix">
             <Grid columns={2}>
@@ -114,7 +101,7 @@ class PremierLeagueSchedule extends Component {
                         this.onClick(evt, game.away, game.home, game.date)
                       }
                     >
-                      <Image src={basketball} />
+                      <Image src={soccer} />
                       <Card.Header />
                       {game.away} vs. {game.home}
                       <br />

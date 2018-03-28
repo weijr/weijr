@@ -25,6 +25,8 @@ import { connect } from "react-redux";
 import App from "./App";
 import { writeMessage } from "../store";
 import axios from "axios";
+import HomeButton from './HomeButton'
+
 
 class NBASchedule extends Component {
   constructor(props) {
@@ -36,6 +38,7 @@ class NBASchedule extends Component {
   }
 
   componentDidMount() {
+    console.log(basketball)
     axios
       .get(
         "https://cors-anywhere.herokuapp.com/http://data.nba.net/data/10s/prod/v1/2017/schedule.json"
@@ -64,37 +67,23 @@ class NBASchedule extends Component {
         away,
         home,
         date,
-        time
+        time,
+        logo: 'basketball'
       }
     });
   };
 
-  createContract = event => {
-    event.preventDefault();
-    this.props.history.push("/new-wager");
-  };
-
-  profilePage = event => {
-    event.preventDefault();
-    this.props.history.push("/your-profile");
-  };
-
-  signUp = event => {
-    event.preventDefault();
-    this.props.history.push("/wagers/signup");
+  goHome = event => {
+    this.props.history.push("/wagers");
   };
 
   render() {
     if (this.state.games) {
       return (
         <div>
-          <Segment inverted>
+          <Segment inverted textAlign='center'>
             <NavBar />
-            <HeaderButtons
-              logout={this.logout}
-              createContract={this.createContract}
-              profilePage={this.profilePage}
-            />
+            <HomeButton goHome={this.goHome} />
           </Segment>
           <div className="borderFix">
             <Grid columns={2}>
