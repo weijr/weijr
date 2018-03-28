@@ -11,6 +11,8 @@ import { Header, Icon, Image, Segment, Grid, Button, Card, Dropdown } from 'sema
 import { connect } from "react-redux";
 import Wager from "../ether/wagers";
 import web3 from "../ether/web3";
+import NavBar from './NavBar'
+import HomeButton from './HomeButton'
 
 
 class ProfilePage extends Component {
@@ -43,6 +45,7 @@ class ProfilePage extends Component {
   render() {
     console.log("metamask: ", this.props.currentUser)
     console.log("props: ", this.props.listOfWagers)
+    const headerMessage = "Hello " + auth.currentUser.displayName
 
     const wagerList = this.props.listOfWagers
 
@@ -57,24 +60,9 @@ class ProfilePage extends Component {
     console.log("managed: ", managedWagers)
     return (
       <div>
-        <Segment inverted>
-          <Header as="h2" icon textAlign="center">
-          <i className="ethereum icon circular"></i>
-            <Header.Content>
-              <h2 className="ui blue header">
-                Hello {auth.currentUser.displayName}
-              </h2>
-            </Header.Content>
-            <Header.Content>
-              <Grid columns={4}>
-                <Grid.Column>
-                  <Button className="ui left floated primary button" circular onClick={this.goHome}>
-                    <Icon name="home" circular />
-                  </Button>
-                </Grid.Column>
-              </Grid>
-            </Header.Content>
-          </Header>
+        <Segment inverted textAlign="center">
+        <NavBar message={headerMessage} />
+        <HomeButton goHome={this.goHome} />
         </Segment>
         <h2>
           Wagers you are currently managing:
