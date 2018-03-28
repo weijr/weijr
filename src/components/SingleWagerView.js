@@ -276,7 +276,7 @@ class SingleWagerView extends Component {
             </div>
           </div>
           <Segment inverted textAlign="center">
-            <NavBar message={'Create a Weijr For All'} />
+            <NavBar message={title} />
             <HomeButton goHome={this.goHome} />
           </Segment>
           <div className='borderFix'>

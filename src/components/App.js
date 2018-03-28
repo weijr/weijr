@@ -11,36 +11,56 @@ import web3 from "../ether/web3";
 import GeneralChat from "./GeneralChat/";
 import SingleWagerView from "./SingleWagerView";
 import { setUser } from "../store";
-import { withAlert } from "react-alert";
-import NavBar from "./NavBar";
-import {
-  Header,
-  Icon,
-  Image,
-  Segment,
-  Grid,
-  Button,
-  Card,
-  Form,
-  Checkbox
-} from "semantic-ui-react";
+import { withAlert } from 'react-alert'
+import NavBar from './NavBar'
+import { Header, Icon, Image, Segment, Grid, Button, Card, Form, Checkbox, Message } from 'semantic-ui-react'
 
-const LoginForm = props => (
-  <Grid>
-    <Grid.Row centered>
-      <Form onSubmit={props.login} className="signin">
-        <label>E-mail</label>
-        <input name="email" placeholder="User Name" />
-        <label id="password">Password</label>
-        <input name="password" placeholder="Password" type="password" />
-        <Button type="signUp" onClick={props.goToSignUp}>
-          Sign Up
-        </Button>
-        <Button type="submit">Login</Button>
-      </Form>
-    </Grid.Row>
-  </Grid>
-);
+const LoginForm = (props) => (
+  <div className='login-form'>
+    <style>{`
+      body > div,
+      body > div > div,
+      body > div > div > div.login-form {
+        height: 100%;
+      }
+    `}</style>
+    <Grid
+      textAlign='center'
+      style={{ height: '100%' }}
+
+    >
+      <Grid.Column style={{ maxWidth: 450 }}>
+        <Header as='h2' color='black' textAlign='center'>
+          Log in Below
+        </Header>
+        <Form onSubmit={props.login} size='large'>
+          <Segment stacked>
+            <Form.Input
+              fluid
+              icon='user'
+              iconPosition='left'
+              placeholder='E-mail address'
+              name="email"
+            />
+            <Form.Input
+              fluid
+              icon='lock'
+              iconPosition='left'
+              placeholder='Password'
+              type='password'
+              name="password"
+            />
+
+            <Button type='submit' color='black' fluid size='large'>Login</Button>
+          </Segment>
+        </Form>
+        <Message>
+          New to us? <Link to='/signup'>Sign Up</Link>
+        </Message>
+      </Grid.Column>
+    </Grid>
+  </div>
+)
 
 class App extends Component {
   constructor(props) {
@@ -87,13 +107,9 @@ class App extends Component {
     ) : (
       <div>
         <Segment inverted>
-          <NavBar
-            message={
-              "Please login to continue. Don't Have an account? Sign up for one!"
-            }
-          />
+          <NavBar message={"Please Login to Enter Weijr"} />
         </Segment>
-        <LoginForm goToSignUp={this.goToSignUp} login={this.login} />
+          <LoginForm goToSignUp={this.goToSignUp} login={this.login} />
       </div>
     );
   }
