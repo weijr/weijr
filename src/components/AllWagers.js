@@ -91,7 +91,7 @@ class AllWagers extends Component {
     const wagerList = this.props.listOfWagers;
     if (this.state.currentUser && this.props.listOfWagers) {
       return (
-        <div id="all-wagers">
+        <div>
           <Segment inverted>
             <NavBar />
             <HeaderButtons
