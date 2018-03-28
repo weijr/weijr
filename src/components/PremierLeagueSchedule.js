@@ -69,7 +69,7 @@ class PremierLeagueSchedule extends Component {
         away,
         home,
         date,
-        logo: 'soccer'
+        logo: 'https://image.flaticon.com/icons/svg/53/53283.svg'
       }
     });
   };
