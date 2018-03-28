@@ -1,11 +1,12 @@
 {
-  "name": "yaku-block",
+  "name": "weijr",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "build": "react-scripts build"
   },
   "author": "",
   "license": "ISC",
