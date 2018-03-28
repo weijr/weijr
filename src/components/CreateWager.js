@@ -51,24 +51,20 @@ class CreateWager extends Component {
   componentDidMount() {
     if (this.props.location.state) {
       let arr = [];
-      const dateCode = this.props.location.state.date.toString();
-      arr.push(dateCode.slice(0, 4));
-      arr.push(dateCode.slice(4, 6));
-      arr.push(dateCode.slice(6));
-      const dateStr = Date(arr.join("-"));
       const desc =
         "Game between " +
         this.props.location.state.away +
         " at " +
         this.props.location.state.home +
         " to be played on " +
-        dateStr.slice(0, 15) +
+        this.props.location.state.date +
         " at " +
         this.props.location.state.time;
       this.setState({
         leftSide: this.props.location.state.away,
         rightSide: this.props.location.state.home,
-        description: desc
+        description: desc,
+        imageURL: this.props.location.state.logo
       });
     }
   }
@@ -99,25 +95,6 @@ class CreateWager extends Component {
 
     const wagerName = this.state.leftSide + " vs. " + this.state.rightSide;
 
-    if (this.props.location.state.logo === "soccer") {
-      db
-        .collection("wagers")
-        .doc(wagerName)
-        .collection("image")
-        .add({
-          imageURL: soccer
-        });
-    }
-
-    if (this.props.location.state.logo === "basketball") {
-      db
-        .collection("wagers")
-        .doc(wagerName)
-        .collection("image")
-        .add({
-          imageURL: basketball
-        });
-    } else {
       db
         .collection("wagers")
         .doc(wagerName)
@@ -125,7 +102,6 @@ class CreateWager extends Component {
         .add({
           imageURL: this.state.imageURL
         });
-    }
 
     this.setState({ loading: false });
   };

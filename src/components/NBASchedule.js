@@ -8,8 +8,8 @@ import store from "../store";
 import { browserHistory } from "react-router";
 import GeneralChat from "./GeneralChat/";
 import basketball from "./basketball.png";
-import NavBar from './NavBar'
-import HeaderButtons from './HeaderButtons'
+import NavBar from "./NavBar";
+import HeaderButtons from "./HeaderButtons";
 import {
   Header,
   Icon,
@@ -25,8 +25,7 @@ import { connect } from "react-redux";
 import App from "./App";
 import { writeMessage } from "../store";
 import axios from "axios";
-import HomeButton from './HomeButton'
-
+import HomeButton from "./HomeButton";
 
 class NBASchedule extends Component {
   constructor(props) {
@@ -38,7 +37,7 @@ class NBASchedule extends Component {
   }
 
   componentDidMount() {
-    console.log(basketball)
+    console.log(basketball);
     axios
       .get(
         "https://cors-anywhere.herokuapp.com/http://data.nba.net/data/10s/prod/v1/2017/schedule.json"
@@ -46,10 +45,17 @@ class NBASchedule extends Component {
       .then(obj => {
         let arr = [];
         for (let i = 1196; i < obj.data.league.standard.length; i++) {
+          let dateArr = [];
+          const dateCode = obj.data.league.standard[i].startDateEastern;
+          dateArr.push(dateCode.slice(0, 4));
+          dateArr.push(dateCode.slice(4, 6));
+          dateArr.push(dateCode.slice(6));
+          const dateStr = dateArr.join("-")
+          console.log(dateStr)
           arr.push({
             home: obj.data.league.standard[i].gameUrlCode.slice(9, 12),
             away: obj.data.league.standard[i].gameUrlCode.slice(12),
-            date: obj.data.league.standard[i].startDateEastern,
+            date: dateStr,
             time: obj.data.league.standard[i].startTimeEastern
           });
         }
@@ -68,7 +74,8 @@ class NBASchedule extends Component {
         home,
         date,
         time,
-        logo: 'basketball'
+        logo:
+          "http://icons.iconarchive.com/icons/custom-icon-design/flatastic-10/512/Sport-basketball-icon.png"
       }
     });
   };
@@ -81,7 +88,7 @@ class NBASchedule extends Component {
     if (this.state.games) {
       return (
         <div>
-          <Segment inverted textAlign='center'>
+          <Segment inverted textAlign="center">
             <NavBar />
             <HomeButton goHome={this.goHome} />
           </Segment>
