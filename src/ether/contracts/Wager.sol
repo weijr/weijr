@@ -1,10 +1,10 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.20;
 
 contract WagerFactory {
     address[] public deployedWagers;
 
-    function createWager(uint minimum, string title, string description) public {
-        address newWager = new Wager(minimum, msg.sender, title, description);
+    function createWager(uint minimum, string title, string description, string url) public {
+        address newWager = new Wager(minimum, msg.sender, title, description, url);
         deployedWagers.push(newWager);
     }
 
@@ -22,28 +22,27 @@ contract Wager {
 
   User[] public users;
   address public manager;
-  string public url;
-
-  address[] side1Array;
-  address[] side2Array;
+  address[] joinBetArray;
   uint public side1;
   uint public side2;
   uint public minimumBet;
   string public title;
   bool complete;
   string public description;
+  string public url;
 
 
 
   mapping(address => bool) public alreadyBetting;
 
 
-  function Wager(uint minimum, address creator, string name, string desc) public {
+  function Wager(uint minimum, address creator, string name, string desc, string pic) public {
       manager = creator;
       minimumBet = minimum;
       title = name;
       complete = false;
       description = desc;
+      url = pic;
   }
 
   function joinBet(bool side) public payable {
@@ -54,11 +53,11 @@ contract Wager {
       alreadyBetting[msg.sender] = true;
       if (side) {
         side1++;
-        side1Array.push(msg.sender);
     } else {
         side2++;
-        side1Array.push(msg.sender);
       }
+    joinBetArray.push(msg.sender);
+
   }
 
   function payout(bool winningSide) public {
@@ -86,7 +85,7 @@ contract Wager {
     return users.length;
   }
 
-  function getWagerSummary() public view returns (uint, uint, uint, uint, uint, address, string, bool, string, address[], address[]) {
+  function getWagerSummary() public view returns (uint, uint, uint, uint, uint, address, string, bool, string, address[], string) {
       return (
           minimumBet,
           this.balance,
@@ -97,8 +96,8 @@ contract Wager {
           title,
           complete,
           description,
-          side1Array,
-          side2Array
+          joinBetArray,
+          url
       );
   }
 }

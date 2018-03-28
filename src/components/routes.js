@@ -11,6 +11,7 @@ import ProfilePage from './ProfilePage'
 import DirectChatCreation from './DirectChat/index'
 import GeneralChat from './GeneralChat'
 import NBASchedule from './NBASchedule'
+import PremierLeagueSchedule from './PremierLeagueSchedule';
 import SignUpPage from './SignUpPage';
 
 
@@ -27,7 +28,8 @@ class Routes extends Component {
         <Route exact path="/your-profile" component={ProfilePage} />
         <Route exact path='/newPrivateMessage' component={DirectChatCreation} />
         <Route exact path='/privateChat' component={ GeneralChat } />
-        <Route exact path='/nbaschedule' component={ NBASchedule } />
+        <Route exact path='/nbaSchedule' component={ NBASchedule } />
+        <Route exact path='/eplSchedule' component={ PremierLeagueSchedule } />
         <Redirect from="*" to="/" />
       </Switch>
     )

@@ -10,10 +10,19 @@ import web3 from "../ether/web3";
 import GeneralChat from "./GeneralChat/";
 import SingleWagerView from "./SingleWagerView";
 import basketball from "./basketball.png";
-import { Header, Icon, Image, Segment, Grid, Button, Card, Dropdown } from 'semantic-ui-react'
-import factory from '../ether/factory'
+import {
+  Header,
+  Icon,
+  Image,
+  Segment,
+  Grid,
+  Button,
+  Card,
+  Dropdown
+} from "semantic-ui-react";
+import factory from "../ether/factory";
 import { connect } from "react-redux";
-import App from './App'
+import App from "./App";
 import Wager from "../ether/wagers";
 import NavBar from './NavBar'
 import HeaderButtons from './HeaderButtons'
@@ -28,50 +37,51 @@ class AllWagers extends Component {
     this.state = {
       wager: "",
       listOfWagers: [],
+      wagerURLs: [],
       currentUser: this.props.currentUser
     };
     this.signUp = this.signUp.bind(this);
-    this.logout = this.logout.bind(this)
-    this.onClickSort = this.onClickSort.bind(this)
+    this.logout = this.logout.bind(this);
+    this.onClickSort = this.onClickSort.bind(this);
+    this.getImageFromFB = this.getImageFromFB.bind(this);
   }
 
   componentDidMount() {
-    this.props.fetchAllWagers()
-    console.log("this should be after we in here")
-    this.setState({ listOfWagers: this.props.listOfWagers })
+    this.props.fetchAllWagers();
   }
 
   signUp = event => {
     event.preventDefault();
-    this.props.history.push('/wagers/signup');
-  }
+    this.props.history.push("/wagers/signup");
+  };
 
   logout = () => {
-    auth.signOut()
+    auth
+      .signOut()
       .then(() => {
         this.setState({
           currentUser: ""
-        })
+        });
       })
       .then(() => {
-        this.props.history.push('/')
-      })
-  }
+        this.props.history.push("/");
+      });
+  };
 
-  createContract = (event) => {
-    event.preventDefault()
-    this.props.history.push('/new-wager')
-  }
+  createContract = event => {
+    event.preventDefault();
+    this.props.history.push("/new-wager");
+  };
 
   onClickSort = (event, data) => {
-    event.preventDefault()
-    let listOfWagersSorted = this.props.listOfWagers.slice()
-    let type = data.value.split("-")[0]
-    let order = data.value.split("-")[1] + "-" + data.value.split("-")[2]
-    if (order === 'low-high') {
-      var sortedList = listOfWagersSorted.sort(function (a, b) {
-        return parseInt(a[type]) - parseFloat(b[type])
-      })
+    event.preventDefault();
+    let listOfWagersSorted = this.props.listOfWagers.slice();
+    let type = data.value.split("-")[0];
+    let order = data.value.split("-")[1] + "-" + data.value.split("-")[2];
+    if (order === "low-high") {
+      var sortedList = listOfWagersSorted.sort(function(a, b) {
+        return parseInt(a[type]) - parseFloat(b[type]);
+      });
     } else {
       var sortedList = listOfWagersSorted.sort(function (a, b) {
         return parseInt(b[type]) - parseFloat(a[type])
@@ -80,15 +90,30 @@ class AllWagers extends Component {
     this.props.fetchSortedWagers(sortedList)
   }
 
-  profilePage = (event) => {
+  profilePage = event => {
     event.preventDefault();
-    this.props.history.push("/your-profile")
-  }
+    this.props.history.push("/your-profile");
+  };
 
+  getImageFromFB = async name => {
+    await db
+      .collection("wagers")
+      .doc(name)
+      .collection("image")
+      .onSnapshot(snapshot => {
+        console.log(snapshot);
+        if (snapshot.docs.length) {
+          console.log(snapshot.docs[0].data().imageURL)
+          return snapshot.docs[0].data().imageURL;
+        } else return basketball;
+      });
+  };
 
   render() {
-    var user = auth.currentUser;
+    let index = 0;
+    const user = auth.currentUser;
     const wagerList = this.props.listOfWagers;
+    console.log(wagerList)
     if (this.state.currentUser && this.props.listOfWagers) {
       return (
         <div>
@@ -97,13 +122,14 @@ class AllWagers extends Component {
             <HeaderButtons
               logout={this.logout}
               createContract={this.createContract}
-              profilePage={this.profilePage} />
+              profilePage={this.profilePage}
+              />
           </Segment>
           <div className='borderFix'>
             <DropDownSort onClickSort={this.onClickSort} />
             <Grid columns={2} centered>
               <Grid.Column width="6">
-                <GeneralChat chatType='general' />
+                <GeneralChat chatType="general" />
               </Grid.Column>
               <Grid.Column width="10">
                 <RenderWagers wagerList={wagerList} columns={4} />
@@ -111,35 +137,34 @@ class AllWagers extends Component {
             </Grid>
           </div>
         </div>
-      )
+      );
     } else if (this.state.currentUser) {
-      return (
-        <div>Loading...</div>
-      )
+      return <div>Loading...</div>;
     } else {
-      this.props.history.push('/')
-      return null
+      this.props.history.push("/");
+      return null;
     }
   }
 }
 
-const mapStateToProps = function (state, ownProps) {
+const mapStateToProps = function(state, ownProps) {
   return {
     currentUser: state.user,
     listOfWagers: state.wagers
   };
 };
 
-const mapDispatchToProps = function (dispatch, ownProps) {
+const mapDispatchToProps = function(dispatch, ownProps) {
   return {
     fetchAllWagers() {
-      dispatch(getAllWagers())
+      dispatch(getAllWagers());
     },
     fetchSortedWagers(listOfWagers) {
-      dispatch(getSortedWagers(listOfWagers))
+      dispatch(getSortedWagers(listOfWagers));
     }
-  }
-}
+  };
+};
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AllWagers))
-
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(AllWagers)
+);

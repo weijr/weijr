@@ -34,12 +34,24 @@ Field {
   width: 100%;
 }
 .createWager {
+  margin-left: 28em;
   width: 30%;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .signup {
   width: 18%;
 }
-
+.side-bet {
+  display: flex;
+  width: 30em;
+}
+.side-input {
+  width: 5em;
+}
 #loading-false {
   display: none;
 }

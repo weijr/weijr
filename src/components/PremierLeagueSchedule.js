@@ -7,9 +7,9 @@ import history from "../history";
 import store from "../store";
 import { browserHistory } from "react-router";
 import GeneralChat from "./GeneralChat/";
-import basketball from "./basketball.png";
-import NavBar from './NavBar'
-import HeaderButtons from './HeaderButtons'
+import soccer from "./soccer.png";
+import NavBar from "./NavBar";
+import HeaderButtons from "./HeaderButtons";
 import {
   Header,
   Icon,
@@ -25,10 +25,9 @@ import { connect } from "react-redux";
 import App from "./App";
 import { writeMessage } from "../store";
 import axios from "axios";
-import HomeButton from './HomeButton'
+import HomeButton from "./HomeButton";
 
-
-class NBASchedule extends Component {
+class PremierLeagueSchedule extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,28 +37,31 @@ class NBASchedule extends Component {
   }
 
   componentDidMount() {
-    console.log(basketball)
     axios
       .get(
-        "https://cors-anywhere.herokuapp.com/http://data.nba.net/data/10s/prod/v1/2017/schedule.json"
+        "https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/openfootball/football.json/master/2017-18/en.1.json"
       )
       .then(obj => {
         let arr = [];
-        for (let i = 1196; i < obj.data.league.standard.length; i++) {
-          arr.push({
-            home: obj.data.league.standard[i].gameUrlCode.slice(9, 12),
-            away: obj.data.league.standard[i].gameUrlCode.slice(12),
-            date: obj.data.league.standard[i].startDateEastern,
-            time: obj.data.league.standard[i].startTimeEastern
+        for (let i = 32; i < 38; i++) {
+          obj.data.rounds[i].matches.forEach(match => {
+            arr.push({
+              home: match.team1.name,
+              away: match.team2.name,
+              date: match.date
+            });
           });
         }
+        return arr;
+      })
+      .then(arr =>
         this.setState({
           games: arr
-        });
-      });
+        })
+      );
   }
 
-  onClick = (evt, away, home, date, time) => {
+  onClick = (evt, away, home, date) => {
     evt.preventDefault();
     this.props.history.push({
       pathname: "/new-wager",
@@ -67,8 +69,7 @@ class NBASchedule extends Component {
         away,
         home,
         date,
-        time,
-        logo: 'basketball'
+        logo: 'soccer'
       }
     });
   };
@@ -97,22 +98,14 @@ class NBASchedule extends Component {
                       key={game.id}
                       className="ui segment centered"
                       onClick={evt =>
-                        this.onClick(
-                          evt,
-                          game.away,
-                          game.home,
-                          game.date,
-                          game.time
-                        )
+                        this.onClick(evt, game.away, game.home, game.date)
                       }
                     >
-                      <Image src={basketball} />
+                      <Image src={soccer} />
                       <Card.Header />
                       {game.away} vs. {game.home}
                       <br />
                       {game.date}
-                      <br />
-                      {game.time}
                       <br />
                     </Card>
                   </Grid.Column>
@@ -128,4 +121,4 @@ class NBASchedule extends Component {
   }
 }
 
-export default withRouter(NBASchedule);
+export default withRouter(PremierLeagueSchedule);

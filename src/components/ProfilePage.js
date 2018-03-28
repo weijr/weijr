@@ -15,13 +15,14 @@ import {
   Grid,
   Button,
   Card,
-  Dropdown
+  Dropdown,
+  Message
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Wager from "../ether/wagers";
 import web3 from "../ether/web3";
-import NavBar from './NavBar'
-import HomeButton from './HomeButton'
+import NavBar from "./NavBar";
+import HomeButton from "./HomeButton";
 import RenderWagers from "./RenderWagers";
 
 class ProfilePage extends Component {
@@ -51,7 +52,6 @@ class ProfilePage extends Component {
   }
 
   render() {
-    const headerMessage = "Hello " + auth.currentUser.displayName
     const wagerList = this.props.listOfWagers;
 
     const managedWagers = wagerList.filter(wager => {
@@ -59,58 +59,73 @@ class ProfilePage extends Component {
     });
 
     const inTheseWagers = wagerList.filter(wager => {
-      return wager.side1.concat(wager.side2).indexOf(this.state.metamask) > -1;
+      return wager.joined.indexOf(this.state.metamask) > -1;
     });
+    if (this.props.currentUser) {
+      return (
+        <div>
+          <Segment inverted textAlign="center">
+            <NavBar message={"Hello " + auth.currentUser.displayName} />
+            <HomeButton goHome={this.goHome} />
+          </Segment>
 
-    return (
-      <div>
-        <Segment inverted textAlign="center">
-          <NavBar message={headerMessage} />
-          <HomeButton goHome={this.goHome} />
-        </Segment>
+          <Header as="h1" icon textAlign="center">
+            <Icon name="hourglass half" circular />
+            <Header.Content>Wager Status</Header.Content>
+          </Header>
 
-        <Header as="h1" icon textAlign="center">
-          <Icon name="hourglass half" circular />
-          <Header.Content>Wager Status</Header.Content>
-        </Header>
-
-        <Grid columns={2}>
-          <Grid.Column>
-            <Header as='h2' textAlign='centered'>Wagers you are currently managing:</Header>
-            {managedWagers.length ? (
-              <RenderWagers wagerList={managedWagers} columns={3} />
-            ) : (
+          <Grid columns={2} celled>
+            <Grid.Column>
+              <Header as="h2" textAlign="centered">
+                Wagers you are currently managing:
+              </Header>
+              {managedWagers.length ? (
+                <RenderWagers wagerList={managedWagers} columns={3} />
+              ) : (
                 <div>
                   <Grid.Column />
                   <Grid.Column>
-                    <br /><br />
-                    <Header as='h3' textAlign='centered'>You are not currently managing any wagers.</Header>
+                    <br />
+                    <br />
+                    <Header as="h3" textAlign="centered">
+                      You are not currently managing any wagers.
+                    </Header>
                   </Grid.Column>
                 </div>
               )}
-          </Grid.Column>
-          <Grid.Column>
-            <Header as='h2' textAlign='centered'>Wagers you are currently participating in:</Header>
-            {inTheseWagers.length ? (
-              <RenderWagers wagerList={inTheseWagers} columns={3} />
-            ) : (
+            </Grid.Column>
+            <Grid.Column>
+              <Header as="h2" textAlign="centered">
+                Wagers you are currently participating in:
+              </Header>
+              {inTheseWagers.length ? (
+                <RenderWagers wagerList={inTheseWagers} columns={3} />
+              ) : (
                 <div>
                   <Grid.Column />
                   <Grid.Column>
-                    <br /><br />
-                    <Header as='h3' textAlign='centered'>You are not current participating in any wagers.</Header>
+                    <br />
+                    <br />
+                    <Message warning>
+                      <Message.Header textAlign="centered">
+                        You are not currently participating in any wagers.
+                      </Message.Header>
+                    </Message>
                   </Grid.Column>
                 </div>
               )}
-          </Grid.Column>
-        </Grid>
-      </div>
-    );
+            </Grid.Column>
+          </Grid>
+        </div>
+      );
+    } else {
+      this.props.history.push("/");
+      return null;
+    }
   }
 }
 
-
-const mapStateToProps = function (state, ownProps) {
+const mapStateToProps = function(state, ownProps) {
   return {
     currentUser: state.user,
     listOfWagers: state.wagers

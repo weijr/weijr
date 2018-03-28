@@ -26,8 +26,8 @@ export function getAllWagers() {
           complete: wagerObj[7],
           description: wagerObj[8],
           manager: wagerObj[5],
-          side1: wagerObj[9],
-          side2: wagerObj[10]
+          joined: wagerObj[9],
+          imageUrl: wagerObj[10]
         }
         console.log(wagerInfo.complete)
         return wagerInfo
