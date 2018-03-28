@@ -8,6 +8,8 @@ import store from "../store";
 import { browserHistory } from "react-router";
 import GeneralChat from "./GeneralChat/";
 import basketball from "./basketball.png";
+import NavBar from './NavBar'
+import HeaderButtons from './HeaderButtons'
 import {
   Header,
   Icon,
@@ -49,8 +51,9 @@ class NBASchedule extends Component {
           });
         }
         this.setState({
-          games: arr })
-      })
+          games: arr
+        });
+      });
   }
 
   onClick = (evt, away, home, date, time) => {
@@ -66,43 +69,72 @@ class NBASchedule extends Component {
     });
   };
 
+  createContract = event => {
+    event.preventDefault();
+    this.props.history.push("/new-wager");
+  };
+
+  profilePage = event => {
+    event.preventDefault();
+    this.props.history.push("/your-profile");
+  };
+
+  signUp = event => {
+    event.preventDefault();
+    this.props.history.push("/wagers/signup");
+  };
+
   render() {
     if (this.state.games) {
       return (
-            <Grid columns={4}>
-              {this.state.games.map(game => (
-                <Grid.Column width="4">
-                  <Card
-                    key={game.id}
-                    className="ui segment centered"
-                    onClick={(evt) =>
-                      this.onClick(
-                        evt,
-                        game.away,
-                        game.home,
-                        game.date,
-                        game.time
-                      )
-                    }
-                  >
-                    <Image src={basketball} />
-                    <Card.Header />
-                    {game.away} vs. {game.home}
-                    <br />
-                    {game.date}
-                    <br />
-                    {game.time}
-                    <br />
-                  </Card>
-                </Grid.Column>
-              ))}
+        <div>
+          <Segment inverted>
+            <NavBar />
+            <HeaderButtons
+              logout={this.logout}
+              createContract={this.createContract}
+              profilePage={this.profilePage}
+            />
+          </Segment>
+          <div className="borderFix">
+            <Grid columns={2}>
+              <Grid.Column width="6">
+                <GeneralChat chatType="general" />
+              </Grid.Column>
+              <Grid columns={4}>
+                {this.state.games.map(game => (
+                  <Grid.Column width="4">
+                    <Card
+                      key={game.id}
+                      className="ui segment centered"
+                      onClick={evt =>
+                        this.onClick(
+                          evt,
+                          game.away,
+                          game.home,
+                          game.date,
+                          game.time
+                        )
+                      }
+                    >
+                      <Image src={basketball} />
+                      <Card.Header />
+                      {game.away} vs. {game.home}
+                      <br />
+                      {game.date}
+                      <br />
+                      {game.time}
+                      <br />
+                    </Card>
+                  </Grid.Column>
+                ))}
+              </Grid>
             </Grid>
+          </div>
+        </div>
       );
     } else if (this.state.currentUser) {
       return <div>Loading...</div>;
-    } else {
-      this.props.history.push("/");
-      return null;
     }
   }
 }

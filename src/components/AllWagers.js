@@ -24,8 +24,27 @@ import factory from "../ether/factory";
 import { connect } from "react-redux";
 import App from "./App";
 import Wager from "../ether/wagers";
+import NavBar from './NavBar'
+import HeaderButtons from './HeaderButtons'
 import { writeMessage } from "../store";
 
+const DropDownSort = () => {
+  return (
+    <Grid columns={5}>
+      <Grid.Column></Grid.Column><Grid.Column></Grid.Column><Grid.Column></Grid.Column><Grid.Column></Grid.Column>
+      <Grid.Column>
+        <Dropdown text='Sort By' icon='filter' floating labeled button className='icon'>
+          <Dropdown.Menu>
+            <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Ante: Low-High' value="ante-low-high" onClick={this.onClickSort} />
+            <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Ante: High-Low' value="ante-high-low" onClick={this.onClickSort} />
+            <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Pot Size: Low-High' value="pot-low-high" onClick={this.onClickSort} />
+            <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Pot Size: High-Low' value="pot-high-low" onClick={this.onClickSort} />
+          </Dropdown.Menu>
+        </Dropdown>
+      </Grid.Column>
+    </Grid>
+  )
+}
 class AllWagers extends Component {
   constructor(props) {
     super(props);
@@ -43,14 +62,6 @@ class AllWagers extends Component {
 
   componentDidMount() {
     this.props.fetchAllWagers();
-    // const completeWagers = this.props.listOfWagers;
-    // const allWagers = await Promise.all(
-    //   completeWagers.map(async wager => {
-    //     const image = await this.getImageFromFB(wager.title)
-    //     return Object.assign({}, wager, {
-    //       imageURL: image
-    //     });
-    //   });
   }
 
   signUp = event => {
@@ -86,12 +97,12 @@ class AllWagers extends Component {
         return parseInt(a[type]) - parseFloat(b[type]);
       });
     } else {
-      var sortedList = listOfWagersSorted.sort(function(a, b) {
-        return parseInt(b[type]) - parseFloat(a[type]);
-      });
+      var sortedList = listOfWagersSorted.sort(function (a, b) {
+        return parseInt(b[type]) - parseFloat(a[type])
+      })
     }
-    this.props.fetchSortedWagers(sortedList);
-  };
+    this.props.fetchSortedWagers(sortedList)
+  }
 
   profilePage = event => {
     event.preventDefault();
@@ -121,96 +132,15 @@ class AllWagers extends Component {
       return (
         <div>
           <Segment inverted>
-            <Header inverted as="h2" icon textAlign="center">
-              <i className="ethereum icon circular" />
-              <Header.Content>
-                <h2 className="ui blue header">Welcome 2 Wagr</h2>
-              </Header.Content>
-              <Grid columns={3}>
-                <Grid.Column>
-                  <Header.Content>
-                    <Button
-                      className="primary button"
-                      circular
-                      onClick={this.logout}
-                    >
-                      Logout
-                    </Button>
-                  </Header.Content>
-                </Grid.Column>
-                <Grid.Column>
-                  <Header.Content>
-                    <Button
-                      className="primary button"
-                      circular
-                      onClick={this.createContract}
-                    >
-                      Create a new Contract
-                    </Button>
-                  </Header.Content>
-                </Grid.Column>
-                <Grid.Column>
-                  <Header.Content>
-                    <Button
-                      className="primary button"
-                      circular
-                      onClick={this.profilePage}
-                    >
-                      Profile Page
-                    </Button>
-                  </Header.Content>
-                </Grid.Column>
-              </Grid>
-            </Header>
+            <NavBar />
+            <HeaderButtons
+              logout={this.logout}
+              createContract={this.createContract}
+              profilePage={this.profilePage}
+              />
           </Segment>
-          <div className="borderFix">
-            <Grid columns={5}>
-              <Grid.Column />
-              <Grid.Column />
-              <Grid.Column>
-                <h3>Wagrs Below</h3>
-              </Grid.Column>
-              <Grid.Column />
-              <Grid.Column>
-                <Dropdown
-                  text="Filter"
-                  icon="filter"
-                  floating
-                  labeled
-                  button
-                  className="icon"
-                >
-                  <Dropdown.Menu>
-                    <Dropdown.Header icon="tags" content="Filter by tag" />
-                    <Dropdown.Divider />
-                    <Dropdown.Item
-                      label={{ color: "red", empty: true, circular: true }}
-                      text="Ante: Low-High"
-                      value="ante-low-high"
-                      onClick={this.onClickSort}
-                    />
-                    <Dropdown.Item
-                      label={{ color: "blue", empty: true, circular: true }}
-                      text="Ante: High-Low"
-                      value="ante-high-low"
-                      onClick={this.onClickSort}
-                    />
-                    <Dropdown.Item
-                      label={{ color: "red", empty: true, circular: true }}
-                      text="Pot Size: Low-High"
-                      value="pot-low-high"
-                      onClick={this.onClickSort}
-                    />
-                    <Dropdown.Item
-                      label={{ color: "blue", empty: true, circular: true }}
-                      text="Pot Size: High-Low"
-                      value="pot-high-low"
-                      onClick={this.onClickSort}
-                    />
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Grid.Column>
-            </Grid>
+          <div className='borderFix'>
+            <DropDownSort />
             <Grid columns={2}>
               <Grid.Column width="6">
                 <GeneralChat chatType="general" />
