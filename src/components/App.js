@@ -13,59 +13,33 @@ import SingleWagerView from "./SingleWagerView";
 import { setUser } from "../store";
 import { withAlert } from 'react-alert'
 import NavBar from './NavBar'
+import LoginForm from './LoginForm'
 import { Header, Icon, Image, Segment, Grid, Button, Card, Form, Checkbox, Message } from 'semantic-ui-react'
 
-const LoginForm = (props) => (
-  <div className='login-form'>
-    <style>{`
-      body > div,
-      body > div > div,
-      body > div > div > div.login-form {
-        height: 100%;
-      }
-    `}</style>
-    <Grid
-      textAlign='center'
-      style={{ height: '100%' }}
-
-    >
-      <Grid.Column style={{ maxWidth: 450 }}>
-        <Header as='h2' color='black' textAlign='center'>
-          Log in Below
-        </Header>
-        <Form onSubmit={props.login} size='large'>
-          <Segment stacked>
-            <Form.Input
-              fluid
-              icon='user'
-              iconPosition='left'
-              placeholder='E-mail address'
-              name="email"
-            />
-            <Form.Input
-              fluid
-              icon='lock'
-              iconPosition='left'
-              placeholder='Password'
-              type='password'
-              name="password"
-            />
-
-            <Button type='submit' color='black' fluid size='large'>Login</Button>
-          </Segment>
-        </Form>
-        <Message>
-          New to us? <Link to='/signup'>Sign Up</Link>
-        </Message>
-      </Grid.Column>
-    </Grid>
-  </div>
-)
 
 class App extends Component {
   constructor(props) {
     super(props);
   }
+
+  noMetamask = () => {
+    return (
+      <div>
+        <Segment inverted>
+          <NavBar message={""} />
+        </Segment>
+        <div class="ui one column stackable center aligned page grid">
+          <div class="column twelve wide">
+            <h2>
+              Please install MetaMask chrome extension to view our website!
+          </h2>
+            <h3>Visit https://metamask.io/ for more info.</h3>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
 
   login = async event => {
     event.preventDefault();
@@ -81,47 +55,30 @@ class App extends Component {
     }
   };
 
-  goToSignUp = event => {
-    this.props.history.push("/signup");
-    console.log(web3._provider.host);
-  };
-
-  noMet;
-
   render() {
     return web3._provider.host ===
       "https://rinkeby.infura.io/orDImgKRzwNrVCDrAk5Q" ? (
-      <div>
-        <Segment inverted>
-          <NavBar message={""} />
-        </Segment>
-        <div class="ui one column stackable center aligned page grid">
-          <div class="column twelve wide">
-            <h2>
-              Please install MetaMask chrome extension to view our website!
-            </h2>
-            <h3>Visit https://metamask.io/ for more info.</h3>
-          </div>
+        <div>
+          { this.noMetamask() }
         </div>
-      </div>
-    ) : (
-      <div>
-        <Segment inverted>
-          <NavBar message={"Please Login to Enter Weijr"} />
-        </Segment>
-          <LoginForm goToSignUp={this.goToSignUp} login={this.login} />
-      </div>
-    );
+      ) : (
+        <div>
+          <Segment inverted>
+            <NavBar message={"Please Login to Enter Weijr"} />
+          </Segment>
+          <LoginForm login={this.login} />
+        </div>
+      );
   }
 }
 
-const mapStateToProps = function(state, ownProps) {
+const mapStateToProps = function (state, ownProps) {
   return {
     currentUser: state.user
   };
 };
 
-const mapDispatchToProps = function(dispatch, ownProps) {
+const mapDispatchToProps = function (dispatch, ownProps) {
   return {
     setUser(user) {
       dispatch(setUser(user));
