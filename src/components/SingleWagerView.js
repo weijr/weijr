@@ -50,8 +50,7 @@ class SingleWagerView extends Component {
     this.goHome = this.goHome.bind(this);
     this.renderCards = this.renderCards.bind(this);
     this.betSide = this.betSide.bind(this);
-    this.paySideOne = this.paySideOne.bind(this);
-    this.paySideTwo = this.paySideTwo.bind(this);
+    this.paySide = this.paySide.bind(this);
   }
 
   async componentDidMount() {
@@ -86,7 +85,55 @@ class SingleWagerView extends Component {
     this.props.history.push("/wagers");
   };
 
-  renderPayoutButton() {
+  renderLoader = loading => {
+    return (
+      <div id={ loading } className="ui active dimmer">
+        <div className="ui large text loader">
+          <p className="loading-text" >This Honestly Takes A Long Time! Be Patient! Don't Leave The Page!
+            </p>
+        </div>
+      </div>
+    )
+  }
+
+  renderCards = () => {
+    const items = [
+      {
+        header: `The Current Pot is ${web3.utils.fromWei(
+          this.state.pot,
+          "ether"
+        )} ether!`,
+        meta: this.state.title,
+        description: `There are ${
+          this.state.totalUsers
+          } people invovled in this Wagr! Place Your Bets Below!`
+      }
+    ];
+    return <Card.Group items={items} />;
+  }
+
+  renderBetButtons = () => {
+    return (
+      <div>
+        <Button as='div' labelPosition='right'>
+          <Button color='red' value={this.state.sideOne} onClick={(event) => this.betSide(event, true)}>
+            <Icon name='ethereum' />
+            {this.state.leftSide}
+          </Button>
+          <Label as='a' basic color='red' pointing='left'>{this.state.sideOne}  Bets Placed</Label>
+        </Button>
+        <Button as='div' labelPosition='right'>
+          <Button color='blue' value={this.state.sideTwo} onClick={(event) => this.betSide(event, false)}>
+            <Icon name='ethereum' />
+            {this.state.rightSide}
+          </Button>
+          <Label as='a' basic color='blue' pointing='left'>{this.state.sideTwo}  Bets Placed</Label>
+        </Button>
+      </div>
+    )
+  }
+
+  renderPayoutButton = () => {
     if (this.state.accounts.includes(this.state.manager)) {
       return (
         <div>
@@ -101,8 +148,6 @@ class SingleWagerView extends Component {
     }
   }
 
-  
-
   async paySide(event, bool) {
     event.preventDefault();
     const wager = Wager(this.props.match.params.address);
@@ -114,40 +159,24 @@ class SingleWagerView extends Component {
         errorMessage: "You're Not The Manager Of This Weijr!",
         error: ""
       });
-      } else {
-        const wager = Wager(this.props.match.params.address);
+    } else {
+      const wager = Wager(this.props.match.params.address);
 
-        this.setState({ loading: true, errorMessage: "" });
-        try {
-          await wager.methods.payout(bool).send({
-            from: manager
-          });
-          this.setState({ error: "" });
-        } catch (err) {
-          this.setState({
-            errorMessage: "You're Not The Manager Of This Weijr!",
-            error: ""
-          });
-        }
-        this.props.history.push("/wagers");
+      this.setState({ loading: true, errorMessage: "" });
+      try {
+        await wager.methods.payout(bool).send({
+          from: manager
+        });
+        this.setState({ error: "" });
+      } catch (err) {
+        this.setState({
+          errorMessage: "You're Not The Manager Of This Weijr!",
+          error: ""
+        });
       }
+      this.props.history.push("/wagers");
+    }
     this.setState({ loading: false });
-  }
-
-  renderCards() {
-    const items = [
-      {
-        header: `The Current Pot is ${web3.utils.fromWei(
-          this.state.pot,
-          "ether"
-        )} ether!`,
-        meta: this.state.title,
-        description: `There are ${
-          this.state.totalUsers
-        } people invovled in this Wagr! Place Your Bets Below!`
-      }
-    ];
-    return <Card.Group items={items} />;
   }
 
   async betSide(event, bool) {
@@ -197,12 +226,7 @@ class SingleWagerView extends Component {
     if (this.state.currentUser) {
       return this.state.manager === "" ? null : (
         <div>
-          <div id={loading} className="ui active dimmer">
-            <div className="ui large text loader">
-              <p className="loading-text" >This Honestly Takes A Long Time! Be Patient! Don't Leave The Page!
-            </p>
-            </div>
-          </div>
+          { this.renderLoader(loading) }
           <Segment inverted textAlign="center">
             <NavBar message={title} />
             <HomeButton goHome={this.goHome} />
@@ -219,21 +243,9 @@ class SingleWagerView extends Component {
                   </div>
                 </Grid.Row>
                 <Grid.Row>
-                  <Button as='div' labelPosition='right'>
-                    <Button color='red' value={this.state.sideOne} onClick={(event) => this.betSide(event, true)}>
-                      <Icon name='ethereum' />
-                      {this.state.leftSide}
-                    </Button>
-                    <Label as='a' basic color='red' pointing='left'>{this.state.sideOne}  Bets Placed</Label>
-                  </Button>
-                  <br />
-                  <Button as='div' labelPosition='right'>
-                    <Button color='blue' value={this.state.sideTwo} onClick={(event) => this.betSide(event, false)}>
-                      <Icon name='ethereum' />
-                      {this.state.rightSide}
-                    </Button>
-                    <Label as='a' basic color='blue' pointing='left'>{this.state.sideTwo}  Bets Placed</Label>
-                  </Button>
+                  <div>
+                    {this.renderBetButtons()}
+                  </div>
                   <Grid.Column width={6} />
                 </Grid.Row>
                 <div className="ui raised segment">
@@ -252,7 +264,6 @@ class SingleWagerView extends Component {
       this.props.history.push('/')
       return null
     }
-
   }
 }
 
