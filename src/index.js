@@ -12,6 +12,7 @@ import store from './store'
 import 'semantic-ui-css/semantic.min.css';
 
 
+
 const history = process.env.NODE_ENV === 'test' ? createMemoryHistory() : createHistory()
 
 const options = {
