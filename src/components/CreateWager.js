@@ -109,13 +109,16 @@ class CreateWager extends Component {
               <NavBar message={"Create a Weijr For All"} />
               <HomeButton goHome={this.goHome} />
             </Segment>
-            <div classname="borderFix">
+         
               <Form
+              style={{margin:0}}
+              id="new-form"
                 textAlign="center"
                 className="createWager"
                 onSubmit={this.onSubmit}
                 error={!!this.state.errorMessage}
               >
+              <div className="field-container">
                 <Form.Field className="form-field">
                   <h3>What's The Name Of Your Wagr</h3>
                   <div className="fields">
@@ -190,8 +193,9 @@ class CreateWager extends Component {
                 <div className="form-field">
                   <Button primary>Create!</Button>
                 </div>
+                </div>
               </Form>
-            </div>
+         
           </div>
         </div>
       );

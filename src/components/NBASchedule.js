@@ -30,12 +30,7 @@ class NBASchedule extends Component {
           dateArr.push(dateCode.slice(0, 4));
           dateArr.push(dateCode.slice(4, 6));
           dateArr.push(dateCode.slice(6));
-<<<<<<< HEAD
-          const dateStr = dateArr.join("-");
-          console.log(dateStr);
-=======
           const dateStr = dateArr.join("-")
->>>>>>> 806332caf30eabd62a3f23768460eac044650d43
           arr.push({
             home: obj.data.league.standard[i].gameUrlCode.slice(9, 12),
             away: obj.data.league.standard[i].gameUrlCode.slice(12),

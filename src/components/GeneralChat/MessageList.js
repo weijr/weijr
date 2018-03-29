@@ -1,11 +1,6 @@
 import React, { Component } from "react";
-<<<<<<< HEAD
 import { withRouter } from "react-router-dom";
 import { db } from "../../fire/firestore";
-=======
-import { Switch, Route, Link, withRouter } from "react-router-dom";
-import { db, auth, userById } from "../../fire/firestore";
->>>>>>> 806332caf30eabd62a3f23768460eac044650d43
 import { connect } from "react-redux";
 import Message from "./Message";
 import { Comment } from "semantic-ui-react";
