@@ -1,11 +1,8 @@
 import React, { Component } from "react";
-import { Switch, Route, Link, withRouter } from "react-router-dom";
-import firebase, { db, auth } from "../../fire/firestore";
+import { withRouter } from "react-router-dom";
+import { db, auth } from "../../fire/firestore";
 import { connect } from "react-redux";
-import logo from "../../logo.svg";
-import { Form, Button, Segment } from "semantic-ui-react";
-import MessageList from "../GeneralChat/MessageList";
-import NewMessageEntry from "../GeneralChat/NewMessageEntry";
+import { Form, Button } from "semantic-ui-react";
 import { addRecipient } from "../../store";
 import NavBar from "../NavBar";
 import HomeButton from "../HomeButton";

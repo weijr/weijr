@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom'
-import { connect, Provider } from 'react-redux';
 import AllWagers from './AllWagers';
 import App from './App'
 import SingleWagerView from './SingleWagerView';

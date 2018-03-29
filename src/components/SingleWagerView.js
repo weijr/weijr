@@ -1,18 +1,12 @@
 import React, { Component } from "react";
 import "./App.css";
-import App from "./App";
-import { Switch, Route, Link, withRouter } from "react-router-dom";
-import { db, auth, userName } from "../fire/firestore";
+import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { postMssage, writeMessage } from "../store";
 import GeneralChat from "./GeneralChat/index";
-import WagerComponent from "./WagerComponent";
-import NavBar from './NavBar'
-import HomeButton from './HomeButton'
+import NavBar from "./NavBar";
+import HomeButton from "./HomeButton";
 import {
-  Header,
   Icon,
-  Image,
   Segment,
   Grid,
   Button,
@@ -30,14 +24,12 @@ class SingleWagerView extends Component {
     this.state = {
       messages: [],
       address: this.props.match.params.address,
-      currentUser: "",
       minimumBet: "",
       pot: "",
       totalUsers: "",
       sideOne: "",
       sideTwo: "",
       manager: "",
-      currentUser: this.props.currentUser,
       loading: false,
       leftSide: "",
       rightSide: "",
@@ -87,14 +79,15 @@ class SingleWagerView extends Component {
 
   renderLoader = loading => {
     return (
-      <div id={ loading } className="ui active dimmer">
+      <div id={loading} className="ui active dimmer">
         <div className="ui large text loader">
-          <p className="loading-text" >This Honestly Takes A Long Time! Be Patient! Don't Leave The Page!
-            </p>
+          <p className="loading-text">
+            This Honestly Takes A Long Time! Be Patient! Don't Leave The Page!
+          </p>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   renderCards = () => {
     const items = [
@@ -106,47 +99,59 @@ class SingleWagerView extends Component {
         meta: this.state.title,
         description: `There are ${
           this.state.totalUsers
-          } people invovled in this Wagr! Place Your Bets Below!`
+        } people invovled in this Wagr! Place Your Bets Below!`
       }
     ];
     return <Card.Group items={items} />;
-  }
+  };
 
   renderBetButtons = () => {
     return (
       <div>
-        <Button as='div' labelPosition='right'>
-          <Button color='red' value={this.state.sideOne} onClick={(event) => this.betSide(event, true)}>
-            <Icon name='ethereum' />
+        <Button as="div" labelPosition="right">
+          <Button
+            color="red"
+            value={this.state.sideOne}
+            onClick={event => this.betSide(event, true)}
+          >
+            <Icon name="ethereum" />
             {this.state.leftSide}
           </Button>
-          <Label as='a' basic color='red' pointing='left'>{this.state.sideOne}  Bets Placed</Label>
+          <Label as="a" basic color="red" pointing="left">
+            {this.state.sideOne} Bets Placed
+          </Label>
         </Button>
-        <Button as='div' labelPosition='right'>
-          <Button color='blue' value={this.state.sideTwo} onClick={(event) => this.betSide(event, false)}>
-            <Icon name='ethereum' />
+        <Button as="div" labelPosition="right">
+          <Button
+            color="blue"
+            value={this.state.sideTwo}
+            onClick={event => this.betSide(event, false)}
+          >
+            <Icon name="ethereum" />
             {this.state.rightSide}
           </Button>
-          <Label as='a' basic color='blue' pointing='left'>{this.state.sideTwo}  Bets Placed</Label>
+          <Label as="a" basic color="blue" pointing="left">
+            {this.state.sideTwo} Bets Placed
+          </Label>
         </Button>
       </div>
-    )
-  }
+    );
+  };
 
   renderPayoutButton = () => {
     if (this.state.accounts.includes(this.state.manager)) {
       return (
         <div>
-          <Button onClick={(event) => this.paySideOne(event, true)}>
+          <Button onClick={event => this.paySideOne(event, true)}>
             {this.state.leftSide} Won!
           </Button>
-          <Button onClick={(event) => this.paySideTwo(event, false)}>
+          <Button onClick={event => this.paySideTwo(event, false)}>
             {this.state.rightSide} Won!
           </Button>
         </div>
       );
     }
-  }
+  };
 
   async paySide(event, bool) {
     event.preventDefault();
@@ -185,8 +190,8 @@ class SingleWagerView extends Component {
     const accounts = await web3.eth.getAccounts();
     const summaryCheck = await wager.methods.getWagerSummary().call();
     const arrayOfParticipants = summaryCheck[9];
-    const check = arrayOfParticipants.includes(accounts[0])
-    if (check || (accounts[0] === summaryCheck[5])) {
+    const check = arrayOfParticipants.includes(accounts[0]);
+    if (check || accounts[0] === summaryCheck[5]) {
       this.setState({
         errorMessage:
           "You Either Don't Have Enough Ether Or You May Have Already Bet In This Weijr! You Might Even Be The Manager Of This Weijr! No Cheating!",
@@ -219,55 +224,53 @@ class SingleWagerView extends Component {
   }
 
   render() {
-    let email;
-    let loading = this.state.loading ? "loading" : "loading-false"
-    const title = this.state.leftSide + " vs. " + this.state.rightSide
+    let loading = this.state.loading ? "loading" : "loading-false";
+    const title = this.state.leftSide + " vs. " + this.state.rightSide;
 
     if (this.state.currentUser) {
       return this.state.manager === "" ? null : (
         <div>
-          { this.renderLoader(loading) }
+          {this.renderLoader(loading)}
           <Segment inverted textAlign="center">
             <NavBar message={title} />
             <HomeButton goHome={this.goHome} />
           </Segment>
-          <div className='borderFix'>
+          <div className="borderFix">
             <Grid columns={2}>
               <Grid.Column width={9}>
                 <GeneralChat wager={this.state.title} chatType="wager" />
               </Grid.Column>
               <Grid.Column width={7} className="ui centered grid">
                 <Grid.Row>
-                  <div>
-                    {this.renderCards()}
-                  </div>
+                  <div>{this.renderCards()}</div>
                 </Grid.Row>
                 <Grid.Row>
-                  <div>
-                    {this.renderBetButtons()}
-                  </div>
+                  <div>{this.renderBetButtons()}</div>
                   <Grid.Column width={6} />
                 </Grid.Row>
                 <div className="ui raised segment">
-                  <p>
-                    {this.state.description}
-                  </p>
+                  <p>{this.state.description}</p>
                 </div>
                 {this.renderPayoutButton()}
-                <Message id={`${this.state.error}`} error header="Oops!" content={this.state.errorMessage} />
+                <Message
+                  id={`${this.state.error}`}
+                  error
+                  header="Oops!"
+                  content={this.state.errorMessage}
+                />
               </Grid.Column>
             </Grid>
           </div>
         </div>
-      )
+      );
     } else {
-      this.props.history.push('/')
-      return null
+      this.props.history.push("/");
+      return null;
     }
   }
 }
 
-const mapStateToProps = function (state, ownProps) {
+const mapStateToProps = function(state, ownProps) {
   return {
     currentUser: state.user
   };

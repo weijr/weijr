@@ -34,8 +34,15 @@ Field {
   width: 100%;
 }
 .createWager {
-  margin-left: 28em;
-  width: 30%;
+  margin:3em 0 0 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.field-container{
+  width: 30em;  
 }
 .form-field {
   display: flex;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Segment, Header, Icon } from 'semantic-ui-react'
+import { Header } from 'semantic-ui-react'
 
 const NavBar = ({ message }) => {
   return (

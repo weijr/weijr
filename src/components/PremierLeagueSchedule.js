@@ -1,29 +1,10 @@
 import React, { Component } from "react";
-import logo from "../logo.svg";
 import "./App.css";
-import { Switch, Route, Link, withRouter } from "react-router-dom";
-import { db, auth, userById, email } from "../fire/firestore";
-import history from "../history";
-import store from "../store";
-import { browserHistory } from "react-router";
+import { withRouter } from "react-router-dom";
 import GeneralChat from "./GeneralChat/";
 import soccer from "./soccer.png";
 import NavBar from "./NavBar";
-import HeaderButtons from "./HeaderButtons";
-import {
-  Header,
-  Icon,
-  Image,
-  Segment,
-  Grid,
-  Button,
-  Card,
-  Dropdown
-} from "semantic-ui-react";
-import factory from "../ether/factory";
-import { connect } from "react-redux";
-import App from "./App";
-import { writeMessage } from "../store";
+import { Image, Segment, Grid, Card } from "semantic-ui-react";
 import axios from "axios";
 import HomeButton from "./HomeButton";
 
@@ -69,7 +50,7 @@ class PremierLeagueSchedule extends Component {
         away,
         home,
         date,
-        logo: 'https://image.flaticon.com/icons/svg/53/53283.svg'
+        logo: "https://image.flaticon.com/icons/svg/53/53283.svg"
       }
     });
   };
@@ -82,7 +63,7 @@ class PremierLeagueSchedule extends Component {
     if (this.state.games) {
       return (
         <div>
-          <Segment inverted textAlign='center'>
+          <Segment inverted textAlign="center">
             <NavBar />
             <HomeButton goHome={this.goHome} />
           </Segment>

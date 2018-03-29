@@ -1,25 +1,9 @@
 import React, { Component } from "react";
-import logo from "../logo.svg";
 import "./App.css";
-import { Switch, Route, Link, withRouter } from "react-router-dom";
-import { db, auth } from "../fire/firestore";
-import history from "../history";
-import store from "../store";
-import { browserHistory } from "react-router";
-import basketball from "./basketball.png";
-import {
-  Header,
-  Icon,
-  Image,
-  Segment,
-  Grid,
-  Button,
-  Card,
-  Dropdown,
-  Message
-} from "semantic-ui-react";
+import { withRouter } from "react-router-dom";
+import { auth } from "../fire/firestore";
+import { Header, Icon, Segment, Grid, Message } from "semantic-ui-react";
 import { connect } from "react-redux";
-import Wager from "../ether/wagers";
 import web3 from "../ether/web3";
 import NavBar from "./NavBar";
 import HomeButton from "./HomeButton";

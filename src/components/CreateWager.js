@@ -1,30 +1,14 @@
 import React, { Component } from "react";
 import factory from "../ether/factory";
 import web3 from "../ether/web3";
-import { Router } from "./routes";
 import { withRouter } from "react-router-dom";
-import { db, auth, userById } from "../fire/firestore";
+import { db } from "../fire/firestore";
 import "./App.css";
 import { connect } from "react-redux";
 import NavBar from "./NavBar";
 import HomeButton from "./HomeButton";
+import { Segment, Button, Form, Input, Message } from "semantic-ui-react";
 
-import {
-  Header,
-  Icon,
-  Image,
-  Segment,
-  Grid,
-  Button,
-  Card,
-  Label,
-  Form,
-  Input,
-  Message
-} from "semantic-ui-react";
-
-import basketball from "./basketball.png";
-import soccer from "./soccer.png";
 
 class CreateWager extends Component {
   constructor(props) {
@@ -50,7 +34,6 @@ class CreateWager extends Component {
 
   componentDidMount() {
     if (this.props.location.state) {
-      let arr = [];
       const desc =
         "Game between " +
         this.props.location.state.away +
@@ -86,7 +69,7 @@ class CreateWager extends Component {
         .send({
           from: accounts[0]
         });
-      const createdContract = await factory.methods.getDeployedwagers().call();
+
 
       this.props.history.push("/wagers");
     } catch (err) {
@@ -95,20 +78,19 @@ class CreateWager extends Component {
 
     const wagerName = this.state.leftSide + " vs. " + this.state.rightSide;
 
-      db
-        .collection("wagers")
-        .doc(wagerName)
-        .collection("image")
-        .add({
-          imageURL: this.state.imageURL
-        });
+    db
+      .collection("wagers")
+      .doc(wagerName)
+      .collection("image")
+      .add({
+        imageURL: this.state.imageURL
+      });
 
     this.setState({ loading: false });
   };
 
   render() {
     let desc = "";
-    let arr = [];
     let loading = this.state.loading ? "loading" : "loading-false";
 
     if (this.props.currentUser) {
@@ -127,90 +109,93 @@ class CreateWager extends Component {
               <NavBar message={"Create a Weijr For All"} />
               <HomeButton goHome={this.goHome} />
             </Segment>
-            <div classname="borderFix">
-                <Form
-                  textAlign="center"
-                  className="createWager"
-                  onSubmit={this.onSubmit}
-                  error={!!this.state.errorMessage}
-
-                >
-                  <Form.Field className="form-field">
-                    <h3>What's The Name Of Your Wagr</h3>
-                    <div className="fields">
-                      <div className="side-bet">
-                        <div className="fifteen wide field">
-                          <Input
-                            value={this.state.leftSide}
-                            onChange={event =>
-                              this.setState({ leftSide: event.target.value })
-                            }
-                            label="Side One"
-                            labelPosition="left"
-                            required
-                            className="side-input"
-                          />
-                        </div>
-                        <label className="large text">Vs.</label>
-                        <div className="fifteen wide field">
-                          <Input
-                            value={this.state.rightSide}
-                            onChange={event =>
-                              this.setState({ rightSide: event.target.value })
-                            }
-                            label="Side Two"
-                            labelPosition="right"
-                            required
-                          />
-                        </div>
+         
+              <Form
+              style={{margin:0}}
+              id="new-form"
+                textAlign="center"
+                className="createWager"
+                onSubmit={this.onSubmit}
+                error={!!this.state.errorMessage}
+              >
+              <div className="field-container">
+                <Form.Field className="form-field">
+                  <h3>What's The Name Of Your Wagr</h3>
+                  <div className="fields">
+                    <div className="side-bet">
+                      <div className="fifteen wide field">
+                        <Input
+                          value={this.state.leftSide}
+                          onChange={event =>
+                            this.setState({ leftSide: event.target.value })
+                          }
+                          label="Side One"
+                          labelPosition="left"
+                          required
+                          className="side-input"
+                        />
+                      </div>
+                      <label className="large text">Vs.</label>
+                      <div className="fifteen wide field">
+                        <Input
+                          value={this.state.rightSide}
+                          onChange={event =>
+                            this.setState({ rightSide: event.target.value })
+                          }
+                          label="Side Two"
+                          labelPosition="right"
+                          required
+                        />
                       </div>
                     </div>
-                  </Form.Field>
-                  <Form.Field className="form-field">
-                    <h4>How much do you want the buy in to be?</h4>
-                    <Input
-                      value={this.state.minimumBet}
-                      onChange={event =>
-                        this.setState({ minimumBet: event.target.value })
-                      }
-                      label="ether"
-                      labelPosition="right"
-                      required
-                    />
-                  </Form.Field>
-                  <Form.Field className="form-field">
-                    <label>Describe What Your Wagr Is Going To Be Below!</label>
-                    <textarea
-                      rows="2"
-                      value={desc || this.state.description}
-                      onChange={event =>
-                        this.setState({ description: event.target.value })
-                      }
-                      label="description"
-                      labelPosition="right"
-                      required
-                    />
-                  </Form.Field>
-                  <Form.Field className="form-field">
-                    <label>Provide an image URL:</label>
-                    <Input
-                      value={this.state.imageURL}
-                      onChange={event =>
-                        this.setState({ imageURL: event.target.value })
-                      }
-                      labelPosition="right"
-                    />
-                  </Form.Field>
-                  <Message
-                    error
-                    header="Oops!"
-                    content={this.state.errorMessage}
-                  />
-                  <div className="form-field">
-                  <Button primary>Create!</Button>
                   </div>
-                </Form>
-            </div>
+                </Form.Field>
+                <Form.Field className="form-field">
+                  <h4>How much do you want the buy in to be?</h4>
+                  <Input
+                    value={this.state.minimumBet}
+                    onChange={event =>
+                      this.setState({ minimumBet: event.target.value })
+                    }
+                    label="ether"
+                    labelPosition="right"
+                    required
+                  />
+                </Form.Field>
+                <Form.Field className="form-field">
+                  <label>Describe What Your Wagr Is Going To Be Below!</label>
+                  <textarea
+                    rows="2"
+                    value={desc || this.state.description}
+                    onChange={event =>
+                      this.setState({ description: event.target.value })
+                    }
+                    label="description"
+                    labelPosition="right"
+                    required
+                  />
+                </Form.Field>
+                <Form.Field className="form-field">
+                  <label>Provide an image URL:</label>
+                  <Input
+                    value={this.state.imageURL}
+                    onChange={event =>
+                      this.setState({ imageURL: event.target.value })
+                    }
+                    labelPosition="right"
+                  />
+                </Form.Field>
+                <Message
+                  error
+                  header="Oops!"
+                  content={this.state.errorMessage}
+                />
+                <div className="form-field">
+                  <Button primary>Create!</Button>
+                </div>
+                </div>
+              </Form>
+         
           </div>
         </div>
       );

@@ -1,6 +1,6 @@
 import "./App.css";
 import React from 'react'
-import { Grid, Header, Icon, Button } from 'semantic-ui-react'
+import { Header, Button } from 'semantic-ui-react'
 
 const HomeButton = props => {
   return (
