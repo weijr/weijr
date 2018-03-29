@@ -18,7 +18,6 @@ class NewMessageEntry extends Component {
   }
 
   sendMessage = event => {
-    console.log(event.target.message.value)
     const date = Date(Date.now())
     const message = event.target.message.value
     if (this.state.chatType === 'wager'){
@@ -62,7 +61,6 @@ class NewMessageEntry extends Component {
   };
 
   render() {
-    console.log(this.props)
     return (
       <Form onSubmit={this.sendMessage}>
         <input name="message" placeholder="Your reply" />

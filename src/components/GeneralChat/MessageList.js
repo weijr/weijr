@@ -1,6 +1,11 @@
 import React, { Component } from "react";
+<<<<<<< HEAD
 import { withRouter } from "react-router-dom";
 import { db } from "../../fire/firestore";
+=======
+import { Switch, Route, Link, withRouter } from "react-router-dom";
+import { db, auth, userById } from "../../fire/firestore";
+>>>>>>> 806332caf30eabd62a3f23768460eac044650d43
 import { connect } from "react-redux";
 import Message from "./Message";
 import { Comment } from "semantic-ui-react";
@@ -18,13 +23,10 @@ class MessageList extends Component {
       wagerB: [],
       chatType: this.props.chatType
     };
-    this.scrollToBottom = this.scrollToBottom.bind(this);
   }
 
   componentDidMount() {
-    console.log('RN', this.props.recipientName)
-    if (this.props.recipientName) this.setState({recipientName: this.props.recipientName}, () => console.log(this.state))
-    // console.log(this.state.chatType
+    if (this.props.recipientName) this.setState({recipientName: this.props.recipientName})
     if (this.state.chatType === "wager") {
       let wager = this.state.wager;
 
@@ -46,7 +48,6 @@ class MessageList extends Component {
             })
           });
         });
-      // this.scrollToBottom();
     } else if (this.state.chatType === 'general') {
       db
         .collection("generalChat")
@@ -64,10 +65,8 @@ class MessageList extends Component {
             })
           });
         });
-      // this.scrollToBottom();
     }
     else {
-      console.log(this.props)
       db
         .collection("privateChats")
         .doc("privateChats")
@@ -89,14 +88,10 @@ class MessageList extends Component {
       }
   }
 
-  scrollToBottom = () => {
-    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-  };
-
   render() {
     const { messages } = this.state;
     return (
-      <div className="overflow">
+      <div className="overflow" id='chatbox'>
         <Comment.Group>
           {messages.map(message => (
             <Message

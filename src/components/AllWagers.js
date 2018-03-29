@@ -82,9 +82,11 @@ class AllWagers extends Component {
       .doc(name)
       .collection("image")
       .onSnapshot(snapshot => {
-        console.log(snapshot);
         if (snapshot.docs.length) {
+<<<<<<< HEAD
           console.log(snapshot.docs[0].data().imageURL);
+=======
+>>>>>>> 806332caf30eabd62a3f23768460eac044650d43
           return snapshot.docs[0].data().imageURL;
         } else return basketball;
       });
@@ -92,7 +94,10 @@ class AllWagers extends Component {
 
   render() {
     const wagerList = this.props.listOfWagers;
+<<<<<<< HEAD
     console.log(wagerList);
+=======
+>>>>>>> 806332caf30eabd62a3f23768460eac044650d43
     if (this.state.currentUser && this.props.listOfWagers) {
       return (
         <div>
