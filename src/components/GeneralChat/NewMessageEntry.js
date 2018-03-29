@@ -50,8 +50,8 @@ class NewMessageEntry extends Component {
       event.preventDefault()
       db
         .collection("privateChats")
-        .doc("privateChats")
-        .collection(this.props.recipientName)
+        .doc(this.props.recipientName)
+        .collection('messages')
         .add({
           uid: auth.currentUser.displayName,
           content: message,

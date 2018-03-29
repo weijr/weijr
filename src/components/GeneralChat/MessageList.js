@@ -64,8 +64,8 @@ class MessageList extends Component {
     else {
       db
         .collection("privateChats")
-        .doc("privateChats")
-        .collection(this.props.recipientName)
+        .doc(this.props.recipientName)
+        .collection('messages')
         .orderBy("sentAt")
         .onSnapshot(snapshot => {
           this.setState({
