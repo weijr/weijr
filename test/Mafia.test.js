@@ -73,7 +73,7 @@
 
 //     const difference = finalBalance - initialBalance;
 
-//     console.log(initialBalance);
+//     (initialBalance);
 //     console.log(finalBalance);
 //     console.log(difference);
 //     assert(difference > web3.utils.toWei('5', 'ether'));

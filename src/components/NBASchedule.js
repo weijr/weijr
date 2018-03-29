@@ -37,7 +37,6 @@ class NBASchedule extends Component {
   }
 
   componentDidMount() {
-    console.log(basketball);
     axios
       .get(
         "https://cors-anywhere.herokuapp.com/http://data.nba.net/data/10s/prod/v1/2017/schedule.json"
@@ -51,7 +50,6 @@ class NBASchedule extends Component {
           dateArr.push(dateCode.slice(4, 6));
           dateArr.push(dateCode.slice(6));
           const dateStr = dateArr.join("-")
-          console.log(dateStr)
           arr.push({
             home: obj.data.league.standard[i].gameUrlCode.slice(9, 12),
             away: obj.data.league.standard[i].gameUrlCode.slice(12),
