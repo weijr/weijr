@@ -34,7 +34,6 @@ class GeneralChat extends Component {
 }
 
 const mapStateToProps = function(state, ownProps) {
-  console.log(state)
   return {
     recipientName: state.DirectChat
   };
