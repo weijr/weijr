@@ -1,7 +1,7 @@
 import "./App.css";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Grid, Header, Icon, Button, Dropdown } from "semantic-ui-react";
+import { Grid, Header, Button, Dropdown } from "semantic-ui-react";
 
 const HeaderButtons = props => {
   return (

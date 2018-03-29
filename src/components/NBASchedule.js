@@ -1,29 +1,10 @@
 import React, { Component } from "react";
-import logo from "../logo.svg";
 import "./App.css";
-import { Switch, Route, Link, withRouter } from "react-router-dom";
-import { db, auth, userById, email } from "../fire/firestore";
-import history from "../history";
-import store from "../store";
-import { browserHistory } from "react-router";
+import { withRouter } from "react-router-dom";
 import GeneralChat from "./GeneralChat/";
 import basketball from "./basketball.png";
 import NavBar from "./NavBar";
-import HeaderButtons from "./HeaderButtons";
-import {
-  Header,
-  Icon,
-  Image,
-  Segment,
-  Grid,
-  Button,
-  Card,
-  Dropdown
-} from "semantic-ui-react";
-import factory from "../ether/factory";
-import { connect } from "react-redux";
-import App from "./App";
-import { writeMessage } from "../store";
+import { Image, Segment, Grid, Card } from "semantic-ui-react";
 import axios from "axios";
 import HomeButton from "./HomeButton";
 
@@ -49,7 +30,12 @@ class NBASchedule extends Component {
           dateArr.push(dateCode.slice(0, 4));
           dateArr.push(dateCode.slice(4, 6));
           dateArr.push(dateCode.slice(6));
+<<<<<<< HEAD
+          const dateStr = dateArr.join("-");
+          console.log(dateStr);
+=======
           const dateStr = dateArr.join("-")
+>>>>>>> 806332caf30eabd62a3f23768460eac044650d43
           arr.push({
             home: obj.data.league.standard[i].gameUrlCode.slice(9, 12),
             away: obj.data.league.standard[i].gameUrlCode.slice(12),

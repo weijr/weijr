@@ -1,11 +1,8 @@
 import React, { Component } from "react";
-import { Switch, Route, Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { db, auth } from "../../fire/firestore";
 import { connect } from "react-redux";
-import logo from "../../logo.svg";
 import { Form, Button } from "semantic-ui-react";
-import MessageList from "../GeneralChat/MessageList";
-import NewMessageEntry from "../GeneralChat/NewMessageEntry";
 import { addRecipient } from "../../store";
 
 class DirectChatCreation extends Component {
