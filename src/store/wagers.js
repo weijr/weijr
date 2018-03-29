@@ -29,11 +29,9 @@ export function getAllWagers() {
           joined: wagerObj[9],
           imageUrl: wagerObj[10]
         }
-        console.log(wagerInfo.complete)
         return wagerInfo
       }))
       const action = { type: FETCH_WAGERS, list: listOfWagers }
-      console.log("WE IN HERE")
       dispatch(action)
     } catch (err) {
       console.error(err)

@@ -101,9 +101,7 @@ class AllWagers extends Component {
       .doc(name)
       .collection("image")
       .onSnapshot(snapshot => {
-        console.log(snapshot);
         if (snapshot.docs.length) {
-          console.log(snapshot.docs[0].data().imageURL)
           return snapshot.docs[0].data().imageURL;
         } else return basketball;
       });
@@ -113,7 +111,6 @@ class AllWagers extends Component {
     let index = 0;
     const user = auth.currentUser;
     const wagerList = this.props.listOfWagers;
-    console.log(wagerList)
     if (this.state.currentUser && this.props.listOfWagers) {
       return (
         <div>
