@@ -26,7 +26,7 @@ class Routes extends Component {
         <Route exact path="/wagers" component={ AllWagers } />
         <Route exact path="/wagers/:address" component={SingleWagerView} />
         <Route exact path="/your-profile" component={ProfilePage} />
-        <Route exact path='/newPrivateMessage' component={DirectChatCreation} />
+        <Route exact path='/privateMessages' component={DirectChatCreation} />
         <Route exact path='/privateChat' component={ GeneralChat } />
         <Route exact path='/nbaSchedule' component={ NBASchedule } />
         <Route exact path='/eplSchedule' component={ PremierLeagueSchedule } />

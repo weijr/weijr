@@ -69,11 +69,24 @@ class ProfilePage extends Component {
             <HomeButton goHome={this.goHome} />
           </Segment>
 
-          <Header as="h1" icon textAlign="center">
-            <Icon name="hourglass half" circular />
-            <Header.Content>Wager Status</Header.Content>
-          </Header>
-
+          <Grid columns={3}>
+            <Grid.Column />
+            <Grid.Column>
+              <Header as="h1" icon textAlign="center">
+                <Icon name="hourglass half" circular />
+                <Header.Content>Wager Status</Header.Content>
+              </Header>
+            </Grid.Column>
+            <Grid.Column textAlign="right" floated="right">
+              <Button
+                onClick={() => {
+                  this.props.history.push("/privateMessages");
+                }}
+              >
+                View / Create Message
+              </Button>
+            </Grid.Column>
+          </Grid>
           <Grid columns={2} celled>
             <Grid.Column>
               <Header as="h2" textAlign="centered">

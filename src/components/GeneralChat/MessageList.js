@@ -26,9 +26,8 @@ class MessageList extends Component {
   }
 
   componentDidMount() {
-    console.log('RN', this.props.recipientName)
-    if (this.props.recipientName) this.setState({recipientName: this.props.recipientName}, () => console.log(this.state))
-    // console.log(this.state.chatType
+    if (this.props.recipientName) this.setState({recipientName: this.props.recipientName})
+    console.log(this.state)
     if (this.state.chatType === "wager") {
       let wager = this.state.wager;
 
@@ -74,8 +73,8 @@ class MessageList extends Component {
       console.log(this.props)
       db
         .collection("privateChats")
-        .doc("privateChats")
-        .collection(this.props.recipientName)
+        .doc(this.props.recipientName)
+        .collection('messages')
         .orderBy("sentAt")
         .onSnapshot(snapshot => {
           this.setState({
