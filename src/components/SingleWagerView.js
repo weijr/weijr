@@ -227,7 +227,7 @@ class SingleWagerView extends Component {
     let loading = this.state.loading ? "loading" : "loading-false";
     const title = this.state.leftSide + " vs. " + this.state.rightSide;
 
-    if (this.state.currentUser) {
+    if (this.props.currentUser) {
       return this.state.manager === "" ? null : (
         <div>
           {this.renderLoader(loading)}
@@ -246,7 +246,6 @@ class SingleWagerView extends Component {
                 </Grid.Row>
                 <Grid.Row>
                   <div>{this.renderBetButtons()}</div>
-                  <Grid.Column width={6} />
                 </Grid.Row>
                 <div className="ui raised segment">
                   <p>{this.state.description}</p>

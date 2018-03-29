@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { db, auth } from "../../fire/firestore";
+import firebase, { db, auth } from "../../fire/firestore";
 import { connect } from "react-redux";
-import { Form, Button } from "semantic-ui-react";
+import { Form, Button, Segment } from "semantic-ui-react";
 import { addRecipient } from "../../store";
 import NavBar from "../NavBar";
 import HomeButton from "../HomeButton";

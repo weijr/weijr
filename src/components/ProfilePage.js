@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import { withRouter } from "react-router-dom";
 import { auth } from "../fire/firestore";
-import { Header, Icon, Segment, Grid, Message } from "semantic-ui-react";
+import { Header, Icon, Segment, Grid, Message, Button } from "semantic-ui-react";
 import { connect } from "react-redux";
 import web3 from "../ether/web3";
 import NavBar from "./NavBar";
