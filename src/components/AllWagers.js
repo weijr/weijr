@@ -56,15 +56,16 @@ class AllWagers extends Component {
 
   onClickSort = (event, data) => {
     event.preventDefault();
+    let sortedList;
     let listOfWagersSorted = this.props.listOfWagers.slice();
     let type = data.value.split("-")[0];
     let order = data.value.split("-")[1] + "-" + data.value.split("-")[2];
     if (order === "low-high") {
-      var sortedList = listOfWagersSorted.sort(function(a, b) {
+      sortedList = listOfWagersSorted.sort(function(a, b) {
         return parseInt(a[type]) - parseFloat(b[type]);
       });
     } else {
-      var sortedList = listOfWagersSorted.sort(function(a, b) {
+      sortedList = listOfWagersSorted.sort(function(a, b) {
         return parseInt(b[type]) - parseFloat(a[type]);
       });
     }
@@ -83,10 +84,6 @@ class AllWagers extends Component {
       .collection("image")
       .onSnapshot(snapshot => {
         if (snapshot.docs.length) {
-<<<<<<< HEAD
-          console.log(snapshot.docs[0].data().imageURL);
-=======
->>>>>>> 806332caf30eabd62a3f23768460eac044650d43
           return snapshot.docs[0].data().imageURL;
         } else return basketball;
       });
@@ -94,10 +91,6 @@ class AllWagers extends Component {
 
   render() {
     const wagerList = this.props.listOfWagers;
-<<<<<<< HEAD
-    console.log(wagerList);
-=======
->>>>>>> 806332caf30eabd62a3f23768460eac044650d43
     if (this.state.currentUser && this.props.listOfWagers) {
       return (
         <div>
