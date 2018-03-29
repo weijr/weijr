@@ -1,13 +1,9 @@
 import React, { Component } from "react";
-// import './App.css';
-// import App from './App'
-import { Switch, Route, Link, withRouter } from "react-router-dom";
-import { db, auth, userById } from "../../fire/firestore";
+import { withRouter } from "react-router-dom";
+import { db } from "../../fire/firestore";
 import { connect } from "react-redux";
 import Message from "./Message";
-import logo from "../../logo.svg";
 import { Comment } from "semantic-ui-react";
-import { ScrollBox } from "react-scroll-box";
 
 class MessageList extends Component {
   constructor(props) {
