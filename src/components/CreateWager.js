@@ -33,7 +33,7 @@ class CreateWager extends Component {
   };
 
   componentDidMount() {
-    if (this.props.location.state) {
+    if (this.props.location.state && this.props.location.state.time) {
       const desc =
         "Game between " +
         this.props.location.state.away +
@@ -43,6 +43,22 @@ class CreateWager extends Component {
         this.props.location.state.date +
         " at " +
         this.props.location.state.time;
+      this.setState({
+        leftSide: this.props.location.state.away,
+        rightSide: this.props.location.state.home,
+        description: desc,
+        imageURL: this.props.location.state.logo
+      });
+    }
+
+    else if (this.props.location.state){
+      const desc =
+        "Game between " +
+        this.props.location.state.away +
+        " at " +
+        this.props.location.state.home +
+        " to be played on " +
+        this.props.location.state.date
       this.setState({
         leftSide: this.props.location.state.away,
         rightSide: this.props.location.state.home,
@@ -109,7 +125,7 @@ class CreateWager extends Component {
               <NavBar message={"Create a Weijr For All"} />
               <HomeButton goHome={this.goHome} />
             </Segment>
-         
+
               <Form
               style={{margin:0}}
               id="new-form"
@@ -195,7 +211,7 @@ class CreateWager extends Component {
                 </div>
                 </div>
               </Form>
-         
+
           </div>
         </div>
       );

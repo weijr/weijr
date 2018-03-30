@@ -142,10 +142,10 @@ class SingleWagerView extends Component {
     if (this.state.accounts.includes(this.state.manager)) {
       return (
         <div>
-          <Button onClick={event => this.paySideOne(event, true)}>
+          <Button onClick={event => this.paySide(event, true)}>
             {this.state.leftSide} Won!
           </Button>
-          <Button onClick={event => this.paySideTwo(event, false)}>
+          <Button onClick={event => this.paySide(event, false)}>
             {this.state.rightSide} Won!
           </Button>
         </div>
