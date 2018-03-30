@@ -99,7 +99,7 @@ class SingleWagerView extends Component {
         meta: this.state.title,
         description: `There are ${
           this.state.totalUsers
-        } people invovled in this Wagr! Place Your Bets Below!`
+        } people involved in this Weijr! Place Your Bets Below!`
       }
     ];
     return <Card.Group items={items} />;

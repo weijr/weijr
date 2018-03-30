@@ -20,7 +20,7 @@ class App extends Component {
         <div class="ui one column stackable center aligned page grid">
           <div class="column twelve wide">
             <h2>
-              Please install MetaMask chrome extension to view our website!
+              Please install the MetaMask chrome extension to view our website!
             </h2>
             <h3>Visit <a href='https://metamask.io/'>https://metamask.io/</a> for more info.</h3>
           </div>
