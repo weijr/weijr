@@ -22,7 +22,7 @@ class App extends Component {
             <h2>
               Please install MetaMask chrome extension to view our website!
             </h2>
-            <h3>Visit https://metamask.io/ for more info.</h3>
+            <h3>Visit <a href='https://metamask.io/'>https://metamask.io/</a> for more info.</h3>
           </div>
         </div>
       </div>
